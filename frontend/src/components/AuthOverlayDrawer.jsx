@@ -12,8 +12,6 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
 
   console.log("AuthOverlayDrawer rendered:", { opened, mode }); // Debug log
 
-  // (mobile detection removed) overlay behavior is handled via global CSS
-  // apply a blur class to the app root so header/hero are blurred (portal content isn't affected)
   useEffect(() => {
     const root =
       typeof document !== "undefined" && document.getElementById("root");
@@ -60,6 +58,7 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
           marginTop: "20px",
           padding: "24px",
           background: "white",
+          height: "100%",
         },
       })}
     >
