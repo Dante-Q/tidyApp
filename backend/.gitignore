@@ -21,7 +21,7 @@ coverage
 node_modules/
 
 # Database files
-backend/data/db/
+data/db/
 
 # dotenv environment variable files
 .env
