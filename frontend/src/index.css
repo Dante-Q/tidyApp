@@ -227,22 +227,6 @@ select:focus {
   padding: 0 1rem;
 }
 
-/* Hero / Home section */
-.hero-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2193b0 100%);
-  color: var(--color-white);
-  padding: 2rem;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-  transform: translateZ(0);
-  overflow: hidden;
-}
-
 /* Animated background effect */
 .hero-container::before {
   content: "";
@@ -311,6 +295,10 @@ select:focus {
   font-size: 1.2em;
   margin-right: 0.2em;
   animation: wave 2.5s ease-in-out infinite;
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background-clip: initial;
 }
 
 @keyframes wave {
@@ -448,9 +436,10 @@ select:focus {
   min-height: calc(100vh - 60px);
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 1rem;
+  padding-top: 2rem;
 }
 
 /* Hero / Home section */
@@ -468,7 +457,7 @@ select:focus {
   );
   backdrop-filter: blur(10px);
   color: var(--color-white);
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
   text-align: center;
   position: relative;
   z-index: 1;
