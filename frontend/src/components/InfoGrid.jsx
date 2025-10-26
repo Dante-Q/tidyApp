@@ -1,3 +1,5 @@
+import "./InfoGrid.css";
+
 export default function InfoGrid() {
   // Placeholder info data - replace with real data later
   const infoCards = [

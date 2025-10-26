@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./BeachSlider.css";
 
 export default function BeachSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);

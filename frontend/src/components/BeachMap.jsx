@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./BeachMap.css";
 
 export default function BeachMap() {
   const [selectedBeach, setSelectedBeach] = useState(null);
