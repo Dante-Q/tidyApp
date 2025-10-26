@@ -12,25 +12,7 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
 
   console.log("AuthOverlayDrawer rendered:", { opened, mode }); // Debug log
 
-  // detect mobile to reduce blur for performance
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq =
-      typeof window !== "undefined" && window.matchMedia("(max-width: 640px)");
-    const handle = (e) => setIsMobile(!!e.matches);
-    if (mq) {
-      handle(mq);
-      mq.addEventListener
-        ? mq.addEventListener("change", handle)
-        : mq.addListener(handle);
-    }
-    return () => {
-      if (mq)
-        mq.removeEventListener
-          ? mq.removeEventListener("change", handle)
-          : mq.removeListener(handle);
-    };
-  }, []);
+  // (mobile detection removed) overlay behavior is handled via global CSS
   // apply a blur class to the app root so header/hero are blurred (portal content isn't affected)
   useEffect(() => {
     const root =
@@ -57,16 +39,6 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
         transition: "slide-left",
         duration: 400,
         timingFunction: "ease",
-      }}
-      overlayProps={{
-        opacity: 0,
-        style: {
-          backdropFilter: "none",
-          backgroundColor: isMobile ? "rgba(2,6,23,0.18)" : "rgba(2,6,23,0.18)",
-          transition: "opacity 200ms ease, background-color 200ms ease",
-        },
-        // ensure overlay sits above headers/other layout elements
-        zIndex: 9999,
       }}
       styles={(theme) => ({
         root: { position: "fixed" },

@@ -200,3 +200,19 @@ footer {
   filter: blur(6px);
   transition: filter 220ms ease, backdrop-filter 220ms ease;
 }
+
+/* Defensive overlay rules — keeps Drawer overlay from adding blur/dim */
+.mantine-Drawer-overlay,
+.mantine-Drawer-overlay.mantine-Overlay-root {
+  opacity: 0 !important; /* remove visual dim if you want only root blur */
+  background-color: rgba(2, 6, 23, 0) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  z-index: 9999 !important; /* keep overlay above header/layout */
+  /* overlay should still capture clicks (modal behavior) */
+  pointer-events: auto !important;
+}
+
+/* If you prefer a subtle dim, use the following instead:
+ .mantine-Drawer-overlay { background-color: rgba(2,6,23,0.12) !important; opacity: 1 !important; }
+*/
