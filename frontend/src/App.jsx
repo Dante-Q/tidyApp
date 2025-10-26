@@ -14,22 +14,7 @@ export default function App() {
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <UserProvider>
         <Router>
-          <AppShell
-            header={{ height: 60 }}
-            padding={0}
-            styles={{
-              main: {
-                backgroundColor: "transparent",
-                minHeight: "100vh",
-                padding: 0,
-              },
-              header: {
-                backgroundColor: "transparent",
-                border: "none",
-                padding: 0,
-              },
-            }}
-          >
+          <AppShell header={{ height: 60 }} padding={0}>
             <AppShell.Header>
               <Navbar />
             </AppShell.Header>

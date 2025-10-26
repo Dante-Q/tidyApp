@@ -44,7 +44,11 @@ body {
   scrollbar-color: #2193b0 #0f172a;
 }
 
-/* AppShell background override */
+/* AppShell styling */
+.mantine-AppShell-root {
+  background: transparent;
+}
+
 .mantine-AppShell-main {
   background: linear-gradient(
     135deg,
@@ -52,6 +56,16 @@ body {
     #1a2332 50%,
     #0f172a 100%
   ) !important;
+  min-height: 100vh;
+  padding: 0 !important;
+}
+
+.mantine-AppShell-header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  z-index: 100 !important;
+  position: relative !important;
 }
 
 h1,
@@ -431,12 +445,12 @@ select:focus {
 /* Homepage wrapper */
 .homepage-wrapper {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 1rem;
 }
 
 /* Hero / Home section */
