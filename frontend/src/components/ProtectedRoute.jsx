@@ -1,16 +1,32 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext.jsx';
+import axios from 'axios';
 
 export default function ProtectedRoute({ children }) {
-  const { user, loadingUser } = useContext(UserContext);
+  const { user, login } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
-  // While fetching user, show nothing or a loader
-  if (loadingUser) return <div>Loading...</div>;
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/auth/me', { withCredentials: true });
+        login(res.data);
+        setAuthorized(true);
+      } catch {
+        setAuthorized(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // If no user, redirect to login
-  if (!user) return <Navigate to="/login" />;
+    if (!user) checkAuth();
+    else setAuthorized(true);
+  }, [user, login]);
 
-  // User is logged in
+  if (loading) return <div>Loading...</div>;
+  if (!authorized) return <Navigate to="/login" />;
+
   return children;
 }
