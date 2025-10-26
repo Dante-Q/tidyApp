@@ -13,7 +13,7 @@ import {
 import { useForm } from "@mantine/form";
 import { UserContext } from "../context/UserContext.jsx";
 
-export default function RegisterPage() {
+export default function RegisterPage({ onRegister }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -46,7 +46,12 @@ export default function RegisterPage() {
 
       login(response.data.user);
 
-      navigate("/dashboard");
+      // If onRegister callback provided (from drawer), call it; otherwise navigate
+      if (onRegister) {
+        onRegister(response.data.user);
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || "An error occurred"
@@ -61,22 +66,6 @@ export default function RegisterPage() {
       <Title align="center" style={{ color: "#ffffff", fontWeight: 700 }}>
         Create an account
       </Title>
-      <Text
-        size="sm"
-        align="center"
-        mt={5}
-        style={{ color: "rgba(255, 255, 255, 0.7)" }}
-      >
-        Already have an account?{" "}
-        <Text
-          component={Link}
-          to="/login"
-          size="sm"
-          style={{ color: "#6dd5ed", fontWeight: 500 }}
-        >
-          Login
-        </Text>
-      </Text>
 
       <Paper
         withBorder

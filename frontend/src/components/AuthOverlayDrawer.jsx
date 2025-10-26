@@ -6,11 +6,20 @@ import { UserContext } from "../context/UserContext.jsx";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 
-export default function AuthOverlayDrawer({ opened, onClose }) {
+export default function AuthOverlayDrawer({
+  opened,
+  onClose,
+  initialMode = "login",
+}) {
   const { login } = useContext(UserContext);
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState(initialMode);
 
   console.log("AuthOverlayDrawer rendered:", { opened, mode }); // Debug log
+
+  // Sync local mode when initialMode changes
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
 
   useEffect(() => {
     const root =
