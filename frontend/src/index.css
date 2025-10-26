@@ -451,10 +451,217 @@ select:focus {
   min-height: calc(100vh - 60px);
   position: relative;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: 1rem;
   padding-top: 2rem;
+  gap: 3rem;
+}
+
+/* Secondary content section */
+.homepage-content {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.content-placeholder {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2rem;
+}
+
+/* Beach Slider Component */
+.beach-slider {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.beach-slider-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.beach-slider-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beach-slider-header p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.beach-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.beach-slider-track {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(109, 213, 237, 0.15);
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.beach-slider-cards {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+}
+
+.beach-card {
+  min-width: 100%;
+  background: rgba(15, 23, 42, 0.8);
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.beach-card-image {
+  width: 100%;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  border: none;
+}
+
+.beach-card-condition {
+  background: rgba(109, 213, 237, 0.9);
+  color: #0f172a;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.beach-card-content {
+  padding: 1.5rem;
+}
+
+.beach-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+
+.beach-card-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.beach-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.beach-stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.beach-stat-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6dd5ed;
+}
+
+/* Slider Navigation Arrows */
+.beach-slider-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(109, 213, 237, 0.2);
+  border: 1px solid rgba(109, 213, 237, 0.4);
+  color: #6dd5ed;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.beach-slider-arrow:hover {
+  background: rgba(109, 213, 237, 0.3);
+  border-color: #6dd5ed;
+  transform: scale(1.1);
+}
+
+.beach-slider-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Slider Dots */
+.beach-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.beach-slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(109, 213, 237, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.beach-slider-dot:hover {
+  background: rgba(109, 213, 237, 0.5);
+}
+
+.beach-slider-dot.active {
+  background: #6dd5ed;
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .beach-card-image {
+    height: 200px;
+  }
+
+  .beach-slider-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .beach-card-title {
+    font-size: 1.25rem;
+  }
 }
 
 /* Hero / Home section */
