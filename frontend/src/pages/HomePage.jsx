@@ -5,6 +5,7 @@ import BeachSlider from "../components/BeachSlider";
 import InfoGrid from "../components/InfoGrid";
 import BeachMap from "../components/BeachMap";
 import TideChart from "../components/TideChart";
+import WindCompass from "../components/WindCompass";
 import DashboardPage from "./DashboardPage";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
@@ -37,6 +38,7 @@ export default function HomePage() {
         <BeachSlider />
         <InfoGrid />
         <TideChart />
+        <WindCompass />
         <BeachMap />
       </section>
     </div>
