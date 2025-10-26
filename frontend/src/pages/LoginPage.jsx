@@ -12,7 +12,8 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+
+  const { login } = useContext(UserContext);
 
   const form = useForm({
     initialValues: { email: '', password: '' },
@@ -30,10 +31,12 @@ export default function LoginPage() {
       const response = await axios.post(
         'http://localhost:5000/api/auth/login',
         values,
-        { withCredentials: true }
+        { withCredentials: true } 
       );
 
-      setUser(response.data.user);
+
+      login(response.data.user);
+
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'An error occurred');
