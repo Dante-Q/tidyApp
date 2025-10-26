@@ -4,6 +4,7 @@ import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
 import InfoGrid from "../components/InfoGrid";
 import BeachMap from "../components/BeachMap";
+import TideChart from "../components/TideChart";
 import DashboardPage from "./DashboardPage";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
@@ -35,6 +36,7 @@ export default function HomePage() {
       <section className="homepage-content">
         <BeachSlider />
         <InfoGrid />
+        <TideChart />
         <BeachMap />
       </section>
     </div>
