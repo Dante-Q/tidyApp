@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
   TextInput,
@@ -18,10 +18,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const form = useForm({
-    initialValues: {
-      email: '',
-      password: '',
-    },
+    initialValues: { email: '', password: '' },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
       password: (value) => (value.length < 6 ? 'Password should be at least 6 characters' : null),
@@ -31,8 +28,12 @@ export default function LoginPage() {
   const handleSubmit = async (values) => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', values);
+      // Store only minimal info
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify({
+        id: response.data.user._id,
+        name: response.data.user.name
+      }));
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'An error occurred');
@@ -41,51 +42,30 @@ export default function LoginPage() {
 
   return (
     <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={(theme) => ({ fontFamily: theme.fontFamily, fontWeight: 900 })}
-      >
+      <Title align="center" sx={(theme) => ({ fontFamily: theme.fontFamily, fontWeight: 900 })}>
         Welcome back!
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Don't have an account yet?{' '}
-        <Text component="a" href="/register" size="sm" color="blue">
+        <Text component={Link} to="/register" size="sm" color="blue">
           Create account
         </Text>
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          {error && (
-            <Text color="red" size="sm" mb="sm">
-              {error}
-            </Text>
-          )}
-          
-          <TextInput
-            label="Email"
-            placeholder="you@example.com"
-            required
-            {...form.getInputProps('email')}
-          />
-          
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            required
-            mt="md"
-            {...form.getInputProps('password')}
-          />
-          
+          {error && <Text color="red" size="sm" mb="sm">{error}</Text>}
+
+          <TextInput label="Email" placeholder="you@example.com" required {...form.getInputProps('email')} />
+          <PasswordInput label="Password" placeholder="Your password" required mt="md" {...form.getInputProps('password')} />
+
           <Group position="apart" mt="lg">
-            <Text component="a" href="/forgot-password" size="sm" color="blue">
+            <Text component={Link} to="/forgot-password" size="sm" color="blue">
               Forgot password?
             </Text>
           </Group>
-          
-          <Button fullWidth mt="xl" type="submit">
-            Sign in
-          </Button>
+
+          <Button fullWidth mt="xl" type="submit">Sign in</Button>
         </form>
       </Paper>
     </Container>
