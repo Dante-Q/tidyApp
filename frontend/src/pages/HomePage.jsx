@@ -1,15 +1,13 @@
 // HomePage.jsx
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import HeroContainer from "../components/HeroContainer";
 import DashboardPage from "./DashboardPage";
-import AuthOverlayDrawer from "../components/AuthOverlayDrawer";
 import { UserContext } from "../context/UserContext.jsx";
+import { UIContext } from "../context/UIContext.js";
 
 export default function HomePage() {
   const { user } = useContext(UserContext);
-  const [showAuth, setShowAuth] = useState(false);
-
-  console.log("HomePage rendered:", { showAuth, hasUser: !!user }); // Debug log
+  const { openAuth } = useContext(UIContext);
 
   if (user) return <DashboardPage />;
 
@@ -27,16 +25,13 @@ export default function HomePage() {
             </p>
             <button
               className="hero-cta-button"
-              onClick={() => setShowAuth(true)}
+              onClick={() => openAuth("login")}
             >
               Get Started
             </button>
           </div>
         </HeroContainer>
       </div>
-
-      {/* Render the Drawer outside the wrapper div */}
-      <AuthOverlayDrawer opened={showAuth} onClose={() => setShowAuth(false)} />
     </>
   );
 }

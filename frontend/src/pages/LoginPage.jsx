@@ -14,7 +14,7 @@ import {
 import { useForm } from "@mantine/form";
 import { UserContext } from "../context/UserContext.jsx";
 
-export default function LoginPage() {
+export default function LoginPage({ onLogin }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -43,7 +43,12 @@ export default function LoginPage() {
 
       login(response.data.user);
 
-      navigate("/dashboard");
+      // If onLogin callback provided (from drawer), call it; otherwise navigate
+      if (onLogin) {
+        onLogin(response.data.user);
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || "An error occurred"
@@ -58,22 +63,6 @@ export default function LoginPage() {
       <Title align="center" style={{ color: "#ffffff", fontWeight: 700 }}>
         Welcome back!
       </Title>
-      <Text
-        size="sm"
-        align="center"
-        mt={5}
-        style={{ color: "rgba(255, 255, 255, 0.7)" }}
-      >
-        Don't have an account yet?{" "}
-        <Text
-          component={Link}
-          to="/register"
-          size="sm"
-          style={{ color: "#6dd5ed", fontWeight: 500 }}
-        >
-          Create account
-        </Text>
-      </Text>
 
       <Paper
         withBorder
