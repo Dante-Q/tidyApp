@@ -17,10 +17,31 @@ body {
   font-family: var(--font-sans);
   background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0f172a 100%);
   color: var(--color-text);
+  overflow-x: hidden;
 }
 
-html {
-  scrollbar-gutter: stable both-edges;
+/* Custom scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2193b0 100%);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2193b0 #0f172a;
 }
 
 /* AppShell background override */

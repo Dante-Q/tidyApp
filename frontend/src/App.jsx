@@ -16,15 +16,17 @@ export default function App() {
         <Router>
           <AppShell
             header={{ height: 60 }}
-            padding="md"
+            padding={0}
             styles={{
               main: {
                 backgroundColor: "transparent",
                 minHeight: "100vh",
+                padding: 0,
               },
               header: {
                 backgroundColor: "transparent",
                 border: "none",
+                padding: 0,
               },
             }}
           >

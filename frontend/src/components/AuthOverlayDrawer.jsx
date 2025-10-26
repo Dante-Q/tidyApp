@@ -33,6 +33,7 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
       position="right"
       withinPortal={true}
       zIndex={10000}
+      lockScroll={false}
       transitionProps={{
         transition: "slide-left",
         duration: 400,
