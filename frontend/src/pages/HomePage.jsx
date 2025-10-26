@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
+import InfoGrid from "../components/InfoGrid";
 import DashboardPage from "./DashboardPage";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
@@ -32,6 +33,7 @@ export default function HomePage() {
       {/* Secondary content section */}
       <section className="homepage-content">
         <BeachSlider />
+        <InfoGrid />
       </section>
     </div>
   );
