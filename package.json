@@ -7,9 +7,10 @@
     "install-all": "npm-run-all --parallel install-frontend install-backend",
     "install-frontend": "npm install --prefix frontend",
     "install-backend": "npm install --prefix backend",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node backend/server.js",
-    "client": "npm --prefix frontend run dev"
+    "start": "concurrently \"npm run mongo\" \"npm run server\" \"npm run client\"",
+    "server": "node backend/src/server.js",
+    "client": "npm --prefix frontend run dev",
+    "mongo": "mongod --dbpath backend/data/db --bind_ip 127.0.0.1 --quiet > backend/data/mongo.log 2>&1"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
