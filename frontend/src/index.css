@@ -1,20 +1,519 @@
+/* Base typography and colors */
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  color-scheme: light dark;
-  color: #1e293b;
-  background-color: #f0f9ff;
+  --font-sans: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --color-text: #1e293b;
+  --color-bg: #f0f9ff;
+  --color-primary: #2193b0;
+  --color-primary-light: #6dd5ed;
+  --color-accent: #00bcd4;
+  --color-white: #ffffff;
 }
 
-body, html {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0f172a 100%);
+  color: var(--color-text);
+  overflow-x: hidden;
 }
 
+/* Custom scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2193b0 100%);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+}
+
+/* Firefox scrollbar */
 * {
-  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #2193b0 #0f172a;
 }
 
-h1, h2, h3 {
+/* AppShell styling */
+.mantine-AppShell-root {
+  background: transparent;
+}
+
+.mantine-AppShell-main {
+  background: linear-gradient(
+    135deg,
+    #0a0f1e 0%,
+    #1a2332 50%,
+    #0f172a 100%
+  ) !important;
+  min-height: 100vh;
+  padding: 0 !important;
+}
+
+.mantine-AppShell-header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  z-index: 100 !important;
+  position: relative !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0 0 1rem 0;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Navbar Styling */
+.navbar-wrapper {
+  height: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(109, 213, 237, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+.navbar-logo-emoji {
+  font-size: 1.5rem;
+  animation: wave 2.5s ease-in-out infinite;
+}
+
+.navbar-logo-text {
+  background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+}
+
+.navbar-btn {
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+}
+
+.navbar-btn-home {
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+}
+
+.navbar-btn-home:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-btn-dashboard,
+.navbar-btn-login {
+  background: rgba(109, 213, 237, 0.15);
+  color: #6dd5ed;
+  border: 1px solid rgba(109, 213, 237, 0.3);
+}
+
+.navbar-btn-dashboard:hover,
+.navbar-btn-login:hover {
+  background: rgba(109, 213, 237, 0.25);
+  border-color: #6dd5ed;
+  transform: translateY(-1px);
+}
+
+.navbar-btn-register {
+  background: transparent;
+  color: #6dd5ed;
+  border: 1px solid rgba(109, 213, 237, 0.5);
+}
+
+.navbar-btn-register:hover {
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  color: #ffffff;
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+
+.navbar-btn-logout {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.navbar-btn-logout:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+
+/* Buttons */
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+  font-family: var(--font-sans);
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(33, 147, 176, 0.2);
+}
+
+/* Container helpers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Animated background effect */
+.hero-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 50%,
+      rgba(109, 213, 237, 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(33, 147, 176, 0.2) 0%,
+      transparent 50%
+    );
+  animation: pulse 8s ease-in-out infinite;
+  z-index: 0;
+  border-radius: 24px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-emoji {
+  display: inline-block;
+  font-size: 1.2em;
+  margin-right: 0.2em;
+  animation: wave 2.5s ease-in-out infinite;
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background-clip: initial;
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-20deg);
+  }
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.hero-cta-button {
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  color: #ffffff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(109, 213, 237, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-cta-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.hero-cta-button:hover::before {
+  left: 100%;
+}
+
+.hero-cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(109, 213, 237, 0.4);
+}
+
+.hero-cta-button:active {
+  transform: translateY(-1px);
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Cards */
+.card {
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Utility classes */
+.mt-1 {
+  margin-top: 0.25rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-white {
+  color: var(--color-white);
+}
+
+/* AppShell and main content positioning - prevent shift when Drawer opens */
+.mantine-AppShell-main {
+  position: relative;
+  width: 100%;
+  transform: translateZ(
+    0
+  ); /* Creates stacking context and prevents subpixel shifts */
+}
+
+/* Homepage wrapper */
+.homepage-wrapper {
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  padding-top: 2rem;
+}
+
+/* Hero / Home section */
+.hero-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(30, 58, 95, 0.6) 50%,
+    rgba(33, 147, 176, 0.4) 100%
+  );
+  backdrop-filter: blur(10px);
+  color: var(--color-white);
+  padding: 2rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0);
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Toggle auth mode button */
+.toggle-auth-mode {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.toggle-auth-mode:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Blur helper applied to app root when overlays open (portal content not affected) */
+#root.tidy-blur {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  filter: blur(6px);
+  transition: filter 220ms ease, backdrop-filter 220ms ease;
+}
+
+/* Defensive overlay rules — keeps Drawer overlay from adding blur/dim */
+.mantine-Drawer-overlay,
+.mantine-Drawer-overlay.mantine-Overlay-root {
+  opacity: 0 !important; /* remove visual dim if you want only root blur */
+  background-color: rgba(2, 6, 23, 0) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+/* Drawer dark theme styling */
+.mantine-Drawer-content {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+}
+
+.mantine-Drawer-body {
+  background: transparent !important;
 }

@@ -33,15 +33,22 @@ router.post('/register', asyncHandler(async (req, res) => {
     { expiresIn: '24h' }
   );
 
-  res.status(201).json({
-    message: 'User registered successfully',
-    user: {
-      id: user._id,
-      email: user.email,
-      name: user.name
-    },
-    token
-  });
+  // Send JWT in HttpOnly cookie
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+});
+
+res.status(201).json({
+  message: 'User registered successfully',
+  user: {
+    id: user._id,
+    email: user.email,
+    name: user.name
+  }
+});
 }));
 
 // Login user
@@ -67,28 +74,33 @@ router.post('/login', asyncHandler(async (req, res) => {
     { expiresIn: '24h' }
   );
 
-  res.json({
-    message: 'Login successful',
-    user: {
-      id: user._id,
-      email: user.email,
-      name: user.name
-    },
-    token
-  });
+// Send JWT as HttpOnly cookie
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+});
+
+res.json({
+  message: 'Login successful',
+  user: {
+    id: user._id,
+    email: user.email,
+    name: user.name
+  }
+});
 }));
 
 // Get current user (protected route example)
 router.get('/me', asyncHandler(async (req, res) => {
-  // Get token from header
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  
+  const token = req.cookies.token; // <-- read from cookie
+
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
 
   try {
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId);
     
@@ -101,5 +113,10 @@ router.get('/me', asyncHandler(async (req, res) => {
     res.status(401).json({ message: 'Token is not valid' });
   }
 }));
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
+});
 
 export default router;

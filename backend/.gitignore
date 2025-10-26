@@ -20,6 +20,9 @@ coverage
 # Dependency directories
 node_modules/
 
+# Database files
+data/db/
+
 # dotenv environment variable files
 .env
 .env.test

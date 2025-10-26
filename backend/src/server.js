@@ -2,10 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
+import cookieParser from 'cookie-parser';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load env vars from root directory
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Startup guard: ensure required env vars are present
 const requiredEnv = ['JWT_SECRET', 'MONGO_URI'];
@@ -26,6 +32,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
