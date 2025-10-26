@@ -1,21 +1,19 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
-  TextInput,
-  PasswordInput,
-  Paper,
-  Title,
-  Container,
-  Button,
-  Text,
-  Group,
+  TextInput, PasswordInput, Paper, Title, Container,
+  Button, Text
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { UserContext } from '../context/UserContext.jsx';
 
 export default function RegisterPage() {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const { login } = useContext(UserContext);
 
   const form = useForm({
     initialValues: { name: '', email: '', password: '', confirmPassword: '' },
@@ -29,21 +27,22 @@ export default function RegisterPage() {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      });
+      setError('');
+      setLoading(true);
 
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify({
-        id: response.data.user._id,
-        name: response.data.user.name
-      }));
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/register',
+        { name: values.name, email: values.email, password: values.password },
+        { withCredentials: true } 
+      );
+
+      login(response.data.user);
 
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,9 +53,7 @@ export default function RegisterPage() {
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Already have an account?{' '}
-        <Text component={Link} to="/login" size="sm" color="blue">
-          Login
-        </Text>
+        <Text component={Link} to="/login" size="sm" color="blue">Login</Text>
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -68,7 +65,7 @@ export default function RegisterPage() {
           <PasswordInput label="Password" placeholder="Create a password" required mt="md" {...form.getInputProps('password')} />
           <PasswordInput label="Confirm Password" placeholder="Confirm your password" required mt="md" {...form.getInputProps('confirmPassword')} />
 
-          <Button fullWidth mt="xl" type="submit">Register</Button>
+          <Button fullWidth mt="xl" type="submit" loading={loading} disabled={!form.isValid()}>Register</Button>
         </form>
       </Paper>
     </Container>

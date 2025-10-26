@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { MantineProvider } from '@mantine/core';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 export default function App() {
   return (
@@ -11,13 +13,18 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/" element={<Navigate to="/login" />} />
           </Routes>
-          <footer className="mt-10 text-sm text-slate-500 text-center">
-            © {new Date().getFullYear()} Tidy. Built with React + Vite.
-          </footer>
         </main>
       </Router>
     </MantineProvider>
-  )
+  );
 }
