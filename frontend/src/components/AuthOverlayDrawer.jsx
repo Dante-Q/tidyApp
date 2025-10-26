@@ -38,7 +38,7 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
         duration: 400,
         timingFunction: "ease",
       }}
-      styles={(theme) => ({
+      styles={() => ({
         root: { position: "fixed" },
         overlay: {
           position: "fixed",
@@ -46,18 +46,18 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
         },
         drawer: {
           position: "fixed",
-          background: theme.white,
+          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
           zIndex: 10000,
         },
         title: {
-          color: "#0f172a",
+          color: "#ffffff",
           fontSize: "1.5rem",
           fontWeight: 600,
         },
         body: {
           marginTop: "20px",
           padding: "24px",
-          background: "white",
+          background: "transparent",
           height: "100%",
         },
       })}
@@ -80,7 +80,7 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
 
       <div
         style={{
-          borderTop: "1px solid #e2e8f0",
+          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
           marginTop: "20px",
           paddingTop: "20px",
         }}
@@ -92,8 +92,9 @@ export default function AuthOverlayDrawer({ opened, onClose }) {
           styles={{
             root: {
               height: "42px",
+              color: "#6dd5ed",
               "&:hover": {
-                background: "#f1f5f9",
+                background: "rgba(109, 213, 237, 0.1)",
               },
             },
           }}

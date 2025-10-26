@@ -8,44 +8,57 @@ export default function Navbar() {
   const { user, logout } = useContext(UserContext);
 
   return (
-    <Container
-      size="lg"
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <Text fw={700} size="xl">
-        TidyApp
-      </Text>
-
-      <Group gap="sm">
+    <div className="navbar-wrapper">
+      <Container
+        size="lg"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
         <Link to="/" style={{ textDecoration: "none" }}>
-          <Button variant="subtle">Home</Button>
+          <div className="navbar-logo">
+            <span className="navbar-logo-emoji">🌊</span>
+            <Text className="navbar-logo-text" fw={700} size="xl">
+              Tidy
+            </Text>
+          </div>
         </Link>
 
-        {user ? (
-          <>
-            <Link to="/dashboard" style={{ textDecoration: "none" }}>
-              <Button variant="light">Dashboard</Button>
-            </Link>
-            <Button color="red" variant="outline" onClick={logout}>
-              Logout
+        <Group gap="sm">
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button variant="subtle" className="navbar-btn navbar-btn-home">
+              Home
             </Button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              <Button variant="light">Login</Button>
-            </Link>
-            <Link to="/register" style={{ textDecoration: "none" }}>
-              <Button variant="outline">Register</Button>
-            </Link>
-          </>
-        )}
-      </Group>
-    </Container>
+          </Link>
+
+          {user ? (
+            <>
+              <Link to="/dashboard" style={{ textDecoration: "none" }}>
+                <Button className="navbar-btn navbar-btn-dashboard">
+                  Dashboard
+                </Button>
+              </Link>
+              <Button className="navbar-btn navbar-btn-logout" onClick={logout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" style={{ textDecoration: "none" }}>
+                <Button className="navbar-btn navbar-btn-login">Login</Button>
+              </Link>
+              <Link to="/register" style={{ textDecoration: "none" }}>
+                <Button className="navbar-btn navbar-btn-register">
+                  Register
+                </Button>
+              </Link>
+            </>
+          )}
+        </Group>
+      </Container>
+    </div>
   );
 }
