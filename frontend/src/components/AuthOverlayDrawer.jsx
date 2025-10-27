@@ -16,8 +16,6 @@ export default function AuthOverlayDrawer({
   const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode);
 
-  console.log("AuthOverlayDrawer rendered:", { opened, mode }); // Debug log
-
   // Sync local mode when initialMode changes
   useEffect(() => {
     setMode(initialMode);
