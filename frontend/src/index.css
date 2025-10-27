@@ -279,7 +279,7 @@ select:focus {
   text-align: center;
   position: relative;
   z-index: 1;
-  max-width: 600px;
+  max-width: 1200px;
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -480,7 +480,7 @@ select:focus {
 /* Hero / Home section */
 .hero-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;
