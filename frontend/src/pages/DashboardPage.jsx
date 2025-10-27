@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import HeroContainer from "../components/HeroContainer";
+import FavoritesWatchlist from "../components/FavoritesWatchlist";
 
 export default function DashboardPage() {
   const { user } = useContext(UserContext);
@@ -19,16 +20,7 @@ export default function DashboardPage() {
 
       {/* Dashboard content section */}
       <section className="homepage-content">
-        {/* Widgets will go here */}
-        <div
-          style={{
-            textAlign: "center",
-            padding: "2rem",
-            color: "rgba(255, 255, 255, 0.7)",
-          }}
-        >
-          Dashboard widgets coming soon...
-        </div>
+        <FavoritesWatchlist />
       </section>
     </div>
   );
