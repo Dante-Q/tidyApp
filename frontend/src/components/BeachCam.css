@@ -1,0 +1,375 @@
+/* Beach Cam Component */
+.beach-cam {
+  width: 100%;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
+
+.beach-cam-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.beach-cam-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beach-cam-header p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.beach-cam-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 1.5rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Main camera view */
+.beach-cam-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cam-video-container {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  aspect-ratio: 16 / 9;
+}
+
+.cam-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Live indicator */
+.cam-live-indicator {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(239, 68, 68, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.live-text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* Camera info overlay */
+.cam-info-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  padding: 3rem 1.5rem 1.5rem;
+  z-index: 1;
+}
+
+.cam-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.cam-location {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Camera controls */
+.cam-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.cam-control-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  color: #ffffff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.cam-control-btn:hover {
+  background: rgba(109, 213, 237, 0.3);
+  border-color: #6dd5ed;
+  transform: scale(1.1);
+}
+
+/* Camera stats */
+.cam-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.cam-stat {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cam-stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cam-stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #6dd5ed;
+}
+
+/* Camera list */
+.beach-cam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.cam-list-header {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(109, 213, 237, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cam-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cam-list-item:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  transform: translateX(4px);
+}
+
+.cam-list-item.active {
+  background: rgba(109, 213, 237, 0.2);
+  border-color: #6dd5ed;
+}
+
+.cam-list-thumbnail {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cam-list-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cam-list-live {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(239, 68, 68, 0.9);
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.live-dot-small {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+.cam-list-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cam-list-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cam-list-location {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cam-list-arrow {
+  font-size: 1.5rem;
+  color: rgba(109, 213, 237, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.cam-list-item:hover .cam-list-arrow {
+  transform: translateX(4px);
+  color: #6dd5ed;
+}
+
+/* Custom scrollbar for camera list */
+.beach-cam-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.beach-cam-list::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.beach-cam-list::-webkit-scrollbar-thumb {
+  background: rgba(109, 213, 237, 0.3);
+  border-radius: 4px;
+}
+
+.beach-cam-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(109, 213, 237, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .beach-cam-container {
+    grid-template-columns: 1fr;
+  }
+
+  .beach-cam-list {
+    max-height: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .cam-list-header {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .beach-cam-container {
+    padding: 1rem;
+  }
+
+  .cam-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cam-name {
+    font-size: 1.25rem;
+  }
+
+  .cam-controls {
+    gap: 0.25rem;
+  }
+
+  .cam-control-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .beach-cam-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .cam-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .cam-stat {
+    padding: 0.75rem;
+  }
+
+  .cam-info-overlay {
+    padding: 2rem 1rem 1rem;
+  }
+}
