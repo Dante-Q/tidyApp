@@ -1,5 +1,6 @@
 // AuthOverlayDrawer.jsx
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Drawer, Button } from "@mantine/core";
 import "@mantine/core/styles.css"; // Add Mantine CSS
 import { UserContext } from "../context/UserContext.jsx";
@@ -12,6 +13,7 @@ export default function AuthOverlayDrawer({
   initialMode = "login",
 }) {
   const { login } = useContext(UserContext);
+  const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode);
 
   console.log("AuthOverlayDrawer rendered:", { opened, mode }); // Debug log
@@ -77,6 +79,7 @@ export default function AuthOverlayDrawer({
           onLogin={(userData) => {
             login(userData);
             onClose();
+            navigate("/dashboard");
           }}
         />
       ) : (
@@ -84,6 +87,7 @@ export default function AuthOverlayDrawer({
           onRegister={(userData) => {
             login(userData);
             onClose();
+            navigate("/dashboard");
           }}
         />
       )}

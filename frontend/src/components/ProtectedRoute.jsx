@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext.jsx';
-import axios from 'axios';
+import { useContext, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext.jsx";
+import axios from "axios";
 
 export default function ProtectedRoute({ children }) {
   const { user, login } = useContext(UserContext);
@@ -11,7 +11,9 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/auth/me', { withCredentials: true });
+        const res = await axios.get("http://localhost:5000/api/auth/me", {
+          withCredentials: true,
+        });
         login(res.data);
         setAuthorized(true);
       } catch {
@@ -21,8 +23,12 @@ export default function ProtectedRoute({ children }) {
       }
     };
 
-    if (!user) checkAuth();
-    else setAuthorized(true);
+    if (!user) {
+      checkAuth();
+    } else {
+      setAuthorized(true);
+      setLoading(false);
+    }
   }, [user, login]);
 
   if (loading) return <div>Loading...</div>;
