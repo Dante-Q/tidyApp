@@ -1,5 +1,6 @@
 // HomePage.jsx
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
 import InfoGrid from "../components/InfoGrid";
@@ -26,7 +27,11 @@ export default function HomePage() {
           <p className="hero-subtitle">
             Stay in sync with tides, surf reports, and weather in Cape Town.
           </p>
-          {!user && (
+          {user ? (
+            <Link to="/dashboard">
+              <button className="hero-cta-button">Go to Dashboard</button>
+            </Link>
+          ) : (
             <button
               className="hero-cta-button"
               onClick={() => openAuth("login")}

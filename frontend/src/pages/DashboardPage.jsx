@@ -14,7 +14,7 @@ export default function DashboardPage() {
             <span className="hero-emoji">👋</span>
             Welcome back, {user.name}!
           </h1>
-          <p className="hero-subtitle">Your personalized beach dashboard</p>
+          <p className="hero-subtitle">Your favorite beaches & conditions</p>
         </div>
       </HeroContainer>
 
