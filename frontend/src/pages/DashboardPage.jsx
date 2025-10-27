@@ -1,17 +1,27 @@
-import { useContext } from 'react';
-import { Button, Container, Title, Text } from '@mantine/core';
-import { UserContext } from '../context/UserContext.jsx';
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext.jsx";
+import HeroContainer from "../components/HeroContainer";
+import FavoritesWatchlist from "../components/FavoritesWatchlist";
 
 export default function DashboardPage() {
-  const { user, logout } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
-    <Container size={600} mt={40}>
-      <Title>Welcome, {user.name}!</Title>
-      <Text mt="md">Your email: {user.email}</Text>
-        <Button mt="xl" color="red" onClick={logout}>
-        Logout
-        </Button>
-    </Container>
+    <div className="homepage-wrapper">
+      <HeroContainer>
+        <div className="hero-content">
+          <h1 className="hero-title">
+            <span className="hero-emoji">👋</span>
+            Welcome back, {user.name}!
+          </h1>
+          <p className="hero-subtitle">Your personalized beach dashboard</p>
+        </div>
+      </HeroContainer>
+
+      {/* Dashboard content section */}
+      <section className="homepage-content">
+        <FavoritesWatchlist />
+      </section>
+    </div>
   );
 }
