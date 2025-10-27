@@ -14,7 +14,6 @@ A modern web application for staying in sync with tides, surf reports, and weath
 ## 🛠️ Tech Stack
 
 ### Frontend
-
 - **React 19** — UI library
 - **Vite** — Build tool and dev server
 - **Mantine UI** — Component library
@@ -23,7 +22,6 @@ A modern web application for staying in sync with tides, surf reports, and weath
 - **CSS3** — Custom styling with gradients, animations, and glassmorphism
 
 ### Backend
-
 - **Node.js & Express** — Server and REST API
 - **MongoDB & Mongoose** — Database and ODM
 - **JWT** — Token-based authentication
@@ -61,24 +59,20 @@ tidyapp/
 ### Installation
 
 1. **Clone the repository**
-
    ```bash
    git clone https://github.com/Dante-Q/tidyApp.git
    cd tidyapp
    ```
 
 2. **Install dependencies**
-
    ```bash
    npm run install-all
    ```
-
    This installs packages for both frontend and backend.
 
 3. **Set up environment variables**
-
+   
    Create `backend/.env`:
-
    ```env
    MONGODB_URI=mongodb://127.0.0.1:27017/tidyapp
    JWT_SECRET=your-secret-key-here
@@ -88,7 +82,6 @@ tidyapp/
 ### Running the App
 
 **Development mode** (runs MongoDB, backend, and frontend concurrently):
-
 ```bash
 npm start
 ```
@@ -97,7 +90,6 @@ npm start
 - Backend API: http://localhost:5000
 
 **Individual services:**
-
 ```bash
 # Frontend only
 cd frontend && npm run dev
@@ -112,7 +104,6 @@ npm run mongo
 ## 🔑 API Endpoints
 
 ### Authentication
-
 - `POST /api/auth/register` — Register new user
 - `POST /api/auth/login` — Login user
 - `GET /api/auth/me` — Get current user (protected)
@@ -130,19 +121,16 @@ npm run mongo
 ## 📝 Available Scripts
 
 ### Root
-
 - `npm start` — Run MongoDB, backend, and frontend
 - `npm run dev` — Development mode with hot reload
 - `npm run install-all` — Install all dependencies
 
 ### Frontend
-
 - `npm run dev` — Start Vite dev server
 - `npm run build` — Build for production
 - `npm run preview` — Preview production build
 
 ### Backend
-
 - `npm run dev` — Start with nodemon (auto-restart)
 - `npm start` — Start production server
 
