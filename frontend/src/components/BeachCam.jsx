@@ -9,21 +9,24 @@ const BeachCam = () => {
       name: "Muizenberg Beach",
       location: "Main Beach",
       status: "live",
-      thumbnail: "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Muizenberg+Cam",
+      thumbnail:
+        "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Muizenberg+Cam",
     },
     {
       id: 2,
       name: "Clifton 4th",
       location: "Clifton",
       status: "live",
-      thumbnail: "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Clifton+Cam",
+      thumbnail:
+        "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Clifton+Cam",
     },
     {
       id: 3,
       name: "Camps Bay",
       location: "Main Beach",
       status: "live",
-      thumbnail: "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Camps+Bay+Cam",
+      thumbnail:
+        "https://via.placeholder.com/400x300/1e293b/6dd5ed?text=Camps+Bay+Cam",
     },
   ]);
 
@@ -45,7 +48,7 @@ const BeachCam = () => {
               alt={selectedCam.name}
               className="cam-video"
             />
-            
+
             {/* Live indicator */}
             <div className="cam-live-indicator">
               <span className="live-dot"></span>
@@ -96,7 +99,7 @@ const BeachCam = () => {
         {/* Camera selection list */}
         <div className="beach-cam-list">
           <div className="cam-list-header">Available Cameras</div>
-          
+
           {cameras.map((cam) => (
             <div
               key={cam.id}
@@ -114,12 +117,12 @@ const BeachCam = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="cam-list-info">
                 <div className="cam-list-name">{cam.name}</div>
                 <div className="cam-list-location">📍 {cam.location}</div>
               </div>
-              
+
               <div className="cam-list-arrow">›</div>
             </div>
           ))}

@@ -43,7 +43,8 @@ const WaveHeightGraph = () => {
     return info[rating] || info.fair;
   };
 
-  const currentWave = waveData.find((w) => w.time === currentTime) || waveData[0];
+  const currentWave =
+    waveData.find((w) => w.time === currentTime) || waveData[0];
   const currentRating = getRatingInfo(currentWave.rating);
 
   return (
@@ -101,10 +102,20 @@ const WaveHeightGraph = () => {
             </div>
 
             {/* Wave line and area */}
-            <svg className="wave-graph-svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+            <svg
+              className="wave-graph-svg"
+              viewBox="0 0 1000 300"
+              preserveAspectRatio="none"
+            >
               {/* Gradient definition */}
               <defs>
-                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient
+                  id="waveGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
                   <stop offset="0%" stopColor="rgba(109, 213, 237, 0.6)" />
                   <stop offset="100%" stopColor="rgba(109, 213, 237, 0.1)" />
                 </linearGradient>
@@ -170,10 +181,14 @@ const WaveHeightGraph = () => {
               {waveData.map((d, i) => (
                 <div
                   key={i}
-                  className={`wave-time-label ${d.time === currentTime ? "current" : ""}`}
+                  className={`wave-time-label ${
+                    d.time === currentTime ? "current" : ""
+                  }`}
                 >
                   {d.time}
-                  {d.time === currentTime && <span className="current-marker">▲</span>}
+                  {d.time === currentTime && (
+                    <span className="current-marker">▲</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -185,19 +200,31 @@ const WaveHeightGraph = () => {
           <div className="wave-legend-title">Surf Rating</div>
           <div className="wave-legend-items">
             <div className="wave-legend-item">
-              <div className="wave-legend-dot" style={{ background: "#ef4444" }}></div>
+              <div
+                className="wave-legend-dot"
+                style={{ background: "#ef4444" }}
+              ></div>
               <span>Poor (0-1.5m)</span>
             </div>
             <div className="wave-legend-item">
-              <div className="wave-legend-dot" style={{ background: "#f59e0b" }}></div>
+              <div
+                className="wave-legend-dot"
+                style={{ background: "#f59e0b" }}
+              ></div>
               <span>Fair (1.5-2.5m)</span>
             </div>
             <div className="wave-legend-item">
-              <div className="wave-legend-dot" style={{ background: "#6dd5ed" }}></div>
+              <div
+                className="wave-legend-dot"
+                style={{ background: "#6dd5ed" }}
+              ></div>
               <span>Good (2.5-3.5m)</span>
             </div>
             <div className="wave-legend-item">
-              <div className="wave-legend-dot" style={{ background: "#10b981" }}></div>
+              <div
+                className="wave-legend-dot"
+                style={{ background: "#10b981" }}
+              ></div>
               <span>Excellent (3.5m+)</span>
             </div>
           </div>
