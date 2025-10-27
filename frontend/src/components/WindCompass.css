@@ -1,0 +1,358 @@
+/* Wind Compass Component */
+.wind-compass {
+  width: 100%;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
+
+.wind-compass-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.wind-compass-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wind-compass-header p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.wind-compass-container {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Wind stats */
+.wind-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.wind-stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.wind-stat-card:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  transform: translateY(-2px);
+}
+
+.wind-stat-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wind-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.wind-stat-condition {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wind-stat-degrees {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Compass circle */
+.wind-compass-circle-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.wind-compass-circle {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compass-outer-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(109, 213, 237, 0.3);
+  box-shadow: 0 0 30px rgba(109, 213, 237, 0.2),
+    inset 0 0 30px rgba(109, 213, 237, 0.1);
+}
+
+/* Cardinal directions */
+.compass-directions {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.compass-direction {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.direction-label {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.direction-label.active {
+  color: #6dd5ed;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(109, 213, 237, 0.8);
+}
+
+/* Tick marks */
+.compass-ticks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.compass-tick {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  transform-origin: center;
+}
+
+.compass-tick::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background: rgba(109, 213, 237, 0.3);
+}
+
+.compass-tick.major::before {
+  height: 15px;
+  background: rgba(109, 213, 237, 0.5);
+}
+
+.compass-tick.minor::before {
+  height: 8px;
+}
+
+/* Wind arrow */
+.wind-arrow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+}
+
+.arrow-head {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid #6dd5ed;
+  filter: drop-shadow(0 0 10px rgba(109, 213, 237, 0.8));
+  animation: arrow-pulse 2s ease-in-out infinite;
+}
+
+.arrow-tail {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 110px;
+  background: linear-gradient(to bottom, #6dd5ed, rgba(109, 213, 237, 0.3));
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(109, 213, 237, 0.5);
+}
+
+@keyframes arrow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(109, 213, 237, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(109, 213, 237, 1));
+  }
+}
+
+/* Center dot */
+.compass-center {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #6dd5ed;
+  box-shadow: 0 0 20px rgba(109, 213, 237, 0.8);
+  z-index: 2;
+}
+
+.center-pulse {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #6dd5ed;
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Wind strength bar */
+.wind-strength-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wind-strength-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.wind-strength-track {
+  position: relative;
+  height: 30px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 15px;
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  overflow: hidden;
+}
+
+.wind-strength-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 15px;
+  transition: all 0.6s ease;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.wind-strength-markers {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0.5rem 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .wind-compass-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .wind-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .wind-compass-circle {
+    width: 280px;
+    height: 280px;
+  }
+
+  .direction-label {
+    font-size: 1rem;
+  }
+
+  .direction-label.active {
+    font-size: 1.25rem;
+  }
+
+  .arrow-head {
+    top: 30px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid #6dd5ed;
+  }
+
+  .arrow-tail {
+    top: 54px;
+    height: 85px;
+  }
+
+  .wind-strength-markers {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wind-compass-circle {
+    width: 240px;
+    height: 240px;
+  }
+
+  .direction-label {
+    font-size: 0.875rem;
+  }
+
+  .direction-label.active {
+    font-size: 1.125rem;
+  }
+}
