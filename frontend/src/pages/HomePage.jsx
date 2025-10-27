@@ -7,6 +7,7 @@ import BeachMap from "../components/BeachMap";
 import TideChart from "../components/TideChart";
 import WindCompass from "../components/WindCompass";
 import WaveHeightGraph from "../components/WaveHeightGraph";
+import BeachCam from "../components/BeachCam";
 import DashboardPage from "./DashboardPage";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
@@ -41,6 +42,7 @@ export default function HomePage() {
         <TideChart />
         <WindCompass />
         <WaveHeightGraph />
+        <BeachCam />
         <BeachMap />
       </section>
     </div>
