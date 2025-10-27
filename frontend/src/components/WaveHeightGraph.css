@@ -143,15 +143,16 @@
 .wave-graph-svg .current-point {
   animation: pulse-point 2s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+  transform-origin: center;
 }
 
 @keyframes pulse-point {
   0%,
   100% {
-    r: 8;
+    transform: scale(1);
   }
   50% {
-    r: 10;
+    transform: scale(1.25);
   }
 }
 
