@@ -29,9 +29,19 @@ if (missing.length) {
 
 const app = express();
 
-// CORS configuration - allow both localhost and 127.0.0.1
+// CORS configuration - allow localhost and 127.0.0.1 on any port (for development)
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
+    if (!origin) return callback(null, true);
+
+    // Allow localhost and 127.0.0.1 on any port
+    if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true, // Allow cookies and auth headers
 };
 app.use(cors(corsOptions));

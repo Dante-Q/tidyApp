@@ -1,19 +1,10 @@
 import { useEffect, useState, useRef } from "react";
+import { fetchMarineData } from "../services/openMeteoService.js";
+import { createCache } from "../utils/cacheManager.js";
+import { CACHE_CONFIG } from "../config/cacheConfig.js";
 
-// Coordinates for Cape Town surf spots
-const beachCoords = {
-  muizenberg: { lat: -34.105, lon: 18.472 },
-  bloubergstrand: { lat: -33.808, lon: 18.464 },
-  strand: { lat: -34.11, lon: 18.827 },
-  clifton: { lat: -33.951, lon: 18.377 },
-  kalkbay: { lat: -34.127, lon: 18.449 },
-  milnerton: { lat: -33.885, lon: 18.495 },
-};
-
-// Cache with 15-minute expiry to avoid spamming the API
-const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
-const MAX_CACHE_SIZE = 20; // Limit cache size for scalability
-const cache = new Map();
+// Create cache instance for surf data
+const surfCache = createCache(CACHE_CONFIG.surfData);
 
 export default function useSurfData(beachName = "muizenberg") {
   const [data, setData] = useState(null);
@@ -23,32 +14,19 @@ export default function useSurfData(beachName = "muizenberg") {
   const abortControllerRef = useRef(null);
 
   useEffect(() => {
-    const beach = beachCoords[beachName.toLowerCase()];
-    if (!beach) {
-      setError("Unknown beach name");
-      setLoading(false);
-      return;
-    }
-
     // Check cache first
     const cacheKey = beachName.toLowerCase();
-    const cached = cache.get(cacheKey);
-    const now = Date.now();
+    const cached = surfCache.get(cacheKey);
 
-    if (cached && now - cached.timestamp < CACHE_DURATION) {
-      // Refresh LRU: move this entry to end of Map
-      cache.delete(cacheKey);
-      cache.set(cacheKey, cached);
-
+    if (cached) {
       // Use cached data
-      setData(cached.data);
-      setCurrent(cached.current);
+      setData(cached);
+      setCurrent(cached.current || null);
       setLoading(false);
       return;
     }
 
-    const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${beach.lat}&longitude=${beach.lon}&hourly=wave_height,wave_direction,wave_period,wind_wave_height,wind_wave_direction,wind_wave_period,swell_wave_height,swell_wave_direction,swell_wave_period&current=wave_height,wave_direction,wave_period&timezone=Africa/Johannesburg`;
-
+    // Fetch fresh data
     async function fetchData() {
       try {
         setLoading(true);
@@ -62,36 +40,20 @@ export default function useSurfData(beachName = "muizenberg") {
         // Create new abort controller for this request
         abortControllerRef.current = new AbortController();
 
-        const response = await fetch(url, {
+        const json = await fetchMarineData(beachName, {
           signal: abortControllerRef.current.signal,
         });
 
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
+        // Validate API response structure
+        if (!json?.hourly?.wave_height) {
+          throw new Error("Invalid API response: missing wave data");
         }
 
-        const json = await response.json();
-
-        // Evict least recently used entry if cache is full (LRU strategy)
-        if (cache.size >= MAX_CACHE_SIZE && !cache.has(cacheKey)) {
-          const firstKey = cache.keys().next().value;
-          cache.delete(firstKey);
-        }
-
-        // Delete and re-set to move this key to the end (LRU behavior)
-        cache.delete(cacheKey);
-        cache.set(cacheKey, {
-          data: json,
-          current: json.current || null,
-          timestamp: now,
-        });
+        // Cache the raw API response
+        surfCache.set(cacheKey, json);
 
         setData(json);
-
-        // Set current conditions if available
-        if (json.current) {
-          setCurrent(json.current);
-        }
+        setCurrent(json.current || null);
       } catch (err) {
         // Don't set error if request was aborted
         if (err.name !== "AbortError") {
