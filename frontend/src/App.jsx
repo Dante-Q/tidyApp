@@ -5,6 +5,7 @@ import { UIProvider } from "./context/UIProvider.jsx";
 
 import Navbar from "./components/Navbar.jsx";
 import GlobalDrawer from "./components/GlobalDrawer.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -19,6 +20,7 @@ export default function App() {
       <UserProvider>
         <UIProvider>
           <Router>
+            <ScrollToTop />
             <AppShell header={{ height: 60 }} padding={0}>
               <AppShell.Header>
                 <Navbar />

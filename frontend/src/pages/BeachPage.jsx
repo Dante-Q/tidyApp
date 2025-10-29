@@ -13,8 +13,6 @@ export default function BeachPage() {
     if (beachName) {
       setSelectedBeach(beachName);
     }
-    // Scroll to top when page loads or beachName changes
-    window.scrollTo(0, 0);
   }, [beachName]);
 
   // Fetch surf data for selected beach
