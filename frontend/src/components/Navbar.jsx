@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
+import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
