@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import "./InfoGrid.css";
 
 export default function InfoGrid() {
-  // Placeholder info data - replace with real data later
+  // Info card data linked to InfoPage articles
   const infoCards = [
     {
       id: 1,
@@ -9,8 +10,8 @@ export default function InfoGrid() {
       description:
         "Check daily high and low tide schedules for all Cape Town beaches.",
       imageUrl:
-        "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Tide+Times",
-      link: "#",
+        "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&q=80&fit=crop",
+      slug: "tide-times",
     },
     {
       id: 2,
@@ -18,24 +19,25 @@ export default function InfoGrid() {
       description:
         "7-day weather outlook including wind speed and temperature.",
       imageUrl:
-        "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Weather",
-      link: "#",
+        "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&q=80&fit=crop",
+      slug: "weather-forecast",
     },
     {
       id: 3,
       title: "Surf Report",
       description: "Live wave height, swell direction, and surf conditions.",
       imageUrl:
-        "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Surf+Report",
-      link: "#",
+        "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80&fit=crop",
+      slug: "surf-report",
     },
     {
       id: 4,
       title: "Beach Safety",
       description:
         "Important safety tips and current water quality information.",
-      imageUrl: "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Safety",
-      link: "#",
+      imageUrl:
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80&fit=crop",
+      slug: "beach-safety",
     },
     {
       id: 5,
@@ -43,8 +45,8 @@ export default function InfoGrid() {
       description:
         "Current ocean temperatures and seasonal trends for your comfort.",
       imageUrl:
-        "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Water+Temp",
-      link: "#",
+        "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80&fit=crop",
+      slug: "water-temperature",
     },
     {
       id: 6,
@@ -52,8 +54,8 @@ export default function InfoGrid() {
       description:
         "Discover what marine species you might encounter at local beaches.",
       imageUrl:
-        "https://via.placeholder.com/300x300/1e293b/6dd5ed?text=Marine+Life",
-      link: "#",
+        "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80&fit=crop",
+      slug: "marine-life",
     },
   ];
 
@@ -66,7 +68,7 @@ export default function InfoGrid() {
 
       <div className="info-grid-container">
         {infoCards.map((card) => (
-          <div key={card.id} className="info-card">
+          <Link key={card.id} to={`/info/${card.slug}`} className="info-card">
             <div
               className="info-card-image"
               style={{ backgroundImage: `url(${card.imageUrl})` }}
@@ -74,11 +76,24 @@ export default function InfoGrid() {
             <div className="info-card-content">
               <h3 className="info-card-title">{card.title}</h3>
               <p className="info-card-description">{card.description}</p>
-              <a href={card.link} className="info-card-link">
-                Learn more →
-              </a>
+              <div className="info-card-link">
+                Learn more
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

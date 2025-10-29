@@ -1,0 +1,312 @@
+/* Beach Carousel Component */
+.beach-carousel {
+  width: 100%;
+  padding: 3rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.beach-carousel-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+}
+
+.beach-carousel-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beach-carousel-header p {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Carousel Container */
+.beach-carousel-container {
+  position: relative;
+  padding: 0 3rem;
+}
+
+/* Beach Grid */
+.beach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 0 0.7rem;
+}
+
+/* Beach Card */
+.beach-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  min-height: 480px;
+}
+
+.beach-card:hover {
+  border-color: rgba(109, 213, 237, 0.5);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(109, 213, 237, 0.3);
+}
+
+.beach-card-image {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.beach-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.3),
+    rgba(15, 23, 42, 0.7)
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.beach-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.beach-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.beach-card-description {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 4.8em;
+  max-height: 4.8em;
+}
+
+.beach-card-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  min-height: 3.5em;
+  align-content: flex-start;
+}
+
+.beach-feature-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6dd5ed;
+  background: rgba(109, 213, 237, 0.15);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.beach-card-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #6dd5ed;
+  transition: gap 0.3s ease;
+}
+
+.beach-card:hover .beach-card-action {
+  gap: 0.75rem;
+}
+
+.beach-card-action svg {
+  transition: transform 0.3s ease;
+}
+
+.beach-card:hover .beach-card-action svg {
+  transform: translateX(4px);
+}
+
+/* Navigation Buttons */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6dd5ed;
+  z-index: 10;
+}
+
+.carousel-nav svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.carousel-nav:hover {
+  background: rgba(109, 213, 237, 0.2);
+  border-color: #6dd5ed;
+  box-shadow: 0 4px 12px rgba(109, 213, 237, 0.3);
+}
+
+.carousel-nav-prev {
+  left: 0;
+}
+
+.carousel-nav-next {
+  right: 0;
+}
+
+/* Pagination Dots */
+.carousel-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 0 2rem;
+}
+
+.pagination-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(109, 213, 237, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.pagination-dot:hover {
+  background: rgba(109, 213, 237, 0.5);
+  transform: scale(1.2);
+}
+
+.pagination-dot.active {
+  background: #6dd5ed;
+  width: 24px;
+  border-radius: 5px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .beach-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .beach-carousel-container {
+    padding: 0 3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .beach-carousel {
+    padding: 2rem 0;
+  }
+
+  .beach-carousel-header {
+    margin-bottom: 2rem;
+  }
+
+  .beach-carousel-header h2 {
+    font-size: 2rem;
+  }
+
+  .beach-carousel-header p {
+    font-size: 1rem;
+  }
+
+  .beach-carousel-container {
+    padding: 0 2.5rem;
+  }
+
+  .beach-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .beach-card-image {
+    height: 180px;
+  }
+
+  .carousel-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-nav-prev {
+    left: -5px;
+  }
+
+  .carousel-nav-next {
+    right: -5px;
+  }
+
+  .carousel-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .beach-carousel-container {
+    padding: 0 2rem;
+  }
+
+  .beach-grid {
+    padding: 0 0.5rem;
+  }
+
+  .carousel-nav {
+    width: 36px;
+    height: 36px;
+  }
+}

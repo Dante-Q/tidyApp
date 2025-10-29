@@ -12,7 +12,8 @@ import {
   Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
+import { API_ENDPOINTS } from "../config/api.js";
 
 export default function LoginPage({ onLogin }) {
   const [error, setError] = useState("");
@@ -35,11 +36,9 @@ export default function LoginPage({ onLogin }) {
       setError("");
       setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        values,
-        { withCredentials: true }
-      );
+      const response = await axios.post(API_ENDPOINTS.auth.login, values, {
+        withCredentials: true,
+      });
 
       login(response.data.user);
 

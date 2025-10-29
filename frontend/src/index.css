@@ -93,114 +93,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Navbar Styling */
-.navbar-wrapper {
-  height: 100%;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(109, 213, 237, 0.2);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-}
-
-.navbar-link {
-  text-decoration: none;
-}
-
-.navbar-link:hover {
-  text-decoration: none;
-}
-
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.navbar-logo:hover {
-  transform: scale(1.05);
-}
-
-.navbar-logo-emoji {
-  font-size: 1.5rem;
-  animation: wave 2.5s ease-in-out infinite;
-}
-
-.navbar-logo-text {
-  background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: 1.5rem !important;
-  font-weight: 800 !important;
-}
-
-.navbar-btn {
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  padding: 0.5rem 1.25rem;
-}
-
-.navbar-btn-home {
-  color: rgba(255, 255, 255, 0.8);
-  background: transparent;
-}
-
-.navbar-btn-home:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.navbar-btn-dashboard,
-.navbar-btn-login {
-  background: rgba(109, 213, 237, 0.15);
-  color: #6dd5ed;
-  border: 1px solid rgba(109, 213, 237, 0.3);
-}
-
-.navbar-btn-dashboard:hover,
-.navbar-btn-login:hover {
-  background: rgba(109, 213, 237, 0.25);
-  border-color: #6dd5ed;
-  transform: translateY(-1px);
-}
-
-.navbar-btn-register {
-  background: transparent;
-  color: #6dd5ed;
-  border: 1px solid rgba(109, 213, 237, 0.5);
-}
-
-.navbar-btn-register:hover {
-  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
-  color: #ffffff;
-  border-color: transparent;
-  transform: translateY(-1px);
-}
-
-.navbar-btn-logout {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.navbar-btn-logout:hover {
-  background: #ef4444;
-  color: #ffffff;
-  border-color: transparent;
-  transform: translateY(-1px);
-}
-
 /* Buttons */
 button {
   font-family: var(--font-sans);
@@ -279,7 +171,7 @@ select:focus {
   text-align: center;
   position: relative;
   z-index: 1;
-  max-width: 600px;
+  max-width: 1200px;
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -480,7 +372,7 @@ select:focus {
 /* Hero / Home section */
 .hero-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -11,7 +11,8 @@ import {
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
+import { API_ENDPOINTS } from "../config/api.js";
 
 export default function RegisterPage({ onRegister }) {
   const [error, setError] = useState("");
@@ -39,7 +40,7 @@ export default function RegisterPage({ onRegister }) {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        API_ENDPOINTS.auth.register,
         { name: values.name, email: values.email, password: values.password },
         { withCredentials: true }
       );
