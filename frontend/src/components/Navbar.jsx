@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import { Group, Button, Text, Container } from "@mantine/core";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
 
@@ -10,6 +10,16 @@ export default function Navbar() {
   const { openAuth } = useContext(UIContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const [beachesOpen, setBeachesOpen] = useState(false);
+
+  const beaches = [
+    { id: "muizenberg", name: "Muizenberg" },
+    { id: "bloubergstrand", name: "Bloubergstrand" },
+    { id: "strand", name: "Strand" },
+    { id: "clifton", name: "Clifton" },
+    { id: "kalkbay", name: "Kalk Bay" },
+    { id: "milnerton", name: "Milnerton" },
+  ];
 
   const handleLogout = () => {
     logout();
@@ -31,6 +41,42 @@ export default function Navbar() {
         </Link>
 
         <Group gap="sm">
+          <div
+            className="navbar-dropdown"
+            onMouseEnter={() => setBeachesOpen(true)}
+            onMouseLeave={() => setBeachesOpen(false)}
+          >
+            <Button variant="subtle" className="navbar-btn navbar-btn-beaches">
+              Beaches
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ marginLeft: "4px" }}
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </Button>
+            {beachesOpen && (
+              <div className="navbar-dropdown-menu">
+                {beaches.map((beach) => (
+                  <Link
+                    key={beach.id}
+                    to={`/beach/${beach.id}`}
+                    className="navbar-dropdown-item"
+                  >
+                    {beach.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Link to="/forum" className="navbar-link">
             <Button variant="subtle" className="navbar-btn navbar-btn-forum">
               Forum

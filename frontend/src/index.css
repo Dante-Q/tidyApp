@@ -201,6 +201,94 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.navbar-btn-forum,
+.navbar-btn-beaches {
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+}
+
+.navbar-btn-forum:hover,
+.navbar-btn-beaches:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Navbar Dropdown */
+.navbar-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: rgba(30, 41, 59, 0.98);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: dropdown-slide-in 0.2s ease;
+}
+
+.navbar-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: transparent;
+}
+
+.navbar-dropdown-item:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.navbar-dropdown-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+@keyframes dropdown-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-dropdown-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.navbar-dropdown-item {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(109, 213, 237, 0.1);
+  background: rgba(30, 41, 59, 0.98);
+}
+
+.navbar-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.navbar-dropdown-item:hover {
+  background: rgba(109, 213, 237, 0.15);
+  color: #6dd5ed;
+  text-decoration: none;
+  padding-left: 1.5rem;
+}
+
 /* Buttons */
 button {
   font-family: var(--font-sans);
