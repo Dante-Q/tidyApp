@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import HeroContainer from "../components/HeroContainer";
 import FavoritesWatchlist from "../components/FavoritesWatchlist";
+import ApiDataViewer from "../components/ApiDataViewer";
 
 export default function DashboardPage() {
   const { user } = useContext(UserContext);
@@ -21,6 +22,9 @@ export default function DashboardPage() {
       {/* Dashboard content section */}
       <section className="homepage-content">
         <FavoritesWatchlist />
+
+        {/* API Testing Section */}
+        <ApiDataViewer />
       </section>
     </div>
   );
