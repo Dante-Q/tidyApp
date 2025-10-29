@@ -1,0 +1,176 @@
+/* Beach Page */
+.beach-page {
+  min-height: 100vh;
+  background: var(--color-bg-dark);
+}
+
+/* Hero Section */
+.beach-hero {
+  position: relative;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.beach-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.6),
+    rgba(15, 23, 42, 0.9)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.beach-hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.beach-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beach-description {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Beach Features */
+.beach-features {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(109, 213, 237, 0.2);
+}
+
+.feature-icon {
+  font-size: 2rem;
+}
+
+.feature-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Surf Forecast Section */
+.beach-forecast {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem 2rem;
+}
+
+/* Info Grid */
+.beach-info-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  box-shadow: 0 4px 12px rgba(109, 213, 237, 0.2);
+}
+
+.info-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #6dd5ed;
+  margin: 0 0 1rem 0;
+}
+
+.info-card p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .beach-title {
+    font-size: 2.5rem;
+  }
+
+  .beach-description {
+    font-size: 1.125rem;
+  }
+
+  .beach-hero {
+    height: 300px;
+  }
+
+  .beach-features {
+    padding: 2rem 1rem;
+  }
+
+  .beach-forecast {
+    padding: 0 1rem 2rem 1rem;
+  }
+
+  .beach-info-grid {
+    padding: 0 1rem 2rem 1rem;
+    grid-template-columns: 1fr;
+  }
+}
