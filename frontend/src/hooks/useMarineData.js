@@ -4,7 +4,7 @@ import { createCache } from "../utils/cacheManager.js";
 import { CACHE_CONFIG } from "../config/cacheConfig.js";
 
 // Create cache instance for marine data
-const marineCache = createCache(CACHE_CONFIG.surfData);
+const marineCache = createCache(CACHE_CONFIG.marineData);
 
 export default function useMarineData(beachName = "muizenberg") {
   const [data, setData] = useState(null);

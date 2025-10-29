@@ -4,10 +4,10 @@
  */
 
 export const CACHE_CONFIG = {
-  // Surf/marine data from Open-Meteo API
-  surfData: {
+  // Marine data from Open-Meteo API
+  marineData: {
     maxSize: 20, // Maximum number of beaches to cache
-    ttl: 15 * 60 * 1000, // 15 minutes - surf conditions change gradually
+    ttl: 15 * 60 * 1000, // 15 minutes - marine conditions change gradually
   },
 
   // Future: Weather data
