@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import useSurfData from "../hooks/useSurfData";
 import "./BeachPage.css";
@@ -7,6 +7,13 @@ import "./BeachPage.css";
 export default function BeachPage() {
   const { beachName } = useParams();
   const [selectedBeach, setSelectedBeach] = useState(beachName || "muizenberg");
+
+  // Update selectedBeach when route parameter changes
+  useEffect(() => {
+    if (beachName) {
+      setSelectedBeach(beachName);
+    }
+  }, [beachName]);
 
   // Fetch surf data for selected beach
   const { data: surfData, loading, error } = useSurfData(selectedBeach);
