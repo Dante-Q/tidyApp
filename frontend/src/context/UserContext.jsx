@@ -3,8 +3,6 @@ import { UserContext } from "./UserContext.js";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api.js";
 
-export { UserContext };
-
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 

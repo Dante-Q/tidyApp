@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Drawer, Button } from "@mantine/core";
 import "@mantine/core/styles.css"; // Add Mantine CSS
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 

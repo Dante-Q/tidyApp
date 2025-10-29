@@ -11,7 +11,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
 import { API_ENDPOINTS } from "../config/api.js";
 
 export default function RegisterPage({ onRegister }) {

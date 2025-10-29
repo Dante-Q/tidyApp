@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api.js";
 

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
 import HeroContainer from "../components/HeroContainer";
 import FavoritesWatchlist from "../components/FavoritesWatchlist";
 import BeachCarousel from "../components/BeachCarousel";

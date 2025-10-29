@@ -2,7 +2,7 @@
 import { Group, Button, Text, Container } from "@mantine/core";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
-import { UserContext } from "../context/UserContext.jsx";
+import { UserContext } from "../context/UserContext.js";
 import { UIContext } from "../context/UIContext.js";
 import "./Navbar.css";
 
