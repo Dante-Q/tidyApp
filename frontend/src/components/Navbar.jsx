@@ -12,6 +12,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [beachesOpen, setBeachesOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const beaches = [
     { id: "muizenberg", name: "Muizenberg" },
@@ -20,6 +21,15 @@ export default function Navbar() {
     { id: "clifton", name: "Clifton" },
     { id: "kalkbay", name: "Kalk Bay" },
     { id: "milnerton", name: "Milnerton" },
+  ];
+
+  const infoPages = [
+    { id: "tide-times", name: "Tide Times" },
+    { id: "weather-forecast", name: "Weather Forecast" },
+    { id: "surf-report", name: "Surf Report" },
+    { id: "beach-safety", name: "Beach Safety" },
+    { id: "water-temperature", name: "Water Temperature" },
+    { id: "marine-life", name: "Marine Life" },
   ];
 
   const handleLogout = () => {
@@ -73,6 +83,43 @@ export default function Navbar() {
                     onClick={() => setBeachesOpen(false)}
                   >
                     {beach.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div
+            className="navbar-dropdown"
+            onMouseEnter={() => setInfoOpen(true)}
+            onMouseLeave={() => setInfoOpen(false)}
+          >
+            <Button variant="subtle" className="navbar-btn navbar-btn-info">
+              Info
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ marginLeft: "4px" }}
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </Button>
+            {infoOpen && (
+              <div className="navbar-dropdown-menu">
+                {infoPages.map((page) => (
+                  <Link
+                    key={page.id}
+                    to={`/info/${page.id}`}
+                    className="navbar-dropdown-item"
+                    onClick={() => setInfoOpen(false)}
+                  >
+                    {page.name}
                   </Link>
                 ))}
               </div>

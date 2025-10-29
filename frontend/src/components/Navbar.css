@@ -49,71 +49,73 @@
   font-weight: 800 !important;
 }
 
-.navbar-btn {
+.navbar-btn.navbar-btn {
   font-weight: 500;
   transition: all 0.3s ease;
   border-radius: 8px;
   padding: 0.5rem 1.25rem;
 }
 
-.navbar-btn-home {
+.navbar-btn-home.navbar-btn-home {
   color: rgba(255, 255, 255, 0.8);
   background: transparent;
 }
 
-.navbar-btn-home:hover {
+.navbar-btn-home.navbar-btn-home:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
 }
 
-.navbar-btn-dashboard,
-.navbar-btn-login {
+.navbar-btn-dashboard.navbar-btn-dashboard,
+.navbar-btn-login.navbar-btn-login {
   background: rgba(109, 213, 237, 0.15);
   color: #6dd5ed;
   border: 1px solid rgba(109, 213, 237, 0.3);
 }
 
-.navbar-btn-dashboard:hover,
-.navbar-btn-login:hover {
+.navbar-btn-dashboard.navbar-btn-dashboard:hover,
+.navbar-btn-login.navbar-btn-login:hover {
   background: rgba(109, 213, 237, 0.25);
   border-color: #6dd5ed;
   transform: translateY(-1px);
 }
 
-.navbar-btn-register {
+.navbar-btn-register.navbar-btn-register {
   background: transparent;
   color: #6dd5ed;
   border: 1px solid rgba(109, 213, 237, 0.5);
 }
 
-.navbar-btn-register:hover {
+.navbar-btn-register.navbar-btn-register:hover {
   background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
   color: #ffffff;
   border-color: transparent;
   transform: translateY(-1px);
 }
 
-.navbar-btn-logout {
+.navbar-btn-logout.navbar-btn-logout {
   background: rgba(239, 68, 68, 0.15);
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-.navbar-btn-logout:hover {
+.navbar-btn-logout.navbar-btn-logout:hover {
   background: #ef4444;
   color: #ffffff;
   border-color: transparent;
   transform: translateY(-1px);
 }
 
-.navbar-btn-forum,
-.navbar-btn-beaches {
+.navbar-btn-forum.navbar-btn-forum,
+.navbar-btn-beaches.navbar-btn-beaches,
+.navbar-btn-info.navbar-btn-info {
   color: rgba(255, 255, 255, 0.8);
   background: transparent;
 }
 
-.navbar-btn-forum:hover,
-.navbar-btn-beaches:hover {
+.navbar-btn-forum.navbar-btn-forum:hover,
+.navbar-btn-beaches.navbar-btn-beaches:hover,
+.navbar-btn-info.navbar-btn-info:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
 }
