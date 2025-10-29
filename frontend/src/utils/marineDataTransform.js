@@ -2,19 +2,7 @@
  * Transform Open-Meteo API data to component-friendly format
  */
 
-/**
- * Calculate surf rating based on wave height and period
- * Good waves = height + decent period
- */
-export function calculateSurfRating(height, period) {
-  // Better waves have more height AND longer period
-  const score = height * (period / 10); // Normalize period contribution
-
-  if (score >= 3.5) return "excellent";
-  if (score >= 2.5) return "good";
-  if (score >= 1.5) return "fair";
-  return "poor";
-}
+import { calculateSurfRating } from "./surfRating.js";
 
 /**
  * Transform API hourly data to WaveHeightGraph format
@@ -106,7 +94,7 @@ export function getCurrentConditions(apiData) {
   const current = apiData?.current;
 
   if (!current) {
-    // Fallback to first hourly data point
+    // Fallback to first hourly data point <---------------------- both fail - falls back to poor rating.. fix later
     const hourly = apiData?.hourly;
     if (hourly?.wave_height?.[0] && hourly?.wave_period?.[0]) {
       return {
