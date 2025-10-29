@@ -1,4 +1,6 @@
 import { useState } from "react";
+// Separate files required for Vite Fast Refresh: context definition (.js) and provider component (.jsx)
+// This is NOT a circular import - UserContext.js exports the context, this file imports and uses it
 import { UserContext } from "./UserContext.js";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api.js";

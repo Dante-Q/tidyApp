@@ -15,6 +15,10 @@ export default function ScrollToTop() {
       document.body.scrollTop = 0;
     };
 
+    // Triple scroll invocation required for Mantine AppShell async rendering
+    // Mantine's AppShell.Main component renders asynchronously, requiring multiple
+    // scroll attempts. Tested alternatives (single scroll, requestAnimationFrame,
+    // useLayoutEffect) all failed. This pattern ensures scroll works reliably.
     scrollToTop();
     setTimeout(scrollToTop, 0);
     setTimeout(scrollToTop, 100);

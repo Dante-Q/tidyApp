@@ -72,7 +72,7 @@ export default function useSurfData(beachName = "muizenberg") {
 
         const json = await response.json();
 
-        // Evict oldest entry if cache is full (FIFO strategy)
+        // Evict least recently used entry if cache is full (LRU strategy)
         if (cache.size >= MAX_CACHE_SIZE && !cache.has(cacheKey)) {
           const firstKey = cache.keys().next().value;
           cache.delete(firstKey);
