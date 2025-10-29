@@ -4,7 +4,7 @@ import {
   transformWaveData,
   findPeakWave,
   getCurrentConditions,
-} from "../utils/surfDataTransform";
+} from "../utils/marineDataTransform";
 
 // Mock data as constant to avoid dependency warning
 const MOCK_DATA = [
