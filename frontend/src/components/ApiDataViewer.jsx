@@ -1,10 +1,10 @@
 import { useState } from "react";
-import useSurfData from "../hooks/useSurfData";
+import useMarineData from "../hooks/useMarineData";
 import "./ApiDataViewer.css";
 
 export default function ApiDataViewer() {
   const [selectedBeach, setSelectedBeach] = useState("muizenberg");
-  const { data, current, loading, error } = useSurfData(selectedBeach);
+  const { data, current, loading, error } = useMarineData(selectedBeach);
 
   const beaches = [
     "muizenberg",

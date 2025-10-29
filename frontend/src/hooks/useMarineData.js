@@ -3,10 +3,10 @@ import { fetchMarineData } from "../services/openMeteoService.js";
 import { createCache } from "../utils/cacheManager.js";
 import { CACHE_CONFIG } from "../config/cacheConfig.js";
 
-// Create cache instance for surf data
-const surfCache = createCache(CACHE_CONFIG.surfData);
+// Create cache instance for marine data
+const marineCache = createCache(CACHE_CONFIG.surfData);
 
-export default function useSurfData(beachName = "muizenberg") {
+export default function useMarineData(beachName = "muizenberg") {
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,8 +15,9 @@ export default function useSurfData(beachName = "muizenberg") {
 
   useEffect(() => {
     // Check cache first
+
     const cacheKey = beachName.toLowerCase();
-    const cached = surfCache.get(cacheKey);
+    const cached = marineCache.get(cacheKey);
 
     if (cached) {
       // Use cached data
@@ -50,7 +51,7 @@ export default function useSurfData(beachName = "muizenberg") {
         }
 
         // Cache the raw API response
-        surfCache.set(cacheKey, json);
+        marineCache.set(cacheKey, json);
 
         setData(json);
         setCurrent(json.current || null);

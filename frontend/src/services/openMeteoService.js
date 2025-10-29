@@ -3,7 +3,7 @@
  * Handles fetching marine/surf data from Open-Meteo API
  */
 
-import { getBeach } from "../config/beaches.js";
+import { getBeach } from "../config/beachApiConfig.js";
 import { EXTERNAL_APIS } from "../config/api.js";
 
 // Get Marine API URL from config

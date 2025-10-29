@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WaveHeightGraph from "../components/WaveHeightGraph";
-import useSurfData from "../hooks/useSurfData";
-import { beaches } from "../config/beaches.js";
+import useMarineData from "../hooks/useMarineData";
+import { beaches } from "../config/beachApiConfig.js";
 import { beachInfo } from "../data/beachInfo.js";
 import "./BeachPage.css";
 
@@ -17,8 +17,8 @@ export default function BeachPage() {
     }
   }, [beachName]);
 
-  // Fetch surf data for selected beach
-  const { data: surfData, loading, error } = useSurfData(selectedBeach);
+  // Fetch marine data for selected beach
+  const { data: surfData, loading, error } = useMarineData(selectedBeach);
 
   const beach = beachInfo[selectedBeach] || beachInfo.muizenberg;
   const beachConfig = beaches[selectedBeach] || beaches.muizenberg;
