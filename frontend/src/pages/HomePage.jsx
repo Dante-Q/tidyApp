@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
+import BeachCarousel from "../components/BeachCarousel";
 import InfoGrid from "../components/InfoGrid";
 import BeachMap from "../components/BeachMap";
 import TideChart from "../components/TideChart";
@@ -44,6 +45,7 @@ export default function HomePage() {
 
       {/* Secondary content section */}
       <section className="homepage-content">
+        <BeachCarousel />
         <BeachSlider />
         <InfoGrid />
         <TideChart />

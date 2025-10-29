@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import HeroContainer from "../components/HeroContainer";
 import FavoritesWatchlist from "../components/FavoritesWatchlist";
+import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import useSurfData from "../hooks/useSurfData";
@@ -28,6 +29,9 @@ export default function DashboardPage() {
       {/* Dashboard content section */}
       <section className="homepage-content">
         <FavoritesWatchlist />
+
+        {/* Beach Carousel */}
+        <BeachCarousel />
 
         {/* Wave Height Graph with Real Data */}
         <WaveHeightGraph
