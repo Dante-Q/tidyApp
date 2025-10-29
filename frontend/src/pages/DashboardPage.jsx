@@ -44,7 +44,6 @@ export default function DashboardPage() {
 
         {/* API Testing Section */}
         <ApiDataViewer />
-        <ApiDataViewer />
       </section>
     </div>
   );

@@ -12,6 +12,7 @@ const beachCoords = {
 
 // Cache with 15-minute expiry to avoid spamming the API
 const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
+const MAX_CACHE_SIZE = 20; // Limit cache size for scalability
 const cache = new Map();
 
 export default function useSurfData(beachName = "muizenberg") {
@@ -35,6 +36,10 @@ export default function useSurfData(beachName = "muizenberg") {
     const now = Date.now();
 
     if (cached && now - cached.timestamp < CACHE_DURATION) {
+      // Refresh LRU: move this entry to end of Map
+      cache.delete(cacheKey);
+      cache.set(cacheKey, cached);
+
       // Use cached data
       setData(cached.data);
       setCurrent(cached.current);
@@ -67,7 +72,14 @@ export default function useSurfData(beachName = "muizenberg") {
 
         const json = await response.json();
 
-        // Cache the result
+        // Evict oldest entry if cache is full (FIFO strategy)
+        if (cache.size >= MAX_CACHE_SIZE && !cache.has(cacheKey)) {
+          const firstKey = cache.keys().next().value;
+          cache.delete(firstKey);
+        }
+
+        // Delete and re-set to move this key to the end (LRU behavior)
+        cache.delete(cacheKey);
         cache.set(cacheKey, {
           data: json,
           current: json.current || null,
