@@ -70,6 +70,7 @@ export default function Navbar() {
                     key={beach.id}
                     to={`/beach/${beach.id}`}
                     className="navbar-dropdown-item"
+                    onClick={() => setBeachesOpen(false)}
                   >
                     {beach.name}
                   </Link>
