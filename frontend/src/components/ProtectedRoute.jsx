@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.jsx";
 import axios from "axios";
+import { API_ENDPOINTS } from "../config/api.js";
 
 export default function ProtectedRoute({ children }) {
   const { user, login } = useContext(UserContext);
@@ -11,7 +12,7 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
+        const res = await axios.get(API_ENDPOINTS.auth.me, {
           withCredentials: true,
         });
         login(res.data);
