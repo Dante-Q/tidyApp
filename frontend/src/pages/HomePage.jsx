@@ -1,5 +1,6 @@
 // HomePage.jsx
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
 import InfoGrid from "../components/InfoGrid";
@@ -8,15 +9,12 @@ import TideChart from "../components/TideChart";
 import WindCompass from "../components/WindCompass";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import BeachCam from "../components/BeachCam";
-import DashboardPage from "./DashboardPage";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
 
 export default function HomePage() {
   const { user } = useContext(UserContext);
   const { openAuth } = useContext(UIContext);
-
-  if (user) return <DashboardPage />;
 
   return (
     <div className="homepage-wrapper">
@@ -29,9 +27,18 @@ export default function HomePage() {
           <p className="hero-subtitle">
             Stay in sync with tides, surf reports, and weather in Cape Town.
           </p>
-          <button className="hero-cta-button" onClick={() => openAuth("login")}>
-            Get Started
-          </button>
+          {user ? (
+            <Link to="/dashboard">
+              <button className="hero-cta-button">Go to Dashboard</button>
+            </Link>
+          ) : (
+            <button
+              className="hero-cta-button"
+              onClick={() => openAuth("login")}
+            >
+              Get Started
+            </button>
+          )}
         </div>
       </HeroContainer>
 

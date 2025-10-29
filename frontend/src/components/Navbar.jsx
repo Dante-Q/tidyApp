@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import { Group, Button, Text, Container } from "@mantine/core";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import { UIContext } from "../context/UIContext.js";
@@ -9,11 +9,14 @@ export default function Navbar() {
   const { user, logout } = useContext(UserContext);
   const { openAuth } = useContext(UIContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
+
+  const isOnDashboard = location.pathname === "/dashboard";
 
   return (
     <div className="navbar-wrapper">
@@ -28,19 +31,27 @@ export default function Navbar() {
         </Link>
 
         <Group gap="sm">
-          <Link to="/" className="navbar-link">
-            <Button variant="subtle" className="navbar-btn navbar-btn-home">
-              Home
+          <Link to="/forum" className="navbar-link">
+            <Button variant="subtle" className="navbar-btn navbar-btn-forum">
+              Forum
             </Button>
           </Link>
 
           {user ? (
             <>
-              <Link to="/dashboard" className="navbar-link">
-                <Button className="navbar-btn navbar-btn-dashboard">
-                  Dashboard
-                </Button>
-              </Link>
+              {isOnDashboard ? (
+                <Link to="/" className="navbar-link">
+                  <Button className="navbar-btn navbar-btn-dashboard">
+                    Home
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/dashboard" className="navbar-link">
+                  <Button className="navbar-btn navbar-btn-dashboard">
+                    Dashboard
+                  </Button>
+                </Link>
+              )}
               <Button
                 className="navbar-btn navbar-btn-logout"
                 onClick={handleLogout}
