@@ -242,6 +242,18 @@
   color: #6dd5ed;
 }
 
+.post-meta .edited-tag {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  cursor: help;
+  transition: color 0.2s;
+}
+
+.post-meta .edited-tag:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* Forum Actions */
 .forum-actions {
   display: flex;

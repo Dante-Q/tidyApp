@@ -1,23 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { usePostDetail } from "../context/PostDetailContext.jsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePostDetail } from "../context/PostDetailContext.js";
 import {
-  toggleLikeComment,
-  deleteComment,
-} from "../services/commentService.js";
+  createLikeCommentMutation,
+  createDeleteCommentMutation,
+} from "../mutations/commentMutations.js";
 import {
   formatCommentDate,
   processLikesData,
   pluralize,
   getUserInitial,
 } from "../utils/forumHelpers.js";
-import {
-  handleLikeAction,
-  handleDeleteAction,
-} from "../utils/forumHandlers.js";
 
 export default function CommentsList() {
-  const { comments, user, refreshComments } = usePostDetail();
+  const { comments, user, postId } = usePostDetail();
+  const queryClient = useQueryClient();
 
   return (
     <div className="comments-list">
@@ -26,19 +24,27 @@ export default function CommentsList() {
           key={comment._id}
           comment={comment}
           user={user}
-          onUpdate={refreshComments}
+          postId={postId}
+          queryClient={queryClient}
         />
       ))}
     </div>
   );
 }
 
-function CommentItem({ comment, user, onUpdate, parentCommentId = null }) {
+function CommentItem({
+  comment,
+  user,
+  postId,
+  queryClient,
+  parentCommentId = null,
+}) {
   const { setReplyTo } = usePostDetail();
   const [showReplies, setShowReplies] = useState(true);
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
+  const navigate = useNavigate();
 
   const INITIAL_REPLIES_SHOWN = 3;
 
@@ -51,28 +57,59 @@ function CommentItem({ comment, user, onUpdate, parentCommentId = null }) {
 
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
-  const navigate = useNavigate();
 
-  const handleLikeComment = async () => {
-    await handleLikeAction({
-      user,
-      navigate,
-      toggleLikeFn: toggleLikeComment,
-      itemId: comment._id,
-      onSuccess: (data) => {
-        setIsLiked(data.isLiked);
-        setLikeCount(data.likes);
-      },
-    });
+  // Use centralized mutation configurations
+  const likeCommentMutation = useMutation({
+    ...createLikeCommentMutation(queryClient, postId),
+    onMutate: async () => {
+      // Local optimistic update for immediate feedback
+      setIsLiked(!isLiked);
+      setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+      // Also call the base onMutate
+      const result = await createLikeCommentMutation(
+        queryClient,
+        postId
+      ).onMutate(comment._id);
+      return result;
+    },
+    onSuccess: (data) => {
+      // Update local state with server response
+      setIsLiked(data.isLiked);
+      setLikeCount(data.likes);
+    },
+    onError: (err, variables, context) => {
+      // Rollback local state
+      setIsLiked(isLiked);
+      setLikeCount(likeCount);
+      // Call base onError
+      if (createLikeCommentMutation(queryClient, postId).onError) {
+        createLikeCommentMutation(queryClient, postId).onError(
+          err,
+          variables,
+          context
+        );
+      }
+    },
+  });
+
+  // Delete comment mutation
+  const deleteCommentMutation = useMutation(
+    createDeleteCommentMutation(queryClient, postId)
+  );
+
+  const handleLikeComment = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    likeCommentMutation.mutate(comment._id);
   };
 
-  const handleDeleteComment = async () => {
-    await handleDeleteAction({
-      confirmMessage: "Are you sure you want to delete this comment?",
-      deleteFn: deleteComment,
-      itemId: comment._id,
-      onSuccess: onUpdate,
-    });
+  const handleDeleteComment = () => {
+    if (!window.confirm("Are you sure you want to delete this comment?")) {
+      return;
+    }
+    deleteCommentMutation.mutate(comment._id);
   };
 
   const isAuthor = user && comment.author._id === user.id;
@@ -180,7 +217,8 @@ function CommentItem({ comment, user, onUpdate, parentCommentId = null }) {
                     key={reply._id}
                     comment={reply}
                     user={user}
-                    onUpdate={onUpdate}
+                    postId={postId}
+                    queryClient={queryClient}
                     parentCommentId={parentCommentId || comment._id}
                   />
                 ))}

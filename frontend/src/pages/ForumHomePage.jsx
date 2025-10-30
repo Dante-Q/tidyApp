@@ -156,24 +156,42 @@ export default function ForumHomePage() {
               </div>
             ) : (
               <div className="recent-posts">
-                {recentPosts.map((post) => (
-                  <Link
-                    key={post._id}
-                    to={`/forum/post/${post._id}`}
-                    className="post-preview"
-                  >
-                    <div className="post-avatar">
-                      {getUserInitial(post.author.name)}
-                    </div>
-                    <div className="post-info">
-                      <h4 className="post-title">{post.title}</h4>
-                      <p className="post-meta">
-                        Posted by <strong>{post.author.name}</strong> •{" "}
-                        {formatTimeAgo(post.createdAt)}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+                {recentPosts.map((post) => {
+                  // Check if post was edited (more than 1 second difference)
+                  const isEdited =
+                    post.updatedAt &&
+                    new Date(post.updatedAt) - new Date(post.createdAt) > 1000;
+
+                  return (
+                    <Link
+                      key={post._id}
+                      to={`/forum/post/${post._id}`}
+                      className="post-preview"
+                    >
+                      <div className="post-avatar">
+                        {getUserInitial(post.author.name)}
+                      </div>
+                      <div className="post-info">
+                        <h4 className="post-title">{post.title}</h4>
+                        <p className="post-meta">
+                          Posted by <strong>{post.author.name}</strong> •{" "}
+                          {formatTimeAgo(post.createdAt)}
+                          {isEdited && (
+                            <span
+                              className="edited-tag"
+                              title={`Last edited: ${formatTimeAgo(
+                                post.updatedAt
+                              )}`}
+                            >
+                              {" "}
+                              (edited)
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>

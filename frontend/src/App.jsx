@@ -45,11 +45,7 @@ export default function App() {
                   />
                   <Route
                     path="/forum/create-post"
-                    element={
-                      <ProtectedRoute>
-                        <CreatePostPage />
-                      </ProtectedRoute>
-                    }
+                    element={<CreatePostPage />}
                   />
                   <Route
                     path="/forum/edit/:postId"

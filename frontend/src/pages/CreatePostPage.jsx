@@ -1,20 +1,26 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext.js";
-import { createPost } from "../services/forumService.js";
-import { handleCreatePost } from "../utils/forumHandlers.js";
+import { createCreatePostMutation } from "../mutations/postMutations.js";
 import "./CreatePostPage.css";
 
 export default function CreatePostPage() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     category: "",
     title: "",
     content: "",
   });
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Use centralized mutation configuration
+  const createPostMutation = useMutation(
+    createCreatePostMutation(queryClient, navigate)
+  );
 
   const categories = [
     { value: "surf-reports", label: "🌊 Surf Reports" },
@@ -26,18 +32,21 @@ export default function CreatePostPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await handleCreatePost({
-      user,
-      navigate,
-      formData,
-      createPostFn: createPost,
-      onSuccess: (post) => {
-        console.log("Post created successfully:", post);
-        navigate(`/forum/post/${post._id}`);
-      },
-      onError: setError,
-      setLoading,
-    });
+    if (!user) {
+      setError("You must be logged in to create a post");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await createPostMutation.mutateAsync(formData);
+    } catch (err) {
+      console.error("Error creating post:", err);
+      setError(
+        err.response?.data?.message ||
+          "Failed to create post. Please try again."
+      );
+    }
   };
 
   const handleChange = (e) => {
@@ -143,13 +152,19 @@ export default function CreatePostPage() {
                 type="button"
                 onClick={() => navigate("/forum")}
                 className="btn-cancel"
-                disabled={loading}
+                disabled={createPostMutation.isPending}
               >
                 Cancel
               </button>
-              <button type="submit" className="btn-submit" disabled={loading}>
-                <span>{loading ? "⏳" : "📝"}</span>
-                {loading ? "Publishing..." : "Publish Post"}
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={createPostMutation.isPending}
+              >
+                <span>{createPostMutation.isPending ? "⏳" : "📝"}</span>
+                {createPostMutation.isPending
+                  ? "Publishing..."
+                  : "Publish Post"}
               </button>
             </div>
           </form>

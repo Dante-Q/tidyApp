@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
-import {
-  PostDetailProvider,
-  usePostDetail,
-} from "../context/PostDetailContext.jsx";
+import { usePostDetail } from "../context/PostDetailContext.js";
+import { PostDetailProvider } from "../context/PostDetailContext.jsx";
 import PostHeader from "../components/PostHeader.jsx";
 import CommentForm from "../components/CommentForm.jsx";
 import CommentsList from "../components/CommentsList.jsx";

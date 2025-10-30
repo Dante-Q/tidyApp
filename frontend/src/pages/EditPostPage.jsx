@@ -1,14 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext.js";
-import { getPostById, updatePost } from "../services/forumService.js";
-import { handleUpdatePost } from "../utils/forumHandlers.js";
+import { getPostById } from "../services/forumService.js";
+import { createUpdatePostMutation } from "../mutations/postMutations.js";
 import "./EditPostPage.css";
 
 export default function EditPostPage() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
     category: "",
@@ -16,8 +18,12 @@ export default function EditPostPage() {
     content: "",
   });
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Use centralized mutation configuration
+  const updatePostMutation = useMutation(
+    createUpdatePostMutation(queryClient, postId, navigate)
+  );
 
   const categories = [
     { value: "surf-reports", label: "🌊 Surf Reports" },
@@ -36,7 +42,7 @@ export default function EditPostPage() {
       const post = await getPostById(postId);
 
       // Check if user is the author
-      if (!user || post.author._id !== user._id) {
+      if (!user || post.author._id !== user.id) {
         setError("You don't have permission to edit this post");
         setTimeout(() => navigate(`/forum/post/${postId}`), 2000);
         return;
@@ -58,16 +64,21 @@ export default function EditPostPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await handleUpdatePost({
-      user,
-      navigate,
-      postId,
-      formData,
-      updatePostFn: updatePost,
-      onSuccess: () => navigate(`/forum/post/${postId}`),
-      onError: setError,
-      setSubmitting,
-    });
+    if (!user) {
+      setError("You must be logged in to edit a post");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await updatePostMutation.mutateAsync(formData);
+    } catch (err) {
+      console.error("Error updating post:", err);
+      setError(
+        err.response?.data?.message ||
+          "Failed to update post. Please try again."
+      );
+    }
   };
 
   const handleChange = (e) => {
@@ -79,7 +90,7 @@ export default function EditPostPage() {
 
   if (loading) {
     return (
-      <div className="create-post-page">
+      <div className="create-post-page edit-post-page">
         <div
           className="loading-container"
           style={{ textAlign: "center", padding: "4rem" }}
@@ -92,7 +103,7 @@ export default function EditPostPage() {
   }
 
   return (
-    <div className="create-post-page">
+    <div className="create-post-page edit-post-page">
       {/* Hero Section */}
       <div
         className="create-post-hero"
@@ -187,17 +198,17 @@ export default function EditPostPage() {
                 type="button"
                 onClick={() => navigate(`/forum/post/${postId}`)}
                 className="btn-cancel"
-                disabled={submitting}
+                disabled={updatePostMutation.isPending}
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 className="btn-submit"
-                disabled={submitting}
+                disabled={updatePostMutation.isPending}
               >
-                <span>{submitting ? "⏳" : "💾"}</span>
-                {submitting ? "Saving..." : "Save Changes"}
+                <span>{updatePostMutation.isPending ? "⏳" : "💾"}</span>
+                {updatePostMutation.isPending ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>

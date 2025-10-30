@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { usePostDetail } from "../context/PostDetailContext.jsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePostDetail } from "../context/PostDetailContext.js";
 import {
   getUserInitial,
   formatDate,
@@ -7,42 +8,55 @@ import {
   getCategoryLabel,
 } from "../utils/forumHelpers.js";
 import {
-  handleLikeAction,
-  handleDeleteAction,
-} from "../utils/forumHandlers.js";
-import { toggleLikePost, deletePost } from "../services/forumService.js";
+  createLikePostMutation,
+  createDeletePostMutation,
+} from "../mutations/postMutations.js";
 
 export default function PostHeader() {
-  const { post, setPost, user, setError } = usePostDetail();
+  const { post, user, postId } = usePostDetail();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const isAuthor = user && post && post.author && post.author._id === user.id;
 
+  // Check if post was edited (updatedAt is more than 1 second after createdAt)
+  const isEdited =
+    post?.updatedAt &&
+    new Date(post.updatedAt) - new Date(post.createdAt) > 1000;
+
+  console.log("PostHeader render:", {
+    postId,
+    createdAt: post?.createdAt,
+    updatedAt: post?.updatedAt,
+    timeDiff:
+      post?.updatedAt && post?.createdAt
+        ? new Date(post.updatedAt) - new Date(post.createdAt)
+        : 0,
+    isEdited,
+  });
+
+  // Use centralized mutation configurations
+  const likeMutation = useMutation(createLikePostMutation(queryClient, postId));
+  const deleteMutation = useMutation(
+    createDeletePostMutation(queryClient, navigate)
+  );
+
   const onLike = () => {
-    handleLikeAction({
-      user,
-      navigate,
-      toggleLikeFn: toggleLikePost,
-      itemId: post._id,
-      onSuccess: (data) => {
-        setPost((prevPost) => ({
-          ...prevPost,
-          likes: data.likes,
-          isLiked: data.isLiked,
-          author: prevPost.author,
-        }));
-      },
-    });
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    likeMutation.mutate(post._id);
   };
 
   const onDelete = () => {
-    handleDeleteAction({
-      confirmMessage:
-        "Are you sure you want to delete this post? This action cannot be undone.",
-      deleteFn: deletePost,
-      itemId: post._id,
-      onSuccess: () => navigate("/forum"),
-      onError: () => setError("Failed to delete post"),
-    });
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this post? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+    deleteMutation.mutate(post._id);
   };
 
   return (
@@ -75,7 +89,18 @@ export default function PostHeader() {
           </div>
           <div className="author-info">
             <span className="author-name">{post.author.name}</span>
-            <span className="post-date">{formatDate(post.createdAt)}</span>
+            <span className="post-date">
+              {formatDate(post.createdAt)}
+              {isEdited && (
+                <span
+                  className="edited-tag"
+                  title={`Last edited: ${formatDate(post.updatedAt)}`}
+                >
+                  {" "}
+                  (edited)
+                </span>
+              )}
+            </span>
           </div>
         </Link>
 

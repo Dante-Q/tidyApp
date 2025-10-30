@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { usePostDetail } from "../context/PostDetailContext.jsx";
-import { handleCommentSubmit } from "../utils/forumHandlers.js";
-import { createComment } from "../services/commentService.js";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePostDetail } from "../context/PostDetailContext.js";
+import { createCreateCommentMutation } from "../mutations/commentMutations.js";
 
 export default function CommentForm() {
-  const { user, postId, refreshComments, setError, replyTo, setReplyTo } =
-    usePostDetail();
+  const { user, postId, replyTo, setReplyTo } = usePostDetail();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // Component now owns its form state!
   const [commentContent, setCommentContent] = useState("");
-  const [submittingComment, setSubmittingComment] = useState(false);
 
   // Prefill comment when replying
   useEffect(() => {
@@ -20,26 +19,38 @@ export default function CommentForm() {
     }
   }, [replyTo]);
 
+  // Use centralized mutation configuration
+  const createCommentMutation = useMutation({
+    ...createCreateCommentMutation(queryClient, postId),
+    onSuccess: () => {
+      // Clear form (in addition to cache invalidation from mutation config)
+      setCommentContent("");
+      setReplyTo(null);
+
+      // Call the base onSuccess from mutation config
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+    },
+    onError: (err) => {
+      console.error("Error creating comment:", err);
+      alert("Failed to post comment. Please try again.");
+    },
+  });
+
   const onSubmit = (e) => {
     e.preventDefault();
 
-    handleCommentSubmit({
-      user,
-      navigate,
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    if (!commentContent.trim()) return;
+
+    createCommentMutation.mutate({
+      postId: postId,
       content: commentContent,
-      createCommentFn: createComment,
-      commentData: {
-        postId: postId,
-        content: commentContent,
-        parentCommentId: replyTo?.parentId || null,
-      },
-      onSuccess: () => {
-        setCommentContent("");
-        setReplyTo(null);
-        refreshComments();
-      },
-      onError: setError,
-      setSubmitting: setSubmittingComment,
+      parentCommentId: replyTo?.parentId || null,
     });
   };
   if (!user) {
@@ -77,14 +88,14 @@ export default function CommentForm() {
         }
         className="comment-input"
         rows={3}
-        disabled={submittingComment}
+        disabled={createCommentMutation.isPending}
       />
       <button
         type="submit"
         className="btn-submit-comment"
-        disabled={submittingComment || !commentContent.trim()}
+        disabled={createCommentMutation.isPending || !commentContent.trim()}
       >
-        {submittingComment ? "Posting..." : "Post Comment"}
+        {createCommentMutation.isPending ? "Posting..." : "Post Comment"}
       </button>
     </form>
   );

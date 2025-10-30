@@ -1,55 +1,81 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "./UserContext.js";
+import { PostDetailContext } from "./PostDetailContext.js";
 import { getPostById } from "../services/forumService.js";
 import { getCommentsByPost } from "../services/commentService.js";
 import { processLikesData } from "../utils/forumHelpers.js";
 
-export const PostDetailContext = createContext(null);
-
 export function PostDetailProvider({ children }) {
   const { postId } = useParams();
   const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
-  const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [replyTo, setReplyTo] = useState(null); // { parentId, username }
 
-  const refreshPost = async () => {
-    try {
+  // Fetch post with React Query
+  const {
+    data: rawPost,
+    isLoading: loadingPost,
+    error: postError,
+  } = useQuery({
+    queryKey: ["post", postId],
+    queryFn: async () => {
+      console.log("Fetching post from server for postId:", postId);
       const data = await getPostById(postId);
+      console.log("Received post data:", {
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        timeDiff: new Date(data.updatedAt) - new Date(data.createdAt),
+      });
       const { count, liked } = processLikesData(data.likes, user, data.isLiked);
-      data.likes = count;
-      data.isLiked = liked;
-      setPost(data);
-      setError("");
-    } catch (err) {
-      console.error("Error fetching post:", err);
-      setError("Failed to load post");
-    }
-  };
+      return { ...data, likes: count, isLiked: liked };
+    },
+    enabled: !!postId, // Only fetch if we have a postId
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Don't cache at all for testing
+  });
 
-  const refreshComments = async () => {
-    try {
+  // Fetch comments with React Query
+  const { data: commentsData, isLoading: loadingComments } = useQuery({
+    queryKey: ["comments", postId],
+    queryFn: async () => {
       const data = await getCommentsByPost(postId);
-      setComments(data.comments || []);
-    } catch (err) {
-      console.error("Error fetching comments:", err);
-      setComments([]);
-    }
+      return data.comments || [];
+    },
+    enabled: !!postId,
+  });
+
+  const post = rawPost || null;
+  const comments = commentsData || [];
+  const loading = loadingPost || loadingComments;
+  const error = postError ? "Failed to load post" : "";
+
+  // Helper function to update post in cache
+  const setPost = (updater) => {
+    queryClient.setQueryData(["post", postId], (old) => {
+      if (typeof updater === "function") {
+        return updater(old);
+      }
+      return updater;
+    });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await Promise.all([refreshPost(), refreshComments()]);
-      setLoading(false);
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postId]);
+  // Helper to set error (for backward compatibility)
+  const setError = () => {
+    // Error handling is now done by React Query
+    // This is kept for backward compatibility but does nothing
+  };
+
+  // Refresh functions - invalidate queries to refetch
+  const refreshPost = () => {
+    queryClient.invalidateQueries({ queryKey: ["post", postId] });
+  };
+
+  const refreshComments = () => {
+    queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+  };
 
   return (
     <PostDetailContext.Provider
@@ -71,12 +97,4 @@ export function PostDetailProvider({ children }) {
       {children}
     </PostDetailContext.Provider>
   );
-}
-
-export function usePostDetail() {
-  const context = useContext(PostDetailContext);
-  if (!context) {
-    throw new Error("usePostDetail must be used within PostDetailProvider");
-  }
-  return context;
 }
