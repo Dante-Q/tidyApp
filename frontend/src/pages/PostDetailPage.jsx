@@ -99,9 +99,9 @@ export default function PostDetailPage() {
 
     try {
       const commentData = {
-        post: postId,
+        postId: postId,
         content: commentContent,
-        parentComment: replyTo,
+        parentCommentId: replyTo,
       };
 
       await createComment(commentData);
@@ -175,8 +175,8 @@ export default function PostDetailPage() {
     );
   }
 
-  const isAuthor = user && post.author._id === user._id;
-  const isLiked = user && post.likes.includes(user._id);
+  const isAuthor = user && post && post.author && post.author._id === user._id;
+  const isLiked = user && post && post.likes && post.likes.includes(user._id);
 
   return (
     <div className="post-detail-page">
@@ -252,6 +252,19 @@ export default function PostDetailPage() {
           💬 {comments.length} {comments.length === 1 ? "Comment" : "Comments"}
         </h2>
 
+        {/* Comments List */}
+        <div className="comments-list">
+          {comments.map((comment) => (
+            <CommentItem
+              key={comment._id}
+              comment={comment}
+              user={user}
+              onReply={(commentId) => setReplyTo(commentId)}
+              onUpdate={fetchComments}
+            />
+          ))}
+        </div>
+
         {/* Comment Form */}
         {user ? (
           <form onSubmit={handleSubmitComment} className="comment-form">
@@ -290,19 +303,6 @@ export default function PostDetailPage() {
             <Link to="/login">Log in</Link> to join the discussion
           </div>
         )}
-
-        {/* Comments List */}
-        <div className="comments-list">
-          {comments.map((comment) => (
-            <CommentItem
-              key={comment._id}
-              comment={comment}
-              user={user}
-              onReply={(commentId) => setReplyTo(commentId)}
-              onUpdate={fetchComments}
-            />
-          ))}
-        </div>
       </div>
     </div>
   );
