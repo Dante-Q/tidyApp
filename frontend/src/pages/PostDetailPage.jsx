@@ -61,7 +61,11 @@ export default function PostDetailPage() {
 
     try {
       const data = await toggleLikePost(postId);
-      setPost(data);
+      // Update only the likes, keep the rest of the post data
+      setPost((prevPost) => ({
+        ...prevPost,
+        likes: data.likes || [],
+      }));
     } catch (err) {
       console.error("Error toggling like:", err);
     }
@@ -176,7 +180,12 @@ export default function PostDetailPage() {
   }
 
   const isAuthor = user && post && post.author && post.author._id === user._id;
-  const isLiked = user && post && post.likes && Array.isArray(post.likes) && post.likes.includes(user._id);
+  const isLiked =
+    user &&
+    post &&
+    post.likes &&
+    Array.isArray(post.likes) &&
+    post.likes.includes(user._id);
 
   return (
     <div className="post-detail-page">
@@ -192,14 +201,26 @@ export default function PostDetailPage() {
       {/* Post Header */}
       <div className="post-header">
         <div className="post-category">
-          <span className="category-emoji">
-            {getCategoryEmoji(post.category)}
-          </span>
-          <span className="category-name">
-            {getCategoryLabel(post.category)}
-          </span>
+          <div className="category-info">
+            <span className="category-emoji">
+              {getCategoryEmoji(post.category)}
+            </span>
+            <span className="category-name">
+              {getCategoryLabel(post.category)}
+            </span>
+          </div>
+          <button
+            onClick={handleLike}
+            className={`btn-action ${isLiked ? "liked" : ""}`}
+          >
+            {isLiked ? "❤️" : "🤍"}{" "}
+            {Array.isArray(post.likes) ? post.likes.length : 0}
+          </button>
         </div>
         <h1 className="post-title">{post.title}</h1>
+
+        {/* Post Content */}
+        <div className="post-body">{post.content}</div>
 
         <div className="post-meta">
           <Link to={`/profile/${post.author._id}`} className="post-author">
@@ -218,32 +239,18 @@ export default function PostDetailPage() {
             <span className="stat">❤️ {post.likes.length} likes</span>
           </div>
         </div>
-      </div>
-
-      {/* Post Content */}
-      <div className="post-content">
-        <div className="post-body">{post.content}</div>
 
         {/* Post Actions */}
-        <div className="post-actions">
-          <button
-            onClick={handleLike}
-            className={`btn-action ${isLiked ? "liked" : ""}`}
-          >
-            {isLiked ? "❤️" : "🤍"} {Array.isArray(post.likes) ? post.likes.length : 0}
-          </button>
-
-          {isAuthor && (
-            <>
-              <Link to={`/forum/edit/${post._id}`} className="btn-action">
-                ✏️ Edit
-              </Link>
-              <button onClick={handleDelete} className="btn-action btn-danger">
-                🗑️ Delete
-              </button>
-            </>
-          )}
-        </div>
+        {isAuthor && (
+          <div className="post-actions">
+            <Link to={`/forum/edit/${post._id}`} className="btn-action">
+              ✏️ Edit
+            </Link>
+            <button onClick={handleDelete} className="btn-action btn-danger">
+              🗑️ Delete
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Comments Section */}

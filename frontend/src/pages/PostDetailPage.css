@@ -77,6 +77,14 @@
 }
 
 .post-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.category-info {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -84,7 +92,6 @@
   background: rgba(109, 213, 237, 0.1);
   border: 1px solid rgba(109, 213, 237, 0.3);
   border-radius: 20px;
-  margin-bottom: 1rem;
   font-size: 0.875rem;
   color: #6dd5ed;
 }
@@ -237,6 +244,7 @@
 }
 
 .comment-form {
+  margin-top: 2rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: rgba(30, 41, 59, 0.6);
