@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { usePostDetail } from "../context/PostDetailContext.jsx";
 import {
   toggleLikeComment,
   deleteComment,
@@ -15,7 +16,9 @@ import {
   handleDeleteAction,
 } from "../utils/forumHandlers.js";
 
-export default function CommentsList({ comments, user, onReply, onUpdate }) {
+export default function CommentsList() {
+  const { comments, user, refreshComments } = usePostDetail();
+
   return (
     <div className="comments-list">
       {comments.map((comment) => (
@@ -23,21 +26,15 @@ export default function CommentsList({ comments, user, onReply, onUpdate }) {
           key={comment._id}
           comment={comment}
           user={user}
-          onReply={onReply}
-          onUpdate={onUpdate}
+          onUpdate={refreshComments}
         />
       ))}
     </div>
   );
 }
 
-function CommentItem({
-  comment,
-  user,
-  onReply,
-  onUpdate,
-  parentCommentId = null,
-}) {
+function CommentItem({ comment, user, onUpdate, parentCommentId = null }) {
+  const { setReplyTo } = usePostDetail();
   const [showReplies, setShowReplies] = useState(true);
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -132,7 +129,7 @@ function CommentItem({
         </button>
         <button
           onClick={() =>
-            onReply({
+            setReplyTo({
               parentId: parentCommentId || comment._id,
               username: comment.author.name,
             })
@@ -183,7 +180,6 @@ function CommentItem({
                     key={reply._id}
                     comment={reply}
                     user={user}
-                    onReply={onReply}
                     onUpdate={onUpdate}
                     parentCommentId={parentCommentId || comment._id}
                   />

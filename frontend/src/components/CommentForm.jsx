@@ -1,20 +1,24 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { usePostDetail } from "../context/PostDetailContext.jsx";
 import { handleCommentSubmit } from "../utils/forumHandlers.js";
 import { createComment } from "../services/commentService.js";
 
-export default function CommentForm({
-  user,
-  commentContent,
-  setCommentContent,
-  replyTo,
-  setReplyTo,
-  submittingComment,
-  setSubmittingComment,
-  postId,
-  onSuccess,
-  setError,
-}) {
+export default function CommentForm() {
+  const { user, postId, refreshComments, setError, replyTo, setReplyTo } =
+    usePostDetail();
   const navigate = useNavigate();
+
+  // Component now owns its form state!
+  const [commentContent, setCommentContent] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+
+  // Prefill comment when replying
+  useEffect(() => {
+    if (replyTo) {
+      setCommentContent(`@${replyTo.username} `);
+    }
+  }, [replyTo]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +36,7 @@ export default function CommentForm({
       onSuccess: () => {
         setCommentContent("");
         setReplyTo(null);
-        if (onSuccess) onSuccess();
+        refreshComments();
       },
       onError: setError,
       setSubmitting: setSubmittingComment,

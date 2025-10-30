@@ -1,22 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getUserInitial } from "../utils/forumHelpers.js";
+import { usePostDetail } from "../context/PostDetailContext.jsx";
+import {
+  getUserInitial,
+  formatDate,
+  getCategoryEmoji,
+  getCategoryLabel,
+} from "../utils/forumHelpers.js";
 import {
   handleLikeAction,
   handleDeleteAction,
 } from "../utils/forumHandlers.js";
 import { toggleLikePost, deletePost } from "../services/forumService.js";
 
-export default function PostHeader({
-  post,
-  user,
-  isLiked,
-  setPost,
-  setIsLiked,
-  setError,
-  formatDate,
-  getCategoryEmoji,
-  getCategoryLabel,
-}) {
+export default function PostHeader() {
+  const { post, setPost, user, setError } = usePostDetail();
   const navigate = useNavigate();
   const isAuthor = user && post && post.author && post.author._id === user.id;
 
@@ -30,9 +27,9 @@ export default function PostHeader({
         setPost((prevPost) => ({
           ...prevPost,
           likes: data.likes,
+          isLiked: data.isLiked,
           author: prevPost.author,
         }));
-        setIsLiked(data.isLiked);
       },
     });
   };
@@ -61,9 +58,9 @@ export default function PostHeader({
         </div>
         <button
           onClick={onLike}
-          className={`btn-like-post ${isLiked ? "liked" : ""}`}
+          className={`btn-like-post ${post.isLiked ? "liked" : ""}`}
         >
-          {isLiked ? "❤️" : "🤍"} {post.likes || 0}
+          {post.isLiked ? "❤️" : "🤍"} {post.likes || 0}
         </button>
       </div>
       <h1 className="post-title">{post.title}</h1>
