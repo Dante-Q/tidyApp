@@ -9,6 +9,7 @@ import {
 import {
   getCommentsByPost,
   createComment,
+  toggleLikeComment,
 } from "../services/commentService.js";
 import "./PostDetailPage.css";
 
@@ -29,11 +30,22 @@ export default function PostDetailPage() {
   const fetchPost = async () => {
     try {
       const data = await getPostById(postId);
-      setPost(data);
-      // Set isLiked from the post data if available
-      if (data.isLiked !== undefined) {
-        setIsLiked(data.isLiked);
+      // Convert likes array to count if it's an array
+      if (Array.isArray(data.likes)) {
+        const likesArray = data.likes;
+        const likesCount = likesArray.length;
+        // Check if current user liked it
+        const userLiked =
+          user && likesArray.some((userId) => userId === user.id);
+        data.likes = likesCount;
+        setIsLiked(userLiked);
+      } else {
+        // If backend already returns count and isLiked
+        if (data.isLiked !== undefined) {
+          setIsLiked(data.isLiked);
+        }
       }
+      setPost(data);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching post:", err);
@@ -66,7 +78,6 @@ export default function PostDetailPage() {
 
     try {
       const data = await toggleLikePost(postId);
-      console.log("Like response:", data);
       // Update the post and isLiked state
       setPost((prevPost) => ({
         ...prevPost,
@@ -188,12 +199,6 @@ export default function PostDetailPage() {
   }
 
   const isAuthor = user && post && post.author && post.author._id === user.id;
-
-  console.log("Debug like status:", {
-    userId: user?.id,
-    postLikes: post?.likes,
-    isLiked: isLiked,
-  });
 
   return (
     <div className="post-detail-page">
@@ -328,6 +333,37 @@ function CommentItem({ comment, user, onReply, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
 
+  // Handle likes - convert array to count if needed
+  const getLikeData = () => {
+    if (Array.isArray(comment.likes)) {
+      const likesCount = comment.likes.length;
+      const userLiked =
+        user && comment.likes.some((userId) => userId === user.id);
+      return { count: likesCount, liked: userLiked };
+    }
+    return { count: comment.likes || 0, liked: comment.isLiked || false };
+  };
+
+  const { count: initialLikeCount, liked: initialIsLiked } = getLikeData();
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const navigate = useNavigate();
+
+  const handleLikeComment = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const data = await toggleLikeComment(comment._id);
+      setIsLiked(data.isLiked);
+      setLikeCount(data.likes);
+    } catch (err) {
+      console.error("Error liking comment:", err);
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -383,8 +419,11 @@ function CommentItem({ comment, user, onReply, onUpdate }) {
       </div>
 
       <div className="comment-actions">
-        <button className="btn-comment-action">
-          🤍 {comment.likes.length}
+        <button
+          onClick={handleLikeComment}
+          className={`btn-comment-action ${isLiked ? "liked" : ""}`}
+        >
+          {isLiked ? "❤️" : "🤍"} {likeCount}
         </button>
         <button
           onClick={() => onReply(comment._id)}

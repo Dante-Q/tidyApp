@@ -497,6 +497,14 @@
   background: rgba(109, 213, 237, 0.1);
 }
 
+.btn-comment-action.liked {
+  color: #ef4444;
+}
+
+.btn-comment-action.liked:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
 /* Nested Replies */
 .replies-section {
   margin-top: 1rem;
