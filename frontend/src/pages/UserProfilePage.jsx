@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPostsByUser } from "../services/forumService.js";
+import {
+  formatDate,
+  getCategoryEmoji,
+  getCategoryLabel,
+} from "../utils/forumHelpers.js";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
@@ -32,35 +37,6 @@ export default function UserProfilePage() {
       setError("Failed to load user profile");
       setLoading(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  const getCategoryEmoji = (category) => {
-    const emojis = {
-      "surf-reports": "🌊",
-      "beach-safety": "🏖️",
-      "general-discussion": "🌅",
-      "events-meetups": "📅",
-    };
-    return emojis[category] || "📝";
-  };
-
-  const getCategoryLabel = (category) => {
-    const labels = {
-      "surf-reports": "Surf Reports",
-      "beach-safety": "Beach Safety",
-      "general-discussion": "General Discussion",
-      "events-meetups": "Events & Meetups",
-    };
-    return labels[category] || category;
   };
 
   const getTotalLikes = () => {

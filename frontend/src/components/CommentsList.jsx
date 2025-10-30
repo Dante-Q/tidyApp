@@ -4,6 +4,7 @@ import {
   toggleLikeComment,
   deleteComment,
 } from "../services/commentService.js";
+import { formatCommentDate } from "../utils/forumHelpers.js";
 
 export default function CommentsList({ comments, user, onReply, onUpdate }) {
   return (
@@ -80,20 +81,6 @@ function CommentItem({
     }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-
-    if (diffInMinutes < 1) return "Just now";
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   const isAuthor = user && comment.author._id === user.id;
 
   return (
@@ -109,7 +96,9 @@ function CommentItem({
           >
             {comment.author.name}
           </Link>
-          <span className="comment-date">{formatDate(comment.createdAt)}</span>
+          <span className="comment-date">
+            {formatCommentDate(comment.createdAt)}
+          </span>
           {comment.isEdited && <span className="edited-tag">(edited)</span>}
         </div>
       </div>

@@ -13,6 +13,11 @@ import {
 import PostHeader from "../components/PostHeader.jsx";
 import CommentForm from "../components/CommentForm.jsx";
 import CommentsList from "../components/CommentsList.jsx";
+import {
+  formatDate,
+  getCategoryEmoji,
+  getCategoryLabel,
+} from "../utils/forumHelpers.js";
 import "./PostDetailPage.css";
 
 export default function PostDetailPage() {
@@ -139,41 +144,6 @@ export default function PostDetailPage() {
     } finally {
       setSubmittingComment(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-
-    if (diffInHours < 1) return "Just now";
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 48) return "Yesterday";
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  const getCategoryEmoji = (category) => {
-    const emojis = {
-      "surf-reports": "🌊",
-      "beach-safety": "🏖️",
-      "general-discussion": "🌅",
-      "events-meetups": "📅",
-    };
-    return emojis[category] || "📝";
-  };
-
-  const getCategoryLabel = (category) => {
-    const labels = {
-      "surf-reports": "Surf Reports",
-      "beach-safety": "Beach Safety",
-      "general-discussion": "General Discussion",
-      "events-meetups": "Events & Meetups",
-    };
-    return labels[category] || category;
   };
 
   if (loading) {
