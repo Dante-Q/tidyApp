@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPostsByUser } from "../services/forumService.js";
+import { fetchUserPostsData } from "../utils/forumHandlers.js";
 import {
   formatDate,
   getCategoryEmoji,
   getCategoryLabel,
+  getUserInitial,
 } from "../utils/forumHelpers.js";
 import "./UserProfilePage.css";
 
@@ -21,22 +23,16 @@ export default function UserProfilePage() {
   }, [userId]);
 
   const fetchUserPosts = async () => {
-    try {
-      const data = await getPostsByUser(userId);
-      const postsArray = data.posts || [];
-      setPosts(postsArray);
-
-      // Get user info from first post
-      if (postsArray.length > 0) {
-        setUserInfo(postsArray[0].author);
-      }
-
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching user posts:", err);
-      setError("Failed to load user profile");
-      setLoading(false);
-    }
+    await fetchUserPostsData({
+      getPostsFn: getPostsByUser,
+      userId,
+      onSuccess: (postsArray, userInfo) => {
+        setPosts(postsArray);
+        setUserInfo(userInfo);
+      },
+      onError: setError,
+      setLoading,
+    });
   };
 
   const getTotalLikes = () => {
@@ -81,7 +77,7 @@ export default function UserProfilePage() {
       <div className="profile-header">
         <div className="profile-container">
           <div className="profile-avatar-large">
-            {userInfo ? userInfo.name.charAt(0).toUpperCase() : "?"}
+            {getUserInitial(userInfo?.name)}
           </div>
           <div className="profile-info">
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>

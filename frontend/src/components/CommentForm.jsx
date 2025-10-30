@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { handleCommentSubmit } from "../utils/forumHandlers.js";
+import { createComment } from "../services/commentService.js";
 
 export default function CommentForm({
   user,
@@ -7,8 +9,35 @@ export default function CommentForm({
   replyTo,
   setReplyTo,
   submittingComment,
-  onSubmit,
+  setSubmittingComment,
+  postId,
+  onSuccess,
+  setError,
 }) {
+  const navigate = useNavigate();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    handleCommentSubmit({
+      user,
+      navigate,
+      content: commentContent,
+      createCommentFn: createComment,
+      commentData: {
+        postId: postId,
+        content: commentContent,
+        parentCommentId: replyTo?.parentId || null,
+      },
+      onSuccess: () => {
+        setCommentContent("");
+        setReplyTo(null);
+        if (onSuccess) onSuccess();
+      },
+      onError: setError,
+      setSubmitting: setSubmittingComment,
+    });
+  };
   if (!user) {
     return (
       <div className="login-prompt">

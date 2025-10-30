@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getCategoryStats, getPosts } from "../services/forumService.js";
+import { getUserInitial } from "../utils/forumHelpers.js";
 import "./ForumHomePage.css";
 
 export default function ForumHomePage() {
@@ -162,7 +163,7 @@ export default function ForumHomePage() {
                     className="post-preview"
                   >
                     <div className="post-avatar">
-                      {post.author.name.charAt(0).toUpperCase()}
+                      {getUserInitial(post.author.name)}
                     </div>
                     <div className="post-info">
                       <h4 className="post-title">{post.title}</h4>

@@ -1,16 +1,52 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getUserInitial } from "../utils/forumHelpers.js";
+import {
+  handleLikeAction,
+  handleDeleteAction,
+} from "../utils/forumHandlers.js";
+import { toggleLikePost, deletePost } from "../services/forumService.js";
 
 export default function PostHeader({
   post,
   user,
   isLiked,
-  onLike,
-  onDelete,
+  setPost,
+  setIsLiked,
+  setError,
   formatDate,
   getCategoryEmoji,
   getCategoryLabel,
 }) {
+  const navigate = useNavigate();
   const isAuthor = user && post && post.author && post.author._id === user.id;
+
+  const onLike = () => {
+    handleLikeAction({
+      user,
+      navigate,
+      toggleLikeFn: toggleLikePost,
+      itemId: post._id,
+      onSuccess: (data) => {
+        setPost((prevPost) => ({
+          ...prevPost,
+          likes: data.likes,
+          author: prevPost.author,
+        }));
+        setIsLiked(data.isLiked);
+      },
+    });
+  };
+
+  const onDelete = () => {
+    handleDeleteAction({
+      confirmMessage:
+        "Are you sure you want to delete this post? This action cannot be undone.",
+      deleteFn: deletePost,
+      itemId: post._id,
+      onSuccess: () => navigate("/forum"),
+      onError: () => setError("Failed to delete post"),
+    });
+  };
 
   return (
     <div className="post-header">
@@ -38,7 +74,7 @@ export default function PostHeader({
       <div className="post-meta">
         <Link to={`/profile/${post.author._id}`} className="post-author">
           <div className="author-avatar">
-            {post.author.name.charAt(0).toUpperCase()}
+            {getUserInitial(post.author.name)}
           </div>
           <div className="author-info">
             <span className="author-name">{post.author.name}</span>

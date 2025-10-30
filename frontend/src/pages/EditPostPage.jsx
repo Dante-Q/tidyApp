@@ -2,7 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
 import { getPostById, updatePost } from "../services/forumService.js";
-import "./CreatePostPage.css";
+import { handleUpdatePost } from "../utils/forumHandlers.js";
+import "./EditPostPage.css";
 
 export default function EditPostPage() {
   const { postId } = useParams();
@@ -57,26 +58,16 @@ export default function EditPostPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      setError("You must be logged in to edit a post");
-      navigate("/login");
-      return;
-    }
-
-    setSubmitting(true);
-    setError("");
-
-    try {
-      await updatePost(postId, formData);
-      navigate(`/forum/post/${postId}`);
-    } catch (err) {
-      console.error("Error updating post:", err);
-      setError(
-        err.response?.data?.message ||
-          "Failed to update post. Please try again."
-      );
-      setSubmitting(false);
-    }
+    await handleUpdatePost({
+      user,
+      navigate,
+      postId,
+      formData,
+      updatePostFn: updatePost,
+      onSuccess: () => navigate(`/forum/post/${postId}`),
+      onError: setError,
+      setSubmitting,
+    });
   };
 
   const handleChange = (e) => {

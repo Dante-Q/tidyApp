@@ -66,3 +66,41 @@ export const formatCommentDate = (dateString) => {
     day: "numeric",
   });
 };
+
+/**
+ * Process likes data - converts array to count and checks if user liked
+ * @param {Array|number} likes - Likes array or count
+ * @param {Object} user - Current user object
+ * @param {boolean} isLiked - Whether user liked (if provided by backend)
+ * @returns {Object} { count: number, liked: boolean }
+ */
+export const processLikesData = (likes, user, isLiked = undefined) => {
+  if (Array.isArray(likes)) {
+    const likesCount = likes.length;
+    const userLiked = user && likes.some((userId) => userId === user.id);
+    return { count: likesCount, liked: userLiked };
+  }
+  return { count: likes || 0, liked: isLiked || false };
+};
+
+/**
+ * Pluralize a word based on count
+ * @param {number} count - The count to check
+ * @param {string} singular - Singular form of the word
+ * @param {string} plural - Plural form of the word (optional, defaults to singular + 's')
+ * @returns {string} The appropriate form of the word
+ */
+export const pluralize = (count, singular, plural = null) => {
+  if (count === 1) return singular;
+  return plural || `${singular}s`;
+};
+
+/**
+ * Get user initials for avatar display
+ * @param {string} name - User's name
+ * @returns {string} First letter capitalized
+ */
+export const getUserInitial = (name) => {
+  if (!name) return "?";
+  return name.charAt(0).toUpperCase();
+};

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
 import { createPost } from "../services/forumService.js";
+import { handleCreatePost } from "../utils/forumHandlers.js";
 import "./CreatePostPage.css";
 
 export default function CreatePostPage() {
@@ -25,28 +26,18 @@ export default function CreatePostPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      setError("You must be logged in to create a post");
-      navigate("/login");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const post = await createPost(formData);
-      console.log("Post created successfully:", post);
-      // Navigate to the newly created post
-      navigate(`/forum/post/${post._id}`);
-    } catch (err) {
-      console.error("Error creating post:", err);
-      setError(
-        err.response?.data?.message ||
-          "Failed to create post. Please try again."
-      );
-      setLoading(false);
-    }
+    await handleCreatePost({
+      user,
+      navigate,
+      formData,
+      createPostFn: createPost,
+      onSuccess: (post) => {
+        console.log("Post created successfully:", post);
+        navigate(`/forum/post/${post._id}`);
+      },
+      onError: setError,
+      setLoading,
+    });
   };
 
   const handleChange = (e) => {

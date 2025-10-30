@@ -4,7 +4,16 @@ import {
   toggleLikeComment,
   deleteComment,
 } from "../services/commentService.js";
-import { formatCommentDate } from "../utils/forumHelpers.js";
+import {
+  formatCommentDate,
+  processLikesData,
+  pluralize,
+  getUserInitial,
+} from "../utils/forumHelpers.js";
+import {
+  handleLikeAction,
+  handleDeleteAction,
+} from "../utils/forumHandlers.js";
 
 export default function CommentsList({ comments, user, onReply, onUpdate }) {
   return (
@@ -37,48 +46,36 @@ function CommentItem({
   const INITIAL_REPLIES_SHOWN = 3;
 
   // Handle likes - convert array to count if needed
-  const getLikeData = () => {
-    if (Array.isArray(comment.likes)) {
-      const likesCount = comment.likes.length;
-      const userLiked =
-        user && comment.likes.some((userId) => userId === user.id);
-      return { count: likesCount, liked: userLiked };
-    }
-    return { count: comment.likes || 0, liked: comment.isLiked || false };
-  };
+  const { count: initialLikeCount, liked: initialIsLiked } = processLikesData(
+    comment.likes,
+    user,
+    comment.isLiked
+  );
 
-  const { count: initialLikeCount, liked: initialIsLiked } = getLikeData();
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const navigate = useNavigate();
 
   const handleLikeComment = async () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const data = await toggleLikeComment(comment._id);
-      setIsLiked(data.isLiked);
-      setLikeCount(data.likes);
-    } catch (err) {
-      console.error("Error liking comment:", err);
-    }
+    await handleLikeAction({
+      user,
+      navigate,
+      toggleLikeFn: toggleLikeComment,
+      itemId: comment._id,
+      onSuccess: (data) => {
+        setIsLiked(data.isLiked);
+        setLikeCount(data.likes);
+      },
+    });
   };
 
   const handleDeleteComment = async () => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) {
-      return;
-    }
-
-    try {
-      await deleteComment(comment._id);
-      onUpdate(); // Refresh comments list
-    } catch (err) {
-      console.error("Error deleting comment:", err);
-      alert("Failed to delete comment. Please try again.");
-    }
+    await handleDeleteAction({
+      confirmMessage: "Are you sure you want to delete this comment?",
+      deleteFn: deleteComment,
+      itemId: comment._id,
+      onSuccess: onUpdate,
+    });
   };
 
   const isAuthor = user && comment.author._id === user.id;
@@ -88,7 +85,7 @@ function CommentItem({
       <div className="comment-header">
         <div className="comment-author">
           <div className="author-avatar-small">
-            {comment.author.name.charAt(0).toUpperCase()}
+            {getUserInitial(comment.author.name)}
           </div>
           <Link
             to={`/profile/${comment.author._id}`}
@@ -170,7 +167,7 @@ function CommentItem({
             className="toggle-replies"
           >
             {showReplies ? "−" : "+"} {comment.replies.length}{" "}
-            {comment.replies.length === 1 ? "reply" : "replies"}
+            {pluralize(comment.replies.length, "reply", "replies")}
           </button>
           {showReplies && (
             <div className="replies-list">
@@ -200,11 +197,11 @@ function CommentItem({
                     ? "Show less"
                     : `Show ${
                         comment.replies.length - INITIAL_REPLIES_SHOWN
-                      } more ${
-                        comment.replies.length - INITIAL_REPLIES_SHOWN === 1
-                          ? "reply"
-                          : "replies"
-                      }`}
+                      } more ${pluralize(
+                        comment.replies.length - INITIAL_REPLIES_SHOWN,
+                        "reply",
+                        "replies"
+                      )}`}
                 </button>
               )}
             </div>
