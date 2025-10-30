@@ -9,8 +9,10 @@ import {
 import {
   getCommentsByPost,
   createComment,
-  toggleLikeComment,
 } from "../services/commentService.js";
+import PostHeader from "../components/PostHeader.jsx";
+import CommentForm from "../components/CommentForm.jsx";
+import CommentsList from "../components/CommentsList.jsx";
 import "./PostDetailPage.css";
 
 export default function PostDetailPage() {
@@ -198,8 +200,6 @@ export default function PostDetailPage() {
     );
   }
 
-  const isAuthor = user && post && post.author && post.author._id === user.id;
-
   return (
     <div className="post-detail-page">
       {/* Breadcrumb */}
@@ -212,58 +212,16 @@ export default function PostDetailPage() {
       </div>
 
       {/* Post Header */}
-      <div className="post-header">
-        <div className="post-category">
-          <div className="category-info">
-            <span className="category-emoji">
-              {getCategoryEmoji(post.category)}
-            </span>
-            <span className="category-name">
-              {getCategoryLabel(post.category)}
-            </span>
-          </div>
-          <button
-            onClick={handleLike}
-            className={`btn-like-post ${isLiked ? "liked" : ""}`}
-          >
-            {isLiked ? "❤️" : "🤍"} {post.likes || 0}
-          </button>
-        </div>
-        <h1 className="post-title">{post.title}</h1>
-
-        {/* Post Content */}
-        <div className="post-body">{post.content}</div>
-
-        <div className="post-meta">
-          <Link to={`/profile/${post.author._id}`} className="post-author">
-            <div className="author-avatar">
-              {post.author.name.charAt(0).toUpperCase()}
-            </div>
-            <div className="author-info">
-              <span className="author-name">{post.author.name}</span>
-              <span className="post-date">{formatDate(post.createdAt)}</span>
-            </div>
-          </Link>
-
-          <div className="post-stats">
-            <span className="stat">👁️ {post.views} views</span>
-            <span className="stat">💬 {post.commentCount || 0} comments</span>
-            <span className="stat">❤️ {post.likes || 0} likes</span>
-          </div>
-        </div>
-
-        {/* Post Actions */}
-        {isAuthor && (
-          <div className="post-actions">
-            <Link to={`/forum/edit/${post._id}`} className="btn-action">
-              ✏️ Edit
-            </Link>
-            <button onClick={handleDelete} className="btn-action btn-danger">
-              🗑️ Delete
-            </button>
-          </div>
-        )}
-      </div>
+      <PostHeader
+        post={post}
+        user={user}
+        isLiked={isLiked}
+        onLike={handleLike}
+        onDelete={handleDelete}
+        formatDate={formatDate}
+        getCategoryEmoji={getCategoryEmoji}
+        getCategoryLabel={getCategoryLabel}
+      />
 
       {/* Comments Section */}
       <div className="comments-section">
@@ -272,246 +230,27 @@ export default function PostDetailPage() {
         </h2>
 
         {/* Comments List */}
-        <div className="comments-list">
-          {comments.map((comment) => (
-            <CommentItem
-              key={comment._id}
-              comment={comment}
-              user={user}
-              onReply={(replyData) => {
-                setReplyTo(replyData);
-                setCommentContent(`@${replyData.username} `);
-              }}
-              onUpdate={fetchComments}
-            />
-          ))}
-        </div>
+        <CommentsList
+          comments={comments}
+          user={user}
+          onReply={(replyData) => {
+            setReplyTo(replyData);
+            setCommentContent(`@${replyData.username} `);
+          }}
+          onUpdate={fetchComments}
+        />
 
         {/* Comment Form */}
-        {user ? (
-          <form onSubmit={handleSubmitComment} className="comment-form">
-            {replyTo && (
-              <div className="reply-indicator">
-                Replying to @{replyTo.username}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setReplyTo(null);
-                    setCommentContent("");
-                  }}
-                  className="btn-cancel-reply"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-            <textarea
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder={
-                replyTo
-                  ? `Reply to @${replyTo.username}...`
-                  : "Share your thoughts..."
-              }
-              className="comment-input"
-              rows={3}
-              disabled={submittingComment}
-            />
-            <button
-              type="submit"
-              className="btn-submit-comment"
-              disabled={submittingComment || !commentContent.trim()}
-            >
-              {submittingComment ? "Posting..." : "Post Comment"}
-            </button>
-          </form>
-        ) : (
-          <div className="login-prompt">
-            <Link to="/login">Log in</Link> to join the discussion
-          </div>
-        )}
+        <CommentForm
+          user={user}
+          commentContent={commentContent}
+          setCommentContent={setCommentContent}
+          replyTo={replyTo}
+          setReplyTo={setReplyTo}
+          submittingComment={submittingComment}
+          onSubmit={handleSubmitComment}
+        />
       </div>
-    </div>
-  );
-}
-
-// Comment Component
-function CommentItem({
-  comment,
-  user,
-  onReply,
-  onUpdate,
-  parentCommentId = null,
-}) {
-  const [showReplies, setShowReplies] = useState(true);
-  const [showAllReplies, setShowAllReplies] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState(comment.content);
-
-  const INITIAL_REPLIES_SHOWN = 3;
-
-  // Handle likes - convert array to count if needed
-  const getLikeData = () => {
-    if (Array.isArray(comment.likes)) {
-      const likesCount = comment.likes.length;
-      const userLiked =
-        user && comment.likes.some((userId) => userId === user.id);
-      return { count: likesCount, liked: userLiked };
-    }
-    return { count: comment.likes || 0, liked: comment.isLiked || false };
-  };
-
-  const { count: initialLikeCount, liked: initialIsLiked } = getLikeData();
-  const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCount, setLikeCount] = useState(initialLikeCount);
-  const navigate = useNavigate();
-
-  const handleLikeComment = async () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const data = await toggleLikeComment(comment._id);
-      setIsLiked(data.isLiked);
-      setLikeCount(data.likes);
-    } catch (err) {
-      console.error("Error liking comment:", err);
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-
-    if (diffInMinutes < 1) return "Just now";
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  };
-
-  const isAuthor = user && comment.author._id === user._id;
-
-  return (
-    <div className="comment-item">
-      <div className="comment-header">
-        <div className="comment-author">
-          <div className="author-avatar-small">
-            {comment.author.name.charAt(0).toUpperCase()}
-          </div>
-          <Link
-            to={`/profile/${comment.author._id}`}
-            className="author-name-link"
-          >
-            {comment.author.name}
-          </Link>
-          <span className="comment-date">{formatDate(comment.createdAt)}</span>
-          {comment.isEdited && <span className="edited-tag">(edited)</span>}
-        </div>
-      </div>
-
-      <div className="comment-content">
-        {isEditing ? (
-          <div className="edit-form">
-            <textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="edit-input"
-            />
-            <div className="edit-actions">
-              <button
-                onClick={() => setIsEditing(false)}
-                className="btn-cancel-edit"
-              >
-                Cancel
-              </button>
-              <button className="btn-save-edit">Save</button>
-            </div>
-          </div>
-        ) : (
-          <p>{comment.content}</p>
-        )}
-      </div>
-
-      <div className="comment-actions">
-        <button
-          onClick={handleLikeComment}
-          className={`btn-comment-action ${isLiked ? "liked" : ""}`}
-        >
-          {isLiked ? "❤️" : "🤍"} {likeCount}
-        </button>
-        <button
-          onClick={() =>
-            onReply({
-              parentId: parentCommentId || comment._id,
-              username: comment.author.name,
-            })
-          }
-          className="btn-comment-action"
-        >
-          💬 Reply
-        </button>
-        {isAuthor && !isEditing && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="btn-comment-action"
-          >
-            ✏️ Edit
-          </button>
-        )}
-      </div>
-
-      {/* Nested Replies */}
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="replies-section">
-          <button
-            onClick={() => setShowReplies(!showReplies)}
-            className="toggle-replies"
-          >
-            {showReplies ? "−" : "+"} {comment.replies.length}{" "}
-            {comment.replies.length === 1 ? "reply" : "replies"}
-          </button>
-          {showReplies && (
-            <div className="replies-list">
-              {comment.replies
-                .slice(
-                  0,
-                  showAllReplies
-                    ? comment.replies.length
-                    : INITIAL_REPLIES_SHOWN
-                )
-                .map((reply) => (
-                  <CommentItem
-                    key={reply._id}
-                    comment={reply}
-                    user={user}
-                    onReply={onReply}
-                    onUpdate={onUpdate}
-                    parentCommentId={parentCommentId || comment._id}
-                  />
-                ))}
-              {comment.replies.length > INITIAL_REPLIES_SHOWN && (
-                <button
-                  onClick={() => setShowAllReplies(!showAllReplies)}
-                  className="btn-show-more-replies"
-                >
-                  {showAllReplies
-                    ? "Show less"
-                    : `Show ${
-                        comment.replies.length - INITIAL_REPLIES_SHOWN
-                      } more ${
-                        comment.replies.length - INITIAL_REPLIES_SHOWN === 1
-                          ? "reply"
-                          : "replies"
-                      }`}
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
