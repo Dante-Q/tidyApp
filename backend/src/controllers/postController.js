@@ -108,12 +108,14 @@ export const updatePost = async (req, res) => {
     if (content) post.content = content;
     if (category) post.category = category;
 
+    // Set editedAt timestamp to mark this as an intentional edit
+    post.editedAt = new Date();
+
     await post.save();
 
-    const updatedPost = await Post.findById(post._id).populate(
-      "author",
-      "name email"
-    );
+    const updatedPost = await Post.findById(post._id)
+      .populate("author", "name email")
+      .populate("commentCount");
 
     res.json(updatedPost);
   } catch (error) {

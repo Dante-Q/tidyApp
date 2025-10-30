@@ -23,17 +23,11 @@ export default function CommentForm() {
   const createCommentMutation = useMutation({
     ...createCreateCommentMutation(queryClient, postId),
     onSuccess: () => {
-      // Clear form (in addition to cache invalidation from mutation config)
+      // Clear form after successful comment creation
       setCommentContent("");
       setReplyTo(null);
 
-      // Call the base onSuccess from mutation config
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
-      queryClient.invalidateQueries({ queryKey: ["post", postId] });
-    },
-    onError: (err) => {
-      console.error("Error creating comment:", err);
-      alert("Failed to post comment. Please try again.");
+      // Mutation already handles cache invalidation
     },
   });
 

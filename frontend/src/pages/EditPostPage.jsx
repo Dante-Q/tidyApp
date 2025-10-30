@@ -20,9 +20,9 @@ export default function EditPostPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Use centralized mutation configuration
+  // Use centralized mutation configuration with error handling
   const updatePostMutation = useMutation(
-    createUpdatePostMutation(queryClient, postId, navigate)
+    createUpdatePostMutation(queryClient, postId, navigate, setError)
   );
 
   const categories = [
@@ -70,15 +70,7 @@ export default function EditPostPage() {
       return;
     }
 
-    try {
-      await updatePostMutation.mutateAsync(formData);
-    } catch (err) {
-      console.error("Error updating post:", err);
-      setError(
-        err.response?.data?.message ||
-          "Failed to update post. Please try again."
-      );
-    }
+    updatePostMutation.mutate(formData);
   };
 
   const handleChange = (e) => {

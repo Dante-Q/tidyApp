@@ -22,13 +22,7 @@ export function PostDetailProvider({ children }) {
   } = useQuery({
     queryKey: ["post", postId],
     queryFn: async () => {
-      console.log("Fetching post from server for postId:", postId);
       const data = await getPostById(postId);
-      console.log("Received post data:", {
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        timeDiff: new Date(data.updatedAt) - new Date(data.createdAt),
-      });
       const { count, liked } = processLikesData(data.likes, user, data.isLiked);
       return { ...data, likes: count, isLiked: liked };
     },

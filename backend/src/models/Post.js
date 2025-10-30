@@ -47,6 +47,10 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    editedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

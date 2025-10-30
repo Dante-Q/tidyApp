@@ -1,200 +1,41 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { getCategoryStats, getPosts } from "../services/forumService.js";
-import { getUserInitial } from "../utils/forumHelpers.js";
+import ForumHeroSection from "../components/ForumHeroSection.jsx";
+import ForumCategories from "../components/ForumCategories.jsx";
+import ForumRecentActivity from "../components/ForumRecentActivity.jsx";
 import "./ForumHomePage.css";
 
 export default function ForumHomePage() {
-  const [categories, setCategories] = useState([]);
-  const [recentPosts, setRecentPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Fetch categories with React Query
+  const { data: categories = [], isLoading: loadingCategories } = useQuery({
+    queryKey: ["forumCategories"],
+    queryFn: getCategoryStats,
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // Fetch recent posts with React Query
+  const { data: postsData, isLoading: loadingPosts } = useQuery({
+    queryKey: ["recentPosts"],
+    queryFn: () => getPosts({ limit: 5, sortBy: "createdAt" }),
+  });
 
-  const fetchData = async () => {
-    try {
-      const [categoriesRes, postsRes] = await Promise.all([
-        getCategoryStats(),
-        getPosts({ limit: 5, sortBy: "createdAt" }),
-      ]);
-
-      console.log("Categories response:", categoriesRes);
-      console.log("Posts response:", postsRes);
-
-      setCategories(categoriesRes || []);
-      setRecentPosts(postsRes.posts || []);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching forum data:", err);
-      setLoading(false);
-    }
-  };
-
-  const getCategoryInfo = (category) => {
-    const info = {
-      "surf-reports": {
-        icon: "🌊",
-        name: "Surf Reports",
-        description:
-          "Share and discuss surf conditions, wave forecasts, and session reports.",
-      },
-      "beach-safety": {
-        icon: "🏖️",
-        name: "Beach Safety",
-        description:
-          "Discuss safety tips, current conditions, and best practices for beach activities.",
-      },
-      "general-discussion": {
-        icon: "🌅",
-        name: "General Discussion",
-        description:
-          "Chat about anything related to Cape Town's beaches, events, and community.",
-      },
-      "events-meetups": {
-        icon: "📅",
-        name: "Events & Meetups",
-        description:
-          "Organize and join beach cleanups, surf sessions, and community events.",
-      },
-    };
-    return info[category] || { icon: "📝", name: category, description: "" };
-  };
-
-  const formatTimeAgo = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-
-    if (diffInHours < 1) return "Just now";
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 48) return "Yesterday";
-    return `${Math.floor(diffInHours / 24)}d ago`;
-  };
+  const recentPosts = postsData?.posts || [];
 
   return (
     <div className="forum-page">
-      {/* Hero Section */}
-      <div
-        className="forum-hero"
-        style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1611224885990-ab7363d1f2f3?w=1200)`,
-        }}
-      >
-        <div className="forum-hero-overlay">
-          <div className="forum-hero-content">
-            <h1 className="forum-title">Community Forum</h1>
-            <p className="forum-subtitle">
-              Connect with the Tidy community, share experiences, and discuss
-              all things surf, tide, and beach-related.
-            </p>
-          </div>
-        </div>
-      </div>
+      <ForumHeroSection />
 
-      {/* Forum Content */}
       <section className="forum-content">
         <div className="forum-container">
-          {/* Categories Section */}
-          <div className="forum-categories">
-            <div className="forum-categories-header">
-              <h2>Forum Categories</h2>
-              <p>Explore topics and join the conversation</p>
-            </div>
-            {loading ? (
-              <div
-                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
-              >
-                Loading categories...
-              </div>
-            ) : (
-              <div className="categories-grid">
-                {categories.map((cat) => {
-                  const info = getCategoryInfo(cat.category);
-                  return (
-                    <Link
-                      key={cat.category}
-                      to={`/forum?category=${cat.category}`}
-                      className="category-card"
-                    >
-                      <div className="category-header">
-                        <div className="category-icon">{info.icon}</div>
-                        <h3 className="category-name">{info.name}</h3>
-                      </div>
-                      <p className="category-description">{info.description}</p>
-                      <div className="category-stats">
-                        <span className="stat-item">
-                          <strong>{cat.totalPosts}</strong> Posts
-                        </span>
-                        <span className="stat-divider">•</span>
-                        <span className="stat-item">
-                          <strong>{cat.totalComments}</strong> Comments
-                        </span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <ForumCategories
+            categories={categories}
+            loading={loadingCategories}
+          />
 
-          {/* Recent Activity Section */}
-          <div className="forum-recent">
-            <h2 className="section-title">Recent Activity</h2>
-            {loading ? (
-              <div
-                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
-              >
-                Loading posts...
-              </div>
-            ) : recentPosts.length === 0 ? (
-              <div
-                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
-              >
-                No posts yet. Be the first to start a discussion!
-              </div>
-            ) : (
-              <div className="recent-posts">
-                {recentPosts.map((post) => {
-                  // Check if post was edited (more than 1 second difference)
-                  const isEdited =
-                    post.updatedAt &&
-                    new Date(post.updatedAt) - new Date(post.createdAt) > 1000;
-
-                  return (
-                    <Link
-                      key={post._id}
-                      to={`/forum/post/${post._id}`}
-                      className="post-preview"
-                    >
-                      <div className="post-avatar">
-                        {getUserInitial(post.author.name)}
-                      </div>
-                      <div className="post-info">
-                        <h4 className="post-title">{post.title}</h4>
-                        <p className="post-meta">
-                          Posted by <strong>{post.author.name}</strong> •{" "}
-                          {formatTimeAgo(post.createdAt)}
-                          {isEdited && (
-                            <span
-                              className="edited-tag"
-                              title={`Last edited: ${formatTimeAgo(
-                                post.updatedAt
-                              )}`}
-                            >
-                              {" "}
-                              (edited)
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <ForumRecentActivity
+            recentPosts={recentPosts}
+            loading={loadingPosts}
+          />
 
           {/* Create Post Button */}
           <div className="forum-actions">

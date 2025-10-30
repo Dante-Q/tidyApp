@@ -17,9 +17,9 @@ export default function CreatePostPage() {
   });
   const [error, setError] = useState("");
 
-  // Use centralized mutation configuration
+  // Use centralized mutation configuration with error handling
   const createPostMutation = useMutation(
-    createCreatePostMutation(queryClient, navigate)
+    createCreatePostMutation(queryClient, navigate, setError)
   );
 
   const categories = [
@@ -38,15 +38,7 @@ export default function CreatePostPage() {
       return;
     }
 
-    try {
-      await createPostMutation.mutateAsync(formData);
-    } catch (err) {
-      console.error("Error creating post:", err);
-      setError(
-        err.response?.data?.message ||
-          "Failed to create post. Please try again."
-      );
-    }
+    createPostMutation.mutate(formData);
   };
 
   const handleChange = (e) => {

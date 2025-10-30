@@ -18,22 +18,6 @@ export default function PostHeader() {
   const queryClient = useQueryClient();
   const isAuthor = user && post && post.author && post.author._id === user.id;
 
-  // Check if post was edited (updatedAt is more than 1 second after createdAt)
-  const isEdited =
-    post?.updatedAt &&
-    new Date(post.updatedAt) - new Date(post.createdAt) > 1000;
-
-  console.log("PostHeader render:", {
-    postId,
-    createdAt: post?.createdAt,
-    updatedAt: post?.updatedAt,
-    timeDiff:
-      post?.updatedAt && post?.createdAt
-        ? new Date(post.updatedAt) - new Date(post.createdAt)
-        : 0,
-    isEdited,
-  });
-
   // Use centralized mutation configurations
   const likeMutation = useMutation(createLikePostMutation(queryClient, postId));
   const deleteMutation = useMutation(
@@ -91,10 +75,10 @@ export default function PostHeader() {
             <span className="author-name">{post.author.name}</span>
             <span className="post-date">
               {formatDate(post.createdAt)}
-              {isEdited && (
+              {post.editedAt && (
                 <span
                   className="edited-tag"
-                  title={`Last edited: ${formatDate(post.updatedAt)}`}
+                  title={`Last edited: ${formatDate(post.editedAt)}`}
                 >
                   {" "}
                   (edited)

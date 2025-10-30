@@ -4,6 +4,7 @@ import {
   createPost,
   updatePost,
 } from "../services/forumService.js";
+import { showErrorAlert } from "../utils/errorHandlers.js";
 
 /**
  * Create a mutation for liking/unliking a post with optimistic updates
@@ -67,8 +68,8 @@ export function createDeletePostMutation(queryClient, navigate) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
 
-    onError: () => {
-      alert("Failed to delete post. Please try again.");
+    onError: (error) => {
+      showErrorAlert(error, "Failed to delete post. Please try again.");
     },
   };
 }
@@ -77,9 +78,14 @@ export function createDeletePostMutation(queryClient, navigate) {
  * Create a mutation for creating a new post
  * @param {Object} queryClient - React Query client instance
  * @param {Function} navigate - React Router navigate function
+ * @param {Function} setError - Optional error state setter
  * @returns {Object} Mutation configuration for useMutation
  */
-export function createCreatePostMutation(queryClient, navigate) {
+export function createCreatePostMutation(
+  queryClient,
+  navigate,
+  setError = null
+) {
   return {
     mutationFn: (formData) => createPost(formData),
 
@@ -90,8 +96,13 @@ export function createCreatePostMutation(queryClient, navigate) {
       navigate(`/forum/post/${data._id}`);
     },
 
-    onError: (err) => {
-      throw err; // Let component handle error display
+    onError: (error) => {
+      if (setError) {
+        const message =
+          error.response?.data?.message ||
+          "Failed to create post. Please try again.";
+        setError(message);
+      }
     },
   };
 }
@@ -101,15 +112,19 @@ export function createCreatePostMutation(queryClient, navigate) {
  * @param {Object} queryClient - React Query client instance
  * @param {string} postId - ID of the post being updated
  * @param {Function} navigate - React Router navigate function
+ * @param {Function} setError - Optional error state setter
  * @returns {Object} Mutation configuration for useMutation
  */
-export function createUpdatePostMutation(queryClient, postId, navigate) {
+export function createUpdatePostMutation(
+  queryClient,
+  postId,
+  navigate,
+  setError = null
+) {
   return {
     mutationFn: (formData) => updatePost(postId, formData),
 
-    onSuccess: async (updatedPost) => {
-      console.log("Post updated, server response:", updatedPost);
-
+    onSuccess: async () => {
       // Remove all cached data for this post to force fresh fetch
       queryClient.removeQueries({ queryKey: ["post", postId] });
       queryClient.removeQueries({ queryKey: ["comments", postId] });
@@ -121,8 +136,13 @@ export function createUpdatePostMutation(queryClient, postId, navigate) {
       navigate(`/forum/post/${postId}`);
     },
 
-    onError: (err) => {
-      throw err; // Let component handle error display
+    onError: (error) => {
+      if (setError) {
+        const message =
+          error.response?.data?.message ||
+          "Failed to update post. Please try again.";
+        setError(message);
+      }
     },
   };
 }

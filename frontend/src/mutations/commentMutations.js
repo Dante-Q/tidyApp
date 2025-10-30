@@ -3,14 +3,20 @@ import {
   toggleLikeComment,
   deleteComment,
 } from "../services/commentService.js";
+import { showErrorAlert } from "../utils/errorHandlers.js";
 
 /**
  * Create a mutation for creating a new comment
  * @param {Object} queryClient - React Query client instance
  * @param {string} postId - ID of the post being commented on
+ * @param {Function} setError - Optional error callback
  * @returns {Object} Mutation configuration for useMutation
  */
-export function createCreateCommentMutation(queryClient, postId) {
+export function createCreateCommentMutation(
+  queryClient,
+  postId,
+  setError = null
+) {
   return {
     mutationFn: (commentData) => createComment(commentData),
 
@@ -21,8 +27,15 @@ export function createCreateCommentMutation(queryClient, postId) {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
     },
 
-    onError: (err) => {
-      throw err; // Let component handle error display
+    onError: (error) => {
+      const message =
+        error.response?.data?.message ||
+        "Failed to post comment. Please try again.";
+      if (setError) {
+        setError(message);
+      } else {
+        alert(message);
+      }
     },
   };
 }
@@ -106,8 +119,8 @@ export function createDeleteCommentMutation(queryClient, postId) {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
     },
 
-    onError: () => {
-      alert("Failed to delete comment. Please try again.");
+    onError: (error) => {
+      showErrorAlert(error, "Failed to delete comment. Please try again.");
     },
   };
 }
