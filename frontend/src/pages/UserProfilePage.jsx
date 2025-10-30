@@ -17,12 +17,13 @@ export default function UserProfilePage() {
 
   const fetchUserPosts = async () => {
     try {
-      const response = await getPostsByUser(userId);
-      setPosts(response.data);
+      const data = await getPostsByUser(userId);
+      const postsArray = data.posts || [];
+      setPosts(postsArray);
 
       // Get user info from first post
-      if (response.data.length > 0) {
-        setUserInfo(response.data[0].author);
+      if (postsArray.length > 0) {
+        setUserInfo(postsArray[0].author);
       }
 
       setLoading(false);

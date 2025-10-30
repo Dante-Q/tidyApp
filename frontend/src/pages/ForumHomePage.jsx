@@ -22,13 +22,11 @@ export default function ForumHomePage() {
       console.log("Categories response:", categoriesRes);
       console.log("Posts response:", postsRes);
 
-      setCategories(categoriesRes.data || []);
-      setRecentPosts(postsRes.data || []);
+      setCategories(categoriesRes || []);
+      setRecentPosts(postsRes.posts || []);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching forum data:", err);
-      setCategories([]);
-      setRecentPosts([]);
       setLoading(false);
     }
   };
@@ -111,37 +109,31 @@ export default function ForumHomePage() {
               </div>
             ) : (
               <div className="categories-grid">
-                {categories && categories.length > 0 ? (
-                  categories.map((cat) => {
-                    const info = getCategoryInfo(cat._id);
-                    return (
-                      <Link
-                        key={cat._id}
-                        to={`/forum?category=${cat._id}`}
-                        className="category-card"
-                      >
-                        <div className="category-header">
-                          <div className="category-icon">{info.icon}</div>
-                          <h3 className="category-name">{info.name}</h3>
-                        </div>
-                        <p className="category-description">{info.description}</p>
-                        <div className="category-stats">
-                          <span className="stat-item">
-                            <strong>{cat.postCount}</strong> Posts
-                          </span>
-                          <span className="stat-divider">•</span>
-                          <span className="stat-item">
-                            <strong>{cat.totalComments}</strong> Comments
-                          </span>
-                        </div>
-                      </Link>
-                    );
-                  })
-                ) : (
-                  <div style={{ textAlign: "center", padding: "2rem", color: "#fff" }}>
-                    No categories available
-                  </div>
-                )}
+                {categories.map((cat) => {
+                  const info = getCategoryInfo(cat.category);
+                  return (
+                    <Link
+                      key={cat.category}
+                      to={`/forum?category=${cat.category}`}
+                      className="category-card"
+                    >
+                      <div className="category-header">
+                        <div className="category-icon">{info.icon}</div>
+                        <h3 className="category-name">{info.name}</h3>
+                      </div>
+                      <p className="category-description">{info.description}</p>
+                      <div className="category-stats">
+                        <span className="stat-item">
+                          <strong>{cat.totalPosts}</strong> Posts
+                        </span>
+                        <span className="stat-divider">•</span>
+                        <span className="stat-item">
+                          <strong>{cat.totalComments}</strong> Comments
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>

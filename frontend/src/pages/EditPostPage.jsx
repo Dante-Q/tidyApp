@@ -32,8 +32,7 @@ export default function EditPostPage() {
 
   const fetchPost = async () => {
     try {
-      const response = await getPostById(postId);
-      const post = response.data;
+      const post = await getPostById(postId);
 
       // Check if user is the author
       if (!user || post.author._id !== user._id) {

@@ -27,8 +27,8 @@ export default function PostDetailPage() {
 
   const fetchPost = async () => {
     try {
-      const response = await getPostById(postId);
-      setPost(response.data);
+      const data = await getPostById(postId);
+      setPost(data);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching post:", err);
@@ -39,10 +39,11 @@ export default function PostDetailPage() {
 
   const fetchComments = async () => {
     try {
-      const response = await getCommentsByPost(postId);
-      setComments(response.data);
+      const data = await getCommentsByPost(postId);
+      setComments(data.comments || []);
     } catch (err) {
       console.error("Error fetching comments:", err);
+      setComments([]);
     }
   };
 
@@ -59,8 +60,8 @@ export default function PostDetailPage() {
     }
 
     try {
-      const response = await toggleLikePost(postId);
-      setPost(response.data);
+      const data = await toggleLikePost(postId);
+      setPost(data);
     } catch (err) {
       console.error("Error toggling like:", err);
     }
