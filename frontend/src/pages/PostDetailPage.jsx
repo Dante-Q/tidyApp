@@ -24,11 +24,16 @@ export default function PostDetailPage() {
   const [commentContent, setCommentContent] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   const fetchPost = async () => {
     try {
       const data = await getPostById(postId);
       setPost(data);
+      // Set isLiked from the post data if available
+      if (data.isLiked !== undefined) {
+        setIsLiked(data.isLiked);
+      }
       setLoading(false);
     } catch (err) {
       console.error("Error fetching post:", err);
@@ -61,11 +66,14 @@ export default function PostDetailPage() {
 
     try {
       const data = await toggleLikePost(postId);
-      // Update only the likes, keep the rest of the post data
+      console.log("Like response:", data);
+      // Update the post and isLiked state
       setPost((prevPost) => ({
         ...prevPost,
-        likes: data.likes || [],
+        likes: data.likes,
+        author: prevPost.author,
       }));
+      setIsLiked(data.isLiked);
     } catch (err) {
       console.error("Error toggling like:", err);
     }
@@ -179,13 +187,13 @@ export default function PostDetailPage() {
     );
   }
 
-  const isAuthor = user && post && post.author && post.author._id === user._id;
-  const isLiked =
-    user &&
-    post &&
-    post.likes &&
-    Array.isArray(post.likes) &&
-    post.likes.includes(user._id);
+  const isAuthor = user && post && post.author && post.author._id === user.id;
+
+  console.log("Debug like status:", {
+    userId: user?.id,
+    postLikes: post?.likes,
+    isLiked: isLiked,
+  });
 
   return (
     <div className="post-detail-page">
@@ -211,10 +219,9 @@ export default function PostDetailPage() {
           </div>
           <button
             onClick={handleLike}
-            className={`btn-action ${isLiked ? "liked" : ""}`}
+            className={`btn-like-post ${isLiked ? "liked" : ""}`}
           >
-            {isLiked ? "❤️" : "🤍"}{" "}
-            {Array.isArray(post.likes) ? post.likes.length : 0}
+            {isLiked ? "❤️" : "🤍"} {post.likes || 0}
           </button>
         </div>
         <h1 className="post-title">{post.title}</h1>
@@ -236,7 +243,7 @@ export default function PostDetailPage() {
           <div className="post-stats">
             <span className="stat">👁️ {post.views} views</span>
             <span className="stat">💬 {post.commentCount || 0} comments</span>
-            <span className="stat">❤️ {post.likes.length} likes</span>
+            <span className="stat">❤️ {post.likes || 0} likes</span>
           </div>
         </div>
 

@@ -100,6 +100,36 @@
   font-size: 1.125rem;
 }
 
+.btn-like-post {
+  padding: 0.5rem 1rem;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-like-post:hover {
+  background: rgba(109, 213, 237, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-like-post.liked {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+.btn-like-post.liked:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
 .post-title {
   font-size: 2rem;
   font-weight: 700;
