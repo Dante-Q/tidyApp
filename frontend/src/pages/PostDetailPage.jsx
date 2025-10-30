@@ -24,7 +24,7 @@ export default function PostDetailPage() {
   const [error, setError] = useState("");
   const [commentContent, setCommentContent] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
-  const [replyTo, setReplyTo] = useState(null);
+  const [replyTo, setReplyTo] = useState(null); // { parentId, username }
   const [isLiked, setIsLiked] = useState(false);
 
   const fetchPost = async () => {
@@ -124,7 +124,7 @@ export default function PostDetailPage() {
       const commentData = {
         postId: postId,
         content: commentContent,
-        parentCommentId: replyTo,
+        parentCommentId: replyTo?.parentId || null,
       };
 
       await createComment(commentData);
@@ -278,7 +278,10 @@ export default function PostDetailPage() {
               key={comment._id}
               comment={comment}
               user={user}
-              onReply={(commentId) => setReplyTo(commentId)}
+              onReply={(replyData) => {
+                setReplyTo(replyData);
+                setCommentContent(`@${replyData.username} `);
+              }}
               onUpdate={fetchComments}
             />
           ))}
@@ -289,10 +292,13 @@ export default function PostDetailPage() {
           <form onSubmit={handleSubmitComment} className="comment-form">
             {replyTo && (
               <div className="reply-indicator">
-                Replying to comment
+                Replying to @{replyTo.username}
                 <button
                   type="button"
-                  onClick={() => setReplyTo(null)}
+                  onClick={() => {
+                    setReplyTo(null);
+                    setCommentContent("");
+                  }}
                   className="btn-cancel-reply"
                 >
                   ✕
@@ -303,7 +309,9 @@ export default function PostDetailPage() {
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}
               placeholder={
-                replyTo ? "Write a reply..." : "Share your thoughts..."
+                replyTo
+                  ? `Reply to @${replyTo.username}...`
+                  : "Share your thoughts..."
               }
               className="comment-input"
               rows={3}
@@ -328,10 +336,19 @@ export default function PostDetailPage() {
 }
 
 // Comment Component
-function CommentItem({ comment, user, onReply, onUpdate }) {
+function CommentItem({
+  comment,
+  user,
+  onReply,
+  onUpdate,
+  parentCommentId = null,
+}) {
   const [showReplies, setShowReplies] = useState(true);
+  const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
+
+  const INITIAL_REPLIES_SHOWN = 3;
 
   // Handle likes - convert array to count if needed
   const getLikeData = () => {
@@ -426,7 +443,12 @@ function CommentItem({ comment, user, onReply, onUpdate }) {
           {isLiked ? "❤️" : "🤍"} {likeCount}
         </button>
         <button
-          onClick={() => onReply(comment._id)}
+          onClick={() =>
+            onReply({
+              parentId: parentCommentId || comment._id,
+              username: comment.author.name,
+            })
+          }
           className="btn-comment-action"
         >
           💬 Reply
@@ -453,15 +475,39 @@ function CommentItem({ comment, user, onReply, onUpdate }) {
           </button>
           {showReplies && (
             <div className="replies-list">
-              {comment.replies.map((reply) => (
-                <CommentItem
-                  key={reply._id}
-                  comment={reply}
-                  user={user}
-                  onReply={onReply}
-                  onUpdate={onUpdate}
-                />
-              ))}
+              {comment.replies
+                .slice(
+                  0,
+                  showAllReplies
+                    ? comment.replies.length
+                    : INITIAL_REPLIES_SHOWN
+                )
+                .map((reply) => (
+                  <CommentItem
+                    key={reply._id}
+                    comment={reply}
+                    user={user}
+                    onReply={onReply}
+                    onUpdate={onUpdate}
+                    parentCommentId={parentCommentId || comment._id}
+                  />
+                ))}
+              {comment.replies.length > INITIAL_REPLIES_SHOWN && (
+                <button
+                  onClick={() => setShowAllReplies(!showAllReplies)}
+                  className="btn-show-more-replies"
+                >
+                  {showAllReplies
+                    ? "Show less"
+                    : `Show ${
+                        comment.replies.length - INITIAL_REPLIES_SHOWN
+                      } more ${
+                        comment.replies.length - INITIAL_REPLIES_SHOWN === 1
+                          ? "reply"
+                          : "replies"
+                      }`}
+                </button>
+              )}
             </div>
           )}
         </div>
