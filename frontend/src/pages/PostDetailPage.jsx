@@ -176,7 +176,7 @@ export default function PostDetailPage() {
   }
 
   const isAuthor = user && post && post.author && post.author._id === user._id;
-  const isLiked = user && post && post.likes && post.likes.includes(user._id);
+  const isLiked = user && post && post.likes && Array.isArray(post.likes) && post.likes.includes(user._id);
 
   return (
     <div className="post-detail-page">
@@ -230,7 +230,7 @@ export default function PostDetailPage() {
             onClick={handleLike}
             className={`btn-action ${isLiked ? "liked" : ""}`}
           >
-            {isLiked ? "❤️" : "🤍"} {post.likes.length}
+            {isLiked ? "❤️" : "🤍"} {Array.isArray(post.likes) ? post.likes.length : 0}
           </button>
 
           {isAuthor && (
