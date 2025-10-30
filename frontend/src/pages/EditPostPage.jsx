@@ -1,18 +1,21 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
-import { createPost } from "../services/forumService.js";
+import { getPostById, updatePost } from "../services/forumService.js";
 import "./CreatePostPage.css";
 
-export default function CreatePostPage() {
+export default function EditPostPage() {
+  const { postId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+
   const [formData, setFormData] = useState({
     category: "",
     title: "",
     content: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const categories = [
@@ -22,30 +25,58 @@ export default function CreatePostPage() {
     { value: "events-meetups", label: "📅 Events & Meetups" },
   ];
 
+  useEffect(() => {
+    fetchPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postId]);
+
+  const fetchPost = async () => {
+    try {
+      const response = await getPostById(postId);
+      const post = response.data;
+
+      // Check if user is the author
+      if (!user || post.author._id !== user._id) {
+        setError("You don't have permission to edit this post");
+        setTimeout(() => navigate(`/forum/post/${postId}`), 2000);
+        return;
+      }
+
+      setFormData({
+        category: post.category,
+        title: post.title,
+        content: post.content,
+      });
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching post:", err);
+      setError("Failed to load post");
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!user) {
-      setError("You must be logged in to create a post");
+      setError("You must be logged in to edit a post");
       navigate("/login");
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
     setError("");
 
     try {
-      const post = await createPost(formData);
-      console.log("Post created successfully:", post);
-      // Navigate to the newly created post
-      navigate(`/forum/post/${post._id}`);
+      await updatePost(postId, formData);
+      navigate(`/forum/post/${postId}`);
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.error("Error updating post:", err);
       setError(
         err.response?.data?.message ||
-          "Failed to create post. Please try again."
+          "Failed to update post. Please try again."
       );
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -55,6 +86,20 @@ export default function CreatePostPage() {
       [e.target.name]: e.target.value,
     });
   };
+
+  if (loading) {
+    return (
+      <div className="create-post-page">
+        <div
+          className="loading-container"
+          style={{ textAlign: "center", padding: "4rem" }}
+        >
+          <div className="loading-spinner"></div>
+          <p style={{ color: "#ffffff" }}>Loading post...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="create-post-page">
@@ -67,9 +112,9 @@ export default function CreatePostPage() {
       >
         <div className="create-post-hero-overlay">
           <div className="create-post-hero-content">
-            <h1 className="create-post-title">Create New Post</h1>
+            <h1 className="create-post-title">Edit Post</h1>
             <p className="create-post-subtitle">
-              Share your thoughts, questions, or experiences with the community
+              Update your post with new information
             </p>
           </div>
         </div>
@@ -150,30 +195,34 @@ export default function CreatePostPage() {
             <div className="form-actions">
               <button
                 type="button"
-                onClick={() => navigate("/forum")}
+                onClick={() => navigate(`/forum/post/${postId}`)}
                 className="btn-cancel"
-                disabled={loading}
+                disabled={submitting}
               >
                 Cancel
               </button>
-              <button type="submit" className="btn-submit" disabled={loading}>
-                <span>{loading ? "⏳" : "📝"}</span>
-                {loading ? "Publishing..." : "Publish Post"}
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={submitting}
+              >
+                <span>{submitting ? "⏳" : "💾"}</span>
+                {submitting ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>
 
           {/* Guidelines Sidebar */}
           <aside className="post-guidelines">
-            <h3 className="guidelines-title">Posting Guidelines</h3>
+            <h3 className="guidelines-title">Editing Guidelines</h3>
             <ul className="guidelines-list">
-              <li>✓ Be respectful and courteous to others</li>
-              <li>✓ Stay on topic for the selected category</li>
-              <li>✓ Use clear and descriptive titles</li>
-              <li>✓ Check for duplicate posts before submitting</li>
-              <li>✓ Share accurate and helpful information</li>
-              <li>✗ No spam or self-promotion</li>
-              <li>✗ No offensive or inappropriate content</li>
+              <li>✓ Keep the original topic and context</li>
+              <li>✓ Fix typos and improve clarity</li>
+              <li>✓ Add new information if relevant</li>
+              <li>✓ Respect existing comments</li>
+              <li>✗ Don't change the meaning entirely</li>
+              <li>✗ Don't remove content others replied to</li>
+              <li>💡 Edits will show an "edited" tag</li>
             </ul>
           </aside>
         </div>

@@ -108,6 +108,8 @@
   display: flex;
   flex-direction: column;
   min-height: 240px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .category-card:hover {
@@ -196,6 +198,8 @@
   gap: 1rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .post-preview:hover {
@@ -205,7 +209,8 @@
 }
 
 .post-avatar {
-  font-size: 2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   width: 50px;
   height: 50px;
   display: flex;
@@ -214,6 +219,7 @@
   background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
   border-radius: 50%;
   flex-shrink: 0;
+  color: #ffffff;
 }
 
 .post-info {

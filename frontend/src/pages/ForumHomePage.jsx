@@ -1,7 +1,79 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getCategoryStats, getPosts } from "../services/forumService.js";
 import "./ForumHomePage.css";
 
 export default function ForumHomePage() {
+  const [categories, setCategories] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [categoriesRes, postsRes] = await Promise.all([
+        getCategoryStats(),
+        getPosts({ limit: 5, sortBy: "createdAt" }),
+      ]);
+
+      console.log("Categories response:", categoriesRes);
+      console.log("Posts response:", postsRes);
+
+      setCategories(categoriesRes.data || []);
+      setRecentPosts(postsRes.data || []);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching forum data:", err);
+      setCategories([]);
+      setRecentPosts([]);
+      setLoading(false);
+    }
+  };
+
+  const getCategoryInfo = (category) => {
+    const info = {
+      "surf-reports": {
+        icon: "🌊",
+        name: "Surf Reports",
+        description:
+          "Share and discuss surf conditions, wave forecasts, and session reports.",
+      },
+      "beach-safety": {
+        icon: "🏖️",
+        name: "Beach Safety",
+        description:
+          "Discuss safety tips, current conditions, and best practices for beach activities.",
+      },
+      "general-discussion": {
+        icon: "🌅",
+        name: "General Discussion",
+        description:
+          "Chat about anything related to Cape Town's beaches, events, and community.",
+      },
+      "events-meetups": {
+        icon: "📅",
+        name: "Events & Meetups",
+        description:
+          "Organize and join beach cleanups, surf sessions, and community events.",
+      },
+    };
+    return info[category] || { icon: "📝", name: category, description: "" };
+  };
+
+  const formatTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+
+    if (diffInHours < 1) return "Just now";
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInHours < 48) return "Yesterday";
+    return `${Math.floor(diffInHours / 24)}d ago`;
+  };
+
   return (
     <div className="forum-page">
       {/* Hero Section */}
@@ -31,127 +103,86 @@ export default function ForumHomePage() {
               <h2>Forum Categories</h2>
               <p>Explore topics and join the conversation</p>
             </div>
-            <div className="categories-grid">
-              <div className="category-card">
-                <div className="category-header">
-                  <div className="category-icon">🌊</div>
-                  <h3 className="category-name">Surf Reports</h3>
-                </div>
-                <p className="category-description">
-                  Share and discuss surf conditions, wave forecasts, and session
-                  reports.
-                </p>
-                <div className="category-stats">
-                  <span className="stat-item">
-                    <strong>42</strong> Topics
-                  </span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">
-                    <strong>128</strong> Posts
-                  </span>
-                </div>
+            {loading ? (
+              <div
+                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
+              >
+                Loading categories...
               </div>
-
-              <div className="category-card">
-                <div className="category-header">
-                  <div className="category-icon">🏖️</div>
-                  <h3 className="category-name">Beach Safety</h3>
-                </div>
-                <p className="category-description">
-                  Discuss safety tips, current conditions, and best practices
-                  for beach activities.
-                </p>
-                <div className="category-stats">
-                  <span className="stat-item">
-                    <strong>18</strong> Topics
-                  </span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">
-                    <strong>64</strong> Posts
-                  </span>
-                </div>
+            ) : (
+              <div className="categories-grid">
+                {categories && categories.length > 0 ? (
+                  categories.map((cat) => {
+                    const info = getCategoryInfo(cat._id);
+                    return (
+                      <Link
+                        key={cat._id}
+                        to={`/forum?category=${cat._id}`}
+                        className="category-card"
+                      >
+                        <div className="category-header">
+                          <div className="category-icon">{info.icon}</div>
+                          <h3 className="category-name">{info.name}</h3>
+                        </div>
+                        <p className="category-description">{info.description}</p>
+                        <div className="category-stats">
+                          <span className="stat-item">
+                            <strong>{cat.postCount}</strong> Posts
+                          </span>
+                          <span className="stat-divider">•</span>
+                          <span className="stat-item">
+                            <strong>{cat.totalComments}</strong> Comments
+                          </span>
+                        </div>
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <div style={{ textAlign: "center", padding: "2rem", color: "#fff" }}>
+                    No categories available
+                  </div>
+                )}
               </div>
-
-              <div className="category-card">
-                <div className="category-header">
-                  <div className="category-icon">🌅</div>
-                  <h3 className="category-name">General Discussion</h3>
-                </div>
-                <p className="category-description">
-                  Chat about anything related to Cape Town's beaches, events,
-                  and community.
-                </p>
-                <div className="category-stats">
-                  <span className="stat-item">
-                    <strong>35</strong> Topics
-                  </span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">
-                    <strong>156</strong> Posts
-                  </span>
-                </div>
-              </div>
-
-              <div className="category-card">
-                <div className="category-header">
-                  <div className="category-icon">📅</div>
-                  <h3 className="category-name">Events & Meetups</h3>
-                </div>
-                <p className="category-description">
-                  Organize and join beach cleanups, surf sessions, and community
-                  events.
-                </p>
-                <div className="category-stats">
-                  <span className="stat-item">
-                    <strong>12</strong> Topics
-                  </span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">
-                    <strong>47</strong> Posts
-                  </span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Recent Activity Section */}
           <div className="forum-recent">
             <h2 className="section-title">Recent Activity</h2>
-            <div className="recent-posts">
-              <div className="post-preview">
-                <div className="post-avatar">👤</div>
-                <div className="post-info">
-                  <h4 className="post-title">
-                    Amazing waves at Muizenberg today!
-                  </h4>
-                  <p className="post-meta">
-                    Posted by <strong>SurferDude</strong> • 2 hours ago
-                  </p>
-                </div>
+            {loading ? (
+              <div
+                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
+              >
+                Loading posts...
               </div>
-
-              <div className="post-preview">
-                <div className="post-avatar">👤</div>
-                <div className="post-info">
-                  <h4 className="post-title">Beach cleanup this Saturday?</h4>
-                  <p className="post-meta">
-                    Posted by <strong>BeachLover</strong> • 5 hours ago
-                  </p>
-                </div>
+            ) : recentPosts.length === 0 ? (
+              <div
+                style={{ textAlign: "center", padding: "2rem", color: "#fff" }}
+              >
+                No posts yet. Be the first to start a discussion!
               </div>
-
-              <div className="post-preview">
-                <div className="post-avatar">👤</div>
-                <div className="post-info">
-                  <h4 className="post-title">
-                    Best time for tides at Clifton?
-                  </h4>
-                  <p className="post-meta">
-                    Posted by <strong>TideWatcher</strong> • 1 day ago
-                  </p>
-                </div>
+            ) : (
+              <div className="recent-posts">
+                {recentPosts.map((post) => (
+                  <Link
+                    key={post._id}
+                    to={`/forum/post/${post._id}`}
+                    className="post-preview"
+                  >
+                    <div className="post-avatar">
+                      {post.author.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="post-info">
+                      <h4 className="post-title">{post.title}</h4>
+                      <p className="post-meta">
+                        Posted by <strong>{post.author.name}</strong> •{" "}
+                        {formatTimeAgo(post.createdAt)}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </div>
+            )}
           </div>
 
           {/* Create Post Button */}
