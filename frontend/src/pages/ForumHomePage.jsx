@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./ForumHomePage.css";
 
 export default function ForumHomePage() {
@@ -155,10 +156,12 @@ export default function ForumHomePage() {
 
           {/* Create Post Button */}
           <div className="forum-actions">
-            <button className="create-post-btn">
-              <span>✍️</span>
-              Create New Post
-            </button>
+            <Link to="/forum/create-post">
+              <button className="create-post-btn">
+                <span>✍️</span>
+                Create New Post
+              </button>
+            </Link>
           </div>
         </div>
       </section>

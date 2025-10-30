@@ -13,6 +13,7 @@ import DashboardPage from "./pages/DashboardPage";
 import BeachPage from "./pages/BeachPage";
 import InfoPage from "./pages/InfoPage.jsx";
 import ForumHomePage from "./pages/ForumHomePage.jsx";
+import CreatePostPage from "./pages/CreatePostPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -35,6 +36,10 @@ export default function App() {
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
                   <Route path="/forum" element={<ForumHomePage />} />
+                  <Route
+                    path="/forum/create-post"
+                    element={<CreatePostPage />}
+                  />
                   <Route
                     path="/dashboard"
                     element={
