@@ -141,6 +141,42 @@
   font-size: 0.875rem;
 }
 
+.max-limit-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
+.tag-limit-error .max-limit-text {
+  animation: maxLimitPulse 1s ease-in-out;
+}
+
+@keyframes maxLimitPulse {
+  0% {
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 0 rgba(255, 107, 107, 0);
+  }
+  12% {
+    color: rgba(255, 140, 140, 0.8);
+    text-shadow: 0 0 8px rgba(255, 140, 140, 0.6),
+      0 0 12px rgba(255, 140, 140, 0.3);
+  }
+  30% {
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 0 rgba(255, 107, 107, 0);
+  }
+  50% {
+    color: rgba(255, 140, 140, 0.8);
+    text-shadow: 0 0 8px rgba(255, 140, 140, 0.6),
+      0 0 12px rgba(255, 140, 140, 0.3);
+  }
+  70%,
+  100% {
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 0 rgba(255, 107, 107, 0);
+  }
+}
+
 .form-helper {
   margin-top: 0.5rem;
   font-size: 0.875rem;
@@ -214,12 +250,24 @@
   cursor: pointer !important;
 }
 
-/* Remove focus effects */
+/* Remove focus effects - comprehensive */
 .beach-tags-select-input:focus,
 .beach-tags-select-input:focus-within,
 .form-group .mantine-MultiSelect-input:focus,
-.form-group .mantine-MultiSelect-input:focus-within {
+.form-group .mantine-MultiSelect-input:focus-within,
+.form-group .mantine-MultiSelect-root:focus-within,
+.form-group .mantine-Input-wrapper:focus-within,
+.form-group [data-mantine-component="MultiSelect"]:focus-within {
   border-color: rgba(109, 213, 237, 0.2) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-offset: 0 !important;
+}
+
+/* Remove any Mantine focus ring globally for this component */
+.form-group .mantine-MultiSelect-root *:focus,
+.form-group .mantine-MultiSelect-root *:focus-visible {
   box-shadow: none !important;
   outline: none !important;
 }
@@ -256,18 +304,67 @@
 }
 
 /* Tag limit error - red border flash */
-.tag-limit-error .mantine-MultiSelect-wrapper {
-  animation: errorFlash 0.4s ease;
+/* Tag limit error - soft pulsing highlight using box-shadow (avoids animating border-color)
+   Reasons:
+   - Mantine may set inline border styles which can interfere with border-color keyframe animations
+   - Animating box-shadow doesn't change layout and is less likely to be overridden
+*/
+.tag-limit-error .beach-tags-select-input {
+  animation: errorPulseBorder 1s ease-in-out;
 }
 
-@keyframes errorFlash {
-  0%,
-  100% {
-    border: none;
+@keyframes errorPulseBorder {
+  0% {
+    box-shadow: inset 0 0 0 1px rgba(109, 213, 237, 0.2);
+  }
+  12% {
+    box-shadow: inset 0 0 0 2px rgba(255, 107, 107, 0.7);
+  }
+  30% {
+    box-shadow: inset 0 0 0 1px rgba(109, 213, 237, 0.2);
   }
   50% {
-    border: 2px solid rgba(239, 68, 68, 0.9);
-    border-radius: 8px;
+    box-shadow: inset 0 0 0 2px rgba(255, 107, 107, 0.7);
+  }
+  70%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(109, 213, 237, 0.2);
+  }
+}
+
+@keyframes errorPulsePill {
+  0% {
+    box-shadow: none;
+    transform: none;
+    background-color: rgba(109, 213, 237, 0.2);
+    border-color: rgba(109, 213, 237, 0.3);
+  }
+  12% {
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4),
+      0 2px 8px rgba(255, 107, 107, 0.2);
+    transform: translateY(-2px) scale(1.02);
+    background-color: rgba(255, 107, 107, 0.25);
+    border-color: rgba(255, 107, 107, 0.6);
+  }
+  30% {
+    box-shadow: none;
+    transform: none;
+    background-color: rgba(109, 213, 237, 0.2);
+    border-color: rgba(109, 213, 237, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4),
+      0 2px 8px rgba(255, 107, 107, 0.2);
+    transform: translateY(-2px) scale(1.02);
+    background-color: rgba(255, 107, 107, 0.25);
+    border-color: rgba(255, 107, 107, 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: none;
+    transform: none;
+    background-color: rgba(109, 213, 237, 0.2);
+    border-color: rgba(109, 213, 237, 0.3);
   }
 }
 

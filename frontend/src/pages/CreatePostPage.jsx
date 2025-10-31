@@ -211,7 +211,8 @@ export default function CreatePostPage() {
                 className="form-label"
                 style={{ pointerEvents: "none" }}
               >
-                Beach Tags <span className="optional">(optional, max 2)</span>
+                Beach Tags <span className="optional">(optional)</span>{" "}
+                <span className="max-limit-text">(max 2)</span>
               </label>
               <MultiSelect
                 id="tags"
@@ -222,29 +223,29 @@ export default function CreatePostPage() {
                 }))}
                 value={formData.tags}
                 onChange={(value) => {
-                  if (value.length > 2) {
-                    setTagLimitError(true);
-                    setTimeout(() => setTagLimitError(false), 600);
-                    return;
-                  }
                   setFormData({ ...formData, tags: value });
+                  setTagLimitError(false);
                 }}
                 searchable
                 clearable
                 hidePickedOptions
                 maxValues={2}
                 onDropdownClose={() => {}}
-                onOptionSubmit={() => {
-                  // Delay closing dropdown so user sees the red flash
-                  if (formData.tags.length >= 2) {
+                onOptionSubmit={(value) => {
+                  // Check if user already has 2 tags and is trying to add another
+                  if (
+                    formData.tags.length >= 2 &&
+                    !formData.tags.includes(value)
+                  ) {
+                    setTagLimitError(true);
                     setTimeout(() => {
-                      document.activeElement?.blur();
-                    }, 100);
-                  } else {
-                    setTimeout(() => {
-                      document.activeElement?.blur();
-                    }, 0);
+                      setTagLimitError(false);
+                    }, 1000);
                   }
+                  // Always close dropdown after interaction
+                  setTimeout(() => {
+                    document.activeElement?.blur();
+                  }, 0);
                 }}
                 classNames={{
                   root: "beach-tags-select-root",
