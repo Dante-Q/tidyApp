@@ -398,11 +398,25 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.btn-cancel-edit:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .btn-save-edit {
   background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
   border: none;
   color: #ffffff;
   font-weight: 600;
+}
+
+.btn-save-edit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-save-edit:disabled,
+.btn-cancel-edit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .comment-actions {

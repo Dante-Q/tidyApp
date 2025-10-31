@@ -6,6 +6,7 @@ import InlineCommentForm from "./InlineCommentForm.jsx";
 import {
   createLikeCommentMutation,
   createDeleteCommentMutation,
+  createUpdateCommentMutation,
 } from "../mutations/commentMutations.js";
 import {
   formatCommentDate,
@@ -98,6 +99,11 @@ function CommentItem({
     createDeleteCommentMutation(queryClient, postId)
   );
 
+  // Update comment mutation
+  const updateCommentMutation = useMutation(
+    createUpdateCommentMutation(queryClient, postId)
+  );
+
   const handleLikeComment = () => {
     if (!user) {
       navigate("/login");
@@ -111,6 +117,27 @@ function CommentItem({
       return;
     }
     deleteCommentMutation.mutate(comment._id);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editContent.trim()) return;
+
+    updateCommentMutation.mutate(
+      {
+        commentId: comment._id,
+        content: editContent,
+      },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+        },
+      }
+    );
+  };
+
+  const handleCancelEdit = () => {
+    setEditContent(comment.content); // Reset to original content
+    setIsEditing(false);
   };
 
   const isAuthor = user && comment.author._id === user.id;
@@ -142,15 +169,26 @@ function CommentItem({
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               className="edit-input"
+              rows={3}
+              disabled={updateCommentMutation.isPending}
             />
             <div className="edit-actions">
               <button
-                onClick={() => setIsEditing(false)}
+                onClick={handleCancelEdit}
                 className="btn-cancel-edit"
+                disabled={updateCommentMutation.isPending}
               >
                 Cancel
               </button>
-              <button className="btn-save-edit">Save</button>
+              <button
+                onClick={handleSaveEdit}
+                className="btn-save-edit"
+                disabled={
+                  updateCommentMutation.isPending || !editContent.trim()
+                }
+              >
+                {updateCommentMutation.isPending ? "Saving..." : "Save"}
+              </button>
             </div>
           </div>
         ) : (

@@ -1,5 +1,6 @@
 import {
   createComment,
+  updateComment,
   toggleLikeComment,
   deleteComment,
 } from "../services/commentService.js";
@@ -121,6 +122,70 @@ export function createDeleteCommentMutation(queryClient, postId) {
 
     onError: (error) => {
       showErrorAlert(error, "Failed to delete comment. Please try again.");
+    },
+  };
+}
+
+/**
+ * Create a mutation for updating/editing a comment
+ * @param {Object} queryClient - React Query client instance
+ * @param {string} postId - ID of the post containing the comment
+ * @returns {Object} Mutation configuration for useMutation
+ */
+export function createUpdateCommentMutation(queryClient, postId) {
+  return {
+    mutationFn: ({ commentId, content }) => updateComment(commentId, content),
+
+    onMutate: async ({ commentId, content }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["comments", postId] });
+
+      // Snapshot previous value
+      const previousComments = queryClient.getQueryData(["comments", postId]);
+
+      // Optimistically update the comment
+      queryClient.setQueryData(["comments", postId], (oldComments) => {
+        if (!oldComments) return oldComments;
+
+        const updateCommentInList = (comments) =>
+          comments.map((comment) => {
+            if (comment._id === commentId) {
+              return {
+                ...comment,
+                content: content,
+                isEdited: true,
+              };
+            }
+            // Handle nested replies
+            if (comment.replies && comment.replies.length > 0) {
+              return {
+                ...comment,
+                replies: updateCommentInList(comment.replies),
+              };
+            }
+            return comment;
+          });
+
+        return updateCommentInList(oldComments);
+      });
+
+      return { previousComments };
+    },
+
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousComments) {
+        queryClient.setQueryData(
+          ["comments", postId],
+          context.previousComments
+        );
+      }
+      showErrorAlert(err, "Failed to update comment. Please try again.");
+    },
+
+    onSuccess: () => {
+      // Refetch to ensure server state is accurate
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
     },
   };
 }
