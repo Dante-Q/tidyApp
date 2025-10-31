@@ -132,6 +132,12 @@ export default function Navbar() {
             </Button>
           </Link>
 
+          <Link to="/about" className="navbar-link">
+            <Button variant="subtle" className="navbar-btn navbar-btn-about">
+              About
+            </Button>
+          </Link>
+
           {user ? (
             <>
               {isOnDashboard ? (
