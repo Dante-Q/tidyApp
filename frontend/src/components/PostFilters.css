@@ -7,11 +7,16 @@
 
 .filters-row {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   align-items: center;
   margin-left: 0;
   margin-right: 0;
+}
+
+/* When clear button is present, adjust grid */
+.filters-row:has(.btn-clear-filters) {
+  grid-template-columns: 1fr 1fr auto;
 }
 
 /* Search Input Styling */
