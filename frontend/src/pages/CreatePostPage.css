@@ -135,6 +135,12 @@
   color: #ef4444;
 }
 
+.optional {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
 .form-helper {
   margin-top: 0.5rem;
   font-size: 0.875rem;
@@ -182,6 +188,101 @@
   resize: vertical;
   min-height: 200px;
   line-height: 1.6;
+}
+
+/* Mantine MultiSelect placeholder styling */
+.form-group input[type="text"]::placeholder,
+.form-group .mantine-MultiSelect-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+  opacity: 1 !important;
+}
+
+/* Beach Tags MultiSelect - Complete Styling */
+.beach-tags-select-root {
+  cursor: pointer;
+}
+
+.beach-tags-select-input {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(109, 213, 237, 0.2) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 1rem !important;
+  min-height: auto !important;
+  line-height: 1.5 !important;
+  cursor: pointer !important;
+}
+
+/* Remove focus effects */
+.beach-tags-select-input:focus,
+.beach-tags-select-input:focus-within,
+.form-group .mantine-MultiSelect-input:focus,
+.form-group .mantine-MultiSelect-input:focus-within {
+  border-color: rgba(109, 213, 237, 0.2) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove focus ring from wrapper */
+.form-group .mantine-Input-wrapper:focus-within {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.beach-tags-select-pill {
+  background-color: rgba(109, 213, 237, 0.2) !important;
+  color: #6dd5ed !important;
+  border: 1px solid rgba(109, 213, 237, 0.3) !important;
+  padding: 0.375rem 0.75rem !important;
+  height: auto !important;
+  min-height: 28px !important;
+}
+
+.beach-tags-select-dropdown {
+  background-color: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(109, 213, 237, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 0.5rem !important;
+}
+
+.beach-tags-select-option {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  border-radius: 6px !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+}
+
+/* Tag limit error - red border flash */
+.tag-limit-error .mantine-MultiSelect-wrapper {
+  animation: errorFlash 0.4s ease;
+}
+
+@keyframes errorFlash {
+  0%,
+  100% {
+    border: none;
+  }
+  50% {
+    border: 2px solid rgba(239, 68, 68, 0.9);
+    border-radius: 8px;
+  }
+}
+
+/* Style clear button and chevron */
+.form-group .mantine-InputClearButton-root {
+  background-color: transparent !important;
+  color: #6dd5ed !important;
+}
+
+.form-group .mantine-InputClearButton-root svg {
+  color: #6dd5ed !important;
+}
+
+.form-group .mantine-ComboboxChevron-chevron {
+  color: #6dd5ed !important;
 }
 
 .form-hint {

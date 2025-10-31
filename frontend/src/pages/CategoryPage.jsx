@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
 import { getCategoryBySlug } from "../config/forumCategories.js";
+import { getBeachTagBySlug } from "../config/beachTags.js";
 import { formatDate } from "../utils/forumHelpers.js";
 import "./CategoryPage.css";
 
@@ -139,20 +140,41 @@ export default function CategoryPage() {
                     >
                       <div className="post-item-header">
                         <h3 className="post-item-title">{post.title}</h3>
-                        {post.subcategory && (
-                          <span className="post-subcategory-tag">
-                            {
-                              category.subcategories.find(
-                                (s) => s.slug === post.subcategory
-                              )?.icon
-                            }{" "}
-                            {
-                              category.subcategories.find(
-                                (s) => s.slug === post.subcategory
-                              )?.name
-                            }
-                          </span>
-                        )}
+                        <div className="post-tags">
+                          {/* Beach Tags */}
+                          {post.tags &&
+                            post.tags.length > 0 &&
+                            post.tags.map((tagSlug) => {
+                              const tag = getBeachTagBySlug(tagSlug);
+                              return tag ? (
+                                <span
+                                  key={tagSlug}
+                                  className="post-beach-tag"
+                                  style={{
+                                    borderColor: tag.color,
+                                    color: tag.color,
+                                  }}
+                                >
+                                  {tag.icon} {tag.name}
+                                </span>
+                              ) : null;
+                            })}
+                          {/* Subcategory Tag */}
+                          {post.subcategory && (
+                            <span className="post-subcategory-tag">
+                              {
+                                category.subcategories.find(
+                                  (s) => s.slug === post.subcategory
+                                )?.icon
+                              }{" "}
+                              {
+                                category.subcategories.find(
+                                  (s) => s.slug === post.subcategory
+                                )?.name
+                              }
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="post-item-meta">
                         <span className="post-author">

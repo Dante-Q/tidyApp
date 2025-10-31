@@ -5,6 +5,7 @@ import {
   getCategoryLabel,
   formatDate,
 } from "../utils/forumHelpers.js";
+import { getBeachTagBySlug } from "../config/beachTags.js";
 import styles from "./ForumRecentActivity.module.css";
 
 export default function ForumRecentActivity({ recentPosts, loading }) {
@@ -46,12 +47,33 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
                 >
                   <div className={styles.postItemHeader}>
                     <h3 className={styles.postItemTitle}>{post.title}</h3>
-                    {(post.subcategory || post.category) && (
-                      <span className={styles.postSubcategoryTag}>
-                        {getCategoryEmoji(post.subcategory || post.category)}{" "}
-                        {getCategoryLabel(post.subcategory || post.category)}
-                      </span>
-                    )}
+                    <div className={styles.postTags}>
+                      {/* Beach Tags */}
+                      {post.tags &&
+                        post.tags.length > 0 &&
+                        post.tags.map((tagSlug) => {
+                          const tag = getBeachTagBySlug(tagSlug);
+                          return tag ? (
+                            <span
+                              key={tagSlug}
+                              className={styles.postBeachTag}
+                              style={{
+                                borderColor: tag.color,
+                                color: tag.color,
+                              }}
+                            >
+                              {tag.icon} {tag.name}
+                            </span>
+                          ) : null;
+                        })}
+                      {/* Subcategory Tag */}
+                      {(post.subcategory || post.category) && (
+                        <span className={styles.postSubcategoryTag}>
+                          {getCategoryEmoji(post.subcategory || post.category)}{" "}
+                          {getCategoryLabel(post.subcategory || post.category)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className={styles.postItemMeta}>
                     <span className={styles.postAuthor}>

@@ -9,6 +9,7 @@ export const getPosts = async (req, res) => {
       category,
       subcategory,
       author,
+      tags,
       page = 1,
       limit = 20,
       sort = "-createdAt",
@@ -23,6 +24,11 @@ export const getPosts = async (req, res) => {
     }
     if (author) {
       query.author = author;
+    }
+    if (tags) {
+      // tags can be a comma-separated string or an array
+      const tagArray = Array.isArray(tags) ? tags : tags.split(",");
+      query.tags = { $in: tagArray };
     }
 
     const skip = (page - 1) * limit;
@@ -78,7 +84,7 @@ export const getPostById = async (req, res) => {
 // Create new post
 export const createPost = async (req, res) => {
   try {
-    const { title, content, category, subcategory } = req.body;
+    const { title, content, category, subcategory, tags } = req.body;
 
     // Validate category and subcategory combination
     if (subcategory && !isValidCategorySubcategory(category, subcategory)) {
@@ -92,6 +98,7 @@ export const createPost = async (req, res) => {
       content,
       category,
       subcategory: subcategory || null,
+      tags: tags || [],
       author: req.user._id,
     });
 
@@ -124,7 +131,7 @@ export const updatePost = async (req, res) => {
         .json({ message: "Not authorized to update this post" });
     }
 
-    const { title, content, category, subcategory } = req.body;
+    const { title, content, category, subcategory, tags } = req.body;
 
     // Validate category and subcategory combination if both are being updated
     if ((category || post.category) && subcategory) {
@@ -140,6 +147,7 @@ export const updatePost = async (req, res) => {
     if (content) post.content = content;
     if (category) post.category = category;
     if (subcategory !== undefined) post.subcategory = subcategory || null;
+    if (tags !== undefined) post.tags = tags;
 
     // Set editedAt timestamp to mark this as an intentional edit
     post.editedAt = new Date();

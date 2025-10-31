@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
 import { getSubcategoryBySlug } from "../config/forumCategories.js";
+import { getBeachTagBySlug } from "../config/beachTags.js";
 import { formatDate } from "../utils/forumHelpers.js";
 import "./SubcategoryPage.css";
 
@@ -109,6 +110,26 @@ export default function SubcategoryPage() {
                     >
                       <div className="post-col-title">
                         <h3 className="post-row-title">{post.title}</h3>
+                        {/* Beach Tags */}
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="post-beach-tags">
+                            {post.tags.map((tagSlug) => {
+                              const tag = getBeachTagBySlug(tagSlug);
+                              return tag ? (
+                                <span
+                                  key={tagSlug}
+                                  className="post-beach-tag"
+                                  style={{
+                                    borderColor: tag.color,
+                                    color: tag.color,
+                                  }}
+                                >
+                                  {tag.icon} {tag.name}
+                                </span>
+                              ) : null;
+                            })}
+                          </div>
+                        )}
                         <p className="post-row-excerpt">
                           {post.content?.substring(0, 120)}
                           {post.content?.length > 120 ? "..." : ""}

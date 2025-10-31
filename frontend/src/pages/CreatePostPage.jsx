@@ -1,12 +1,14 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MultiSelect } from "@mantine/core";
 import { UserContext } from "../context/UserContext.js";
 import { createCreatePostMutation } from "../mutations/postMutations.js";
 import FORUM_CATEGORIES, {
   getCategoryBySlug,
   getSubcategoryBySlug,
 } from "../config/forumCategories.js";
+import BEACH_TAGS from "../config/beachTags.js";
 import "./CreatePostPage.css";
 
 export default function CreatePostPage() {
@@ -20,8 +22,10 @@ export default function CreatePostPage() {
     subcategory: "",
     title: "",
     content: "",
+    tags: [],
   });
   const [error, setError] = useState("");
+  const [tagLimitError, setTagLimitError] = useState(false);
 
   // Pre-fill category and subcategory from URL params
   useEffect(() => {
@@ -197,6 +201,64 @@ export default function CreatePostPage() {
                 </p>
               </div>
             )}
+
+            {/* Beach Tags Selection */}
+            <div
+              className={`form-group ${tagLimitError ? "tag-limit-error" : ""}`}
+            >
+              <label
+                htmlFor="tags"
+                className="form-label"
+                style={{ pointerEvents: "none" }}
+              >
+                Beach Tags <span className="optional">(optional, max 2)</span>
+              </label>
+              <MultiSelect
+                id="tags"
+                placeholder="Select tags related to your post"
+                data={BEACH_TAGS.map((tag) => ({
+                  value: tag.slug,
+                  label: `${tag.icon} ${tag.name}`,
+                }))}
+                value={formData.tags}
+                onChange={(value) => {
+                  if (value.length > 2) {
+                    setTagLimitError(true);
+                    setTimeout(() => setTagLimitError(false), 600);
+                    return;
+                  }
+                  setFormData({ ...formData, tags: value });
+                }}
+                searchable
+                clearable
+                hidePickedOptions
+                maxValues={2}
+                onDropdownClose={() => {}}
+                onOptionSubmit={() => {
+                  // Delay closing dropdown so user sees the red flash
+                  if (formData.tags.length >= 2) {
+                    setTimeout(() => {
+                      document.activeElement?.blur();
+                    }, 100);
+                  } else {
+                    setTimeout(() => {
+                      document.activeElement?.blur();
+                    }, 0);
+                  }
+                }}
+                classNames={{
+                  root: "beach-tags-select-root",
+                  input: "beach-tags-select-input",
+                  pill: "beach-tags-select-pill",
+                  dropdown: "beach-tags-select-dropdown",
+                  option: "beach-tags-select-option",
+                }}
+              />
+              <p className="form-helper">
+                Tag your post with specific beaches to help others find relevant
+                content
+              </p>
+            </div>
 
             {/* Post Title */}
             <div className="form-group">
