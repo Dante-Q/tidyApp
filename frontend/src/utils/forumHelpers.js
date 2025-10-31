@@ -104,3 +104,16 @@ export const getUserInitial = (name) => {
   if (!name) return "?";
   return name.charAt(0).toUpperCase();
 };
+
+/**
+ * Get subcategory label with icon
+ * @param {string} categorySlug - Category slug
+ * @param {string} subcategorySlug - Subcategory slug
+ * @returns {string} Subcategory display label with icon
+ */
+export const getSubcategoryLabel = (categorySlug, subcategorySlug) => {
+  if (!subcategorySlug) return "";
+  const icon = getCategoryIcon(subcategorySlug);
+  const name = getSubcategoryName(subcategorySlug);
+  return `${icon} ${name}`;
+};

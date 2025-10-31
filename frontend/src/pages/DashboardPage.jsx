@@ -5,6 +5,7 @@ import FavoritesWatchlist from "../components/FavoritesWatchlist";
 import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
+import MyForumPosts from "../components/MyForumPosts";
 import useMarineData from "../hooks/useMarineData";
 
 export default function DashboardPage() {
@@ -32,6 +33,9 @@ export default function DashboardPage() {
 
         {/* Beach Carousel */}
         <BeachCarousel />
+
+        {/* My Forum Posts */}
+        <MyForumPosts />
 
         {/* Wave Height Graph with Real Data */}
         <WaveHeightGraph

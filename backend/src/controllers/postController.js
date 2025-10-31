@@ -8,6 +8,7 @@ export const getPosts = async (req, res) => {
     const {
       category,
       subcategory,
+      author,
       page = 1,
       limit = 20,
       sort = "-createdAt",
@@ -19,6 +20,9 @@ export const getPosts = async (req, res) => {
     }
     if (subcategory) {
       query.subcategory = subcategory;
+    }
+    if (author) {
+      query.author = author;
     }
 
     const skip = (page - 1) * limit;

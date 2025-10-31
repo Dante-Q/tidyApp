@@ -1,40 +1,29 @@
-import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getPostsByUser } from "../services/forumService.js";
-import { fetchUserPostsData } from "../utils/forumHandlers.js";
-import {
-  formatDate,
-  getCategoryEmoji,
-  getCategoryLabel,
-  getUserInitial,
-} from "../utils/forumHelpers.js";
+import { useQuery } from "@tanstack/react-query";
+import { getPosts } from "../services/forumService.js";
+import { getUserInitial } from "../utils/forumHelpers.js";
+import UserPostsList from "../components/UserPostsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
   const { userId } = useParams();
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
 
-  useEffect(() => {
-    fetchUserPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  // Fetch posts for this user using React Query
+  const {
+    data: postsData,
+    isLoading: loading,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["userPosts", userId],
+    queryFn: () => getPosts({ author: userId, limit: 50 }),
+    enabled: !!userId,
+  });
 
-  const fetchUserPosts = async () => {
-    await fetchUserPostsData({
-      getPostsFn: getPostsByUser,
-      userId,
-      onSuccess: (postsArray, userInfo) => {
-        setPosts(postsArray);
-        setUserInfo(userInfo);
-      },
-      onError: setError,
-      setLoading,
-    });
-  };
+  const posts = postsData?.posts || [];
+  const error = queryError?.message || "";
 
+  // Extract user info from first post's author
+  const userInfo = posts.length > 0 ? posts[0].author : null;
   const getTotalLikes = () => {
     return posts.reduce((total, post) => total + post.likes.length, 0);
   };
@@ -81,7 +70,6 @@ export default function UserProfilePage() {
           </div>
           <div className="profile-info">
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
-            <p className="profile-email">{userInfo?.email || ""}</p>
 
             <div className="profile-stats">
               <div className="stat-item">
@@ -108,49 +96,7 @@ export default function UserProfilePage() {
       {/* User Posts */}
       <div className="profile-content">
         <div className="content-container">
-          <h2 className="posts-title">📝 Posts by {userInfo?.name}</h2>
-
-          {posts.length === 0 ? (
-            <div className="no-posts">
-              <p>No posts yet</p>
-            </div>
-          ) : (
-            <div className="posts-grid">
-              {posts.map((post) => (
-                <Link
-                  key={post._id}
-                  to={`/forum/post/${post._id}`}
-                  className="post-card"
-                >
-                  <div className="post-card-header">
-                    <span className="post-category">
-                      {getCategoryEmoji(post.category)}{" "}
-                      {getCategoryLabel(post.category)}
-                    </span>
-                    <span className="post-date">
-                      {formatDate(post.createdAt)}
-                    </span>
-                  </div>
-
-                  <h3 className="post-card-title">{post.title}</h3>
-
-                  <p className="post-card-preview">
-                    {post.content.length > 150
-                      ? post.content.substring(0, 150) + "..."
-                      : post.content}
-                  </p>
-
-                  <div className="post-card-footer">
-                    <span className="post-stat">👁️ {post.views}</span>
-                    <span className="post-stat">
-                      💬 {post.commentCount || 0}
-                    </span>
-                    <span className="post-stat">❤️ {post.likes.length}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+          <UserPostsList posts={posts} userName={userInfo?.name} />
         </div>
       </div>
     </div>
