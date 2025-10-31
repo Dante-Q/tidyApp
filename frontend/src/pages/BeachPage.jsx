@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WaveHeightGraph from "../components/WaveHeightGraph";
-import useSurfData from "../hooks/useSurfData";
+import useMarineData from "../hooks/useMarineData";
+import { beaches } from "../config/beachApiConfig.js";
 import { beachInfo } from "../data/beachInfo.js";
 import "./BeachPage.css";
 
@@ -16,10 +17,11 @@ export default function BeachPage() {
     }
   }, [beachName]);
 
-  // Fetch surf data for selected beach
-  const { data: surfData, loading, error } = useSurfData(selectedBeach);
+  // Fetch marine data for selected beach
+  const { data: surfData, loading, error } = useMarineData(selectedBeach);
 
   const beach = beachInfo[selectedBeach] || beachInfo.muizenberg;
+  const beachConfig = beaches[selectedBeach] || beaches.muizenberg;
 
   return (
     <div className="beach-page">
@@ -66,8 +68,8 @@ export default function BeachPage() {
       <section className="beach-info-grid">
         <div className="info-card">
           <h3>📍 Location</h3>
-          <p>Latitude: {beach.coordinates.lat}</p>
-          <p>Longitude: {beach.coordinates.lon}</p>
+          <p>Latitude: {beachConfig.coordinates.lat}</p>
+          <p>Longitude: {beachConfig.coordinates.lon}</p>
         </div>
         <div className="info-card">
           <h3>🌊 Best Conditions</h3>

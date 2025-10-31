@@ -12,6 +12,13 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import BeachPage from "./pages/BeachPage";
 import InfoPage from "./pages/InfoPage.jsx";
+import ForumHomePage from "./pages/ForumHomePage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
+import SubcategoryPage from "./pages/SubcategoryPage.jsx";
+import CreatePostPage from "./pages/CreatePostPage.jsx";
+import PostDetailPage from "./pages/PostDetailPage.jsx";
+import EditPostPage from "./pages/EditPostPage.jsx";
+import UserProfilePage from "./pages/UserProfilePage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -33,6 +40,31 @@ export default function App() {
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
+                  <Route path="/forum" element={<ForumHomePage />} />
+                  <Route
+                    path="/forum/category/:categorySlug"
+                    element={<CategoryPage />}
+                  />
+                  <Route
+                    path="/forum/category/:categorySlug/:subcategorySlug"
+                    element={<SubcategoryPage />}
+                  />
+                  <Route
+                    path="/forum/post/:postId"
+                    element={<PostDetailPage />}
+                  />
+                  <Route
+                    path="/forum/create-post"
+                    element={<CreatePostPage />}
+                  />
+                  <Route
+                    path="/forum/edit/:postId"
+                    element={<EditPostPage />}
+                  />
+                  <Route
+                    path="/profile/:userId"
+                    element={<UserProfilePage />}
+                  />
                   <Route
                     path="/dashboard"
                     element={

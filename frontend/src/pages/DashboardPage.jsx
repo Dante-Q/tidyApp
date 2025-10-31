@@ -5,14 +5,15 @@ import FavoritesWatchlist from "../components/FavoritesWatchlist";
 import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
-import useSurfData from "../hooks/useSurfData";
+import MyForumPosts from "../components/MyForumPosts";
+import useMarineData from "../hooks/useMarineData";
 
 export default function DashboardPage() {
   const { user } = useContext(UserContext);
   const [selectedBeach, setSelectedBeach] = useState("muizenberg");
 
-  // Fetch surf data for selected beach
-  const { data: surfData, loading, error } = useSurfData(selectedBeach);
+  // Fetch marine data for selected beach
+  const { data: surfData, loading, error } = useMarineData(selectedBeach);
 
   return (
     <div className="homepage-wrapper">
@@ -32,6 +33,9 @@ export default function DashboardPage() {
 
         {/* Beach Carousel */}
         <BeachCarousel />
+
+        {/* My Forum Posts */}
+        <MyForumPosts />
 
         {/* Wave Height Graph with Real Data */}
         <WaveHeightGraph

@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
+import postRoutes from "./routes/posts.js";
+import commentRoutes from "./routes/comments.js";
 import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,9 +31,19 @@ if (missing.length) {
 
 const app = express();
 
-// CORS configuration - allow both localhost and 127.0.0.1
+// CORS configuration - allow localhost and 127.0.0.1 on any port (for development)
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
+    if (!origin) return callback(null, true);
+
+    // Allow localhost and 127.0.0.1 on any port
+    if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true, // Allow cookies and auth headers
 };
 app.use(cors(corsOptions));
@@ -51,6 +63,10 @@ app.get("/", (req, res) => {
 
 // Auth routes
 app.use("/api/auth", authRoutes);
+
+// Forum routes
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {
