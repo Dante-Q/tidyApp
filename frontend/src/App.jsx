@@ -27,7 +27,7 @@ export default function App() {
       withGlobalStyles
       withNormalizeCSS
       theme={{
-        colorScheme: "dark", // Force dark theme always
+        colorScheme: "light", // Force light theme always
       }}
     >
       <UserProvider>
