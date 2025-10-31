@@ -17,242 +17,85 @@
   background-clip: text;
 }
 
-.recentPosts {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-/* Post Preview Card */
-.postPreview {
+.postsList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.5rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+}
+
+.postItem {
   background: rgba(30, 41, 59, 0.6);
   border: 1px solid rgba(109, 213, 237, 0.2);
-  border-radius: 12px;
+  border-radius: 8px;
+  padding: 1.5rem;
   transition: all 0.3s ease;
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
+  display: block;
 }
 
-.postPreview:hover {
-  border-color: rgba(109, 213, 237, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(109, 213, 237, 0.25);
-  background: rgba(30, 41, 59, 0.75);
+.postItem:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  transform: translateX(4px);
 }
 
-/* Top Row - Author & Category */
-.postTopRow {
+.postItemHeader {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
-  width: 100%;
+  margin-bottom: 0.75rem;
 }
 
-.postAuthorSection {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-shrink: 0;
-}
-
-.postAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(33, 147, 176, 0.3);
-}
-
-.postAuthorName {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #6dd5ed;
-}
-
-.postCategorySection {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.categoryTag {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6dd5ed;
-  background: rgba(109, 213, 237, 0.15);
-  border: 1px solid rgba(109, 213, 237, 0.3);
-  padding: 0.35rem 0.85rem;
-  border-radius: 12px;
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-/* Post Title */
-.postTitle {
+.postItemTitle {
   font-size: 1.25rem;
   font-weight: 600;
   color: #ffffff;
-  line-height: 1.4;
-  margin-left: 2rem;
+  margin: 0;
+  flex: 1;
 }
 
-/* Post Excerpt */
-.postExcerpt {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin: 0 0 0 3.15rem;
+.postSubcategoryTag {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 12px;
+  color: #6dd5ed;
+  white-space: nowrap;
 }
 
-/* Post Footer */
-.postFooter {
+.postItemMeta {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  margin-bottom: 0;
-  width: 100%;
-  border-top: 1px solid rgba(109, 213, 237, 0.1);
-  border-bottom: none;
-  border-left: none;
-  border-right: none;
-}
-
-.postMeta {
-  display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
-  flex-shrink: 0;
-  border: none;
-  border-top: none;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.postMeta > span {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.editedIndicator {
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.4);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.editedIndicator::before {
-  content: "•";
-  color: rgba(255, 255, 255, 0.3);
+.postAuthor {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .postStats {
   display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin-left: auto;
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-right: 0;
-  flex-shrink: 0;
+  gap: 1rem;
 }
 
-.stat {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(109, 213, 237, 0.1);
-  padding: 0.3rem 0.65rem;
-  border-radius: 12px;
-  border: 1px solid rgba(109, 213, 237, 0.15);
-  transition: all 0.2s ease;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.stat:hover {
-  background: rgba(109, 213, 237, 0.2);
-  border-color: rgba(109, 213, 237, 0.3);
-  color: #6dd5ed;
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
-  .postTopRow {
+  .postItemHeader {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
   }
 
-  .postCategorySection {
-    margin-left: 0;
+  .postSubcategoryTag {
+    align-self: flex-start;
   }
 
-  .postTitle,
-  .postExcerpt {
-    margin-left: 0;
-  }
-
-  .postFooter {
+  .postItemMeta {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  .postStats {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .postPreview {
-    padding: 1.5rem;
-  }
-
-  .postTitle {
-    font-size: 1.1rem;
-  }
-
-  .postAvatar {
-    width: 36px;
-    height: 36px;
-    font-size: 0.9rem;
-  }
-
-  .stat {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
+    gap: 0.5rem;
   }
 }
