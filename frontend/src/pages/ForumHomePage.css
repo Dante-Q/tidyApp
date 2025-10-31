@@ -173,23 +173,18 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
   padding-top: 1rem;
   border-top: 1px solid rgba(109, 213, 237, 0.1);
 }
 
-.stat-item {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.stat-item strong {
+.stat-badge {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 12px;
   color: #6dd5ed;
-  font-weight: 600;
-}
-
-.stat-divider {
-  color: rgba(109, 213, 237, 0.3);
+  font-weight: 500;
 }
 
 /* Recent Activity */

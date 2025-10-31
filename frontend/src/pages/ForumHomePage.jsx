@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getCategoryStats, getPosts } from "../services/forumService.js";
+import { getPosts } from "../services/forumService.js";
 import ForumHeroSection from "../components/ForumHeroSection.jsx";
 import ForumCategories from "../components/ForumCategories.jsx";
 import ForumRecentActivity from "../components/ForumRecentActivity.jsx";
 import "./ForumHomePage.css";
 
 export default function ForumHomePage() {
-  // Fetch categories with React Query
-  const { data: categories = [], isLoading: loadingCategories } = useQuery({
-    queryKey: ["forumCategories"],
-    queryFn: getCategoryStats,
+  // Fetch all posts for counting by category
+  const { data: allPostsData, isLoading: loadingAllPosts } = useQuery({
+    queryKey: ["allPosts"],
+    queryFn: () => getPosts({ limit: 1000 }), // Get all posts for counting
   });
 
-  // Fetch recent posts with React Query
-  const { data: postsData, isLoading: loadingPosts } = useQuery({
+  // Fetch recent posts for activity section
+  const { data: recentPostsData, isLoading: loadingRecentPosts } = useQuery({
     queryKey: ["recentPosts"],
     queryFn: () => getPosts({ limit: 5, sortBy: "createdAt" }),
   });
 
-  const recentPosts = postsData?.posts || [];
+  const allPosts = allPostsData?.posts || [];
+  const recentPosts = recentPostsData?.posts || [];
 
   return (
     <div className="forum-page">
@@ -27,14 +28,11 @@ export default function ForumHomePage() {
 
       <section className="forum-content">
         <div className="forum-container">
-          <ForumCategories
-            categories={categories}
-            loading={loadingCategories}
-          />
+          <ForumCategories posts={allPosts} loading={loadingAllPosts} />
 
           <ForumRecentActivity
             recentPosts={recentPosts}
-            loading={loadingPosts}
+            loading={loadingRecentPosts}
           />
 
           {/* Create Post Button */}

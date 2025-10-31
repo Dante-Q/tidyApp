@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import FORUM_CATEGORIES from "../config/forumCategories.js";
 import "./ForumCategories.css";
 
-export default function ForumCategories({ categories, loading }) {
+export default function ForumCategories({ posts, loading }) {
   return (
     <div className="forum-categories">
       <div className="forum-categories-header">
@@ -16,13 +16,10 @@ export default function ForumCategories({ categories, loading }) {
       ) : (
         <div className="categories-grid">
           {FORUM_CATEGORIES.map((category) => {
-            // Find stats for this category from the API data
-            const stats = categories.find(
-              (cat) => cat.category === category.slug
-            ) || {
-              totalPosts: 0,
-              totalComments: 0,
-            };
+            // Count posts for this category
+            const postCount = posts.filter(
+              (post) => post.category === category.slug
+            ).length;
 
             return (
               <Link
@@ -54,12 +51,8 @@ export default function ForumCategories({ categories, loading }) {
                   )}
 
                 <div className="category-stats">
-                  <span className="stat-item">
-                    <strong>{stats.totalPosts}</strong> Posts
-                  </span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">
-                    <strong>{stats.totalComments}</strong> Comments
+                  <span className="stat-badge">
+                    {postCount} {postCount === 1 ? "post" : "posts"}
                   </span>
                 </div>
               </Link>
