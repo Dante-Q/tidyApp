@@ -23,7 +23,13 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: "dark", // Force dark theme always
+      }}
+    >
       <UserProvider>
         <UIProvider>
           <Router>
