@@ -49,7 +49,7 @@ export const FORUM_CATEGORIES = [
   {
     slug: "safety",
     name: "Safety & Awareness",
-    icon: "🛟",
+    icon: "⚠️",
     description: "Beach safety tips and important alerts",
     subcategories: [
       {

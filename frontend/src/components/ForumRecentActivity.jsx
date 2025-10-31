@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getCategoryEmoji, getCategoryLabel } from "../utils/forumHelpers.js";
+import {
+  getCategoryEmoji,
+  getCategoryLabel,
+  formatDate,
+} from "../utils/forumHelpers.js";
 import styles from "./ForumRecentActivity.module.css";
 
 export default function ForumRecentActivity({ recentPosts, loading }) {
@@ -51,7 +55,8 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
                   </div>
                   <div className={styles.postItemMeta}>
                     <span className={styles.postAuthor}>
-                      by {post.author?.name || "Unknown"}
+                      by {post.author?.name || "Unknown"} •{" "}
+                      {formatDate(post.createdAt)}
                     </span>
                     <span className={styles.postStats}>
                       💬 {post.commentCount || 0} · ❤️ {post.likes?.length || 0}{" "}

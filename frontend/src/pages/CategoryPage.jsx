@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
 import { getCategoryBySlug } from "../config/forumCategories.js";
+import { formatDate } from "../utils/forumHelpers.js";
 import "./CategoryPage.css";
 
 export default function CategoryPage() {
@@ -155,7 +156,8 @@ export default function CategoryPage() {
                       </div>
                       <div className="post-item-meta">
                         <span className="post-author">
-                          by {post.author?.name || "Unknown"}
+                          by {post.author?.name || "Unknown"} •{" "}
+                          {formatDate(post.createdAt)}
                         </span>
                         <span className="post-stats">
                           💬 {post.commentCount || 0} · ❤️{" "}

@@ -130,22 +130,8 @@ export default function SubcategoryPage() {
                         </div>
                       </div>
                       <div className="post-col-stats">
-                        <div className="stat-item">
-                          <span className="stat-icon">💬</span>
-                          <span className="stat-value">
-                            {post.commentCount || 0}
-                          </span>
-                        </div>
-                        <div className="stat-item">
-                          <span className="stat-icon">❤️</span>
-                          <span className="stat-value">
-                            {post.likes?.length || 0}
-                          </span>
-                        </div>
-                        <div className="stat-item">
-                          <span className="stat-icon">👁️</span>
-                          <span className="stat-value">{post.views || 0}</span>
-                        </div>
+                        💬 {post.commentCount || 0} · ❤️{" "}
+                        {post.likes?.length || 0} · 👁️ {post.views || 0}
                       </div>
                     </Link>
                   ))}
