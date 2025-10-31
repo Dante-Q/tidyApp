@@ -18,7 +18,6 @@ export function UserProvider({ children }) {
         });
         setUser({
           id: response.data._id,
-          email: response.data.email,
           name: response.data.name,
         });
       } catch {

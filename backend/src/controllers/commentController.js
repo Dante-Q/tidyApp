@@ -11,7 +11,7 @@ export const getCommentsByPost = async (req, res) => {
 
     // Get top-level comments (no parent)
     const comments = await Comment.find({ post: postId, parentComment: null })
-      .populate("author", "name email")
+      .populate("author", "name")
       .sort("-createdAt")
       .skip(skip)
       .limit(parseInt(limit));
@@ -20,7 +20,7 @@ export const getCommentsByPost = async (req, res) => {
     const commentsWithReplies = await Promise.all(
       comments.map(async (comment) => {
         const replies = await Comment.find({ parentComment: comment._id })
-          .populate("author", "name email")
+          .populate("author", "name")
           .sort("createdAt");
 
         return {
@@ -64,11 +64,9 @@ export const createComment = async (req, res) => {
 
     // Check if post is locked
     if (post.isLocked) {
-      return res
-        .status(403)
-        .json({
-          message: "This post is locked and cannot accept new comments",
-        });
+      return res.status(403).json({
+        message: "This post is locked and cannot accept new comments",
+      });
     }
 
     // If it's a reply, verify parent comment exists
@@ -88,7 +86,7 @@ export const createComment = async (req, res) => {
 
     const populatedComment = await Comment.findById(comment._id).populate(
       "author",
-      "name email"
+      "name"
     );
 
     res.status(201).json(populatedComment);
@@ -127,7 +125,7 @@ export const updateComment = async (req, res) => {
 
     const updatedComment = await Comment.findById(comment._id).populate(
       "author",
-      "name email"
+      "name"
     );
 
     res.json(updatedComment);

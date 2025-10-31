@@ -46,7 +46,6 @@ router.post(
       message: "User registered successfully",
       user: {
         id: user._id,
-        email: user.email,
         name: user.name,
       },
     });
@@ -89,7 +88,6 @@ router.post(
       message: "Login successful",
       user: {
         id: user._id,
-        email: user.email,
         name: user.name,
       },
     });

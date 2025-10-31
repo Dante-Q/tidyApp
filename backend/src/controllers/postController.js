@@ -24,7 +24,7 @@ export const getPosts = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const posts = await Post.find(query)
-      .populate("author", "name email")
+      .populate("author", "name")
       .populate("commentCount")
       .sort(sort)
       .skip(skip)
@@ -52,7 +52,7 @@ export const getPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-      .populate("author", "name email")
+      .populate("author", "name")
       .populate("commentCount");
 
     if (!post) {
@@ -93,7 +93,7 @@ export const createPost = async (req, res) => {
 
     const populatedPost = await Post.findById(post._id).populate(
       "author",
-      "name email"
+      "name"
     );
 
     res.status(201).json(populatedPost);
@@ -143,7 +143,7 @@ export const updatePost = async (req, res) => {
     await post.save();
 
     const updatedPost = await Post.findById(post._id)
-      .populate("author", "name email")
+      .populate("author", "name")
       .populate("commentCount");
 
     res.json(updatedPost);
