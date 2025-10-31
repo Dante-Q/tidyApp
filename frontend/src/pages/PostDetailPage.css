@@ -66,199 +66,7 @@
   color: #2193b0;
 }
 
-/* Post Header */
-.post-header {
-  max-width: 800px;
-  margin: 0 auto 2rem;
-  padding: 2rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(109, 213, 237, 0.2);
-  border-radius: 12px;
-}
-
-.post-category {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.category-info {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(109, 213, 237, 0.1);
-  border: 1px solid rgba(109, 213, 237, 0.3);
-  border-radius: 20px;
-  font-size: 0.875rem;
-  color: #6dd5ed;
-}
-
-.category-emoji {
-  font-size: 1.125rem;
-}
-
-.btn-like-post {
-  padding: 0.5rem 1rem;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(109, 213, 237, 0.3);
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.btn-like-post:hover {
-  background: rgba(109, 213, 237, 0.2);
-  transform: translateY(-1px);
-}
-
-.btn-like-post.liked {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.5);
-  color: #ef4444;
-}
-
-.btn-like-post.liked:hover {
-  background: rgba(239, 68, 68, 0.3);
-}
-
-.post-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 1rem 0;
-  line-height: 1.3;
-}
-
-.post-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(109, 213, 237, 0.1);
-}
-
-.post-author {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: #ffffff;
-  transition: opacity 0.2s;
-}
-
-.post-author:hover {
-  opacity: 0.8;
-}
-
-.author-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.author-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.author-name {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.post-date {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.post-stats {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.stat {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
-  white-space: nowrap;
-}
-
-/* Post Content */
-.post-content {
-  max-width: 800px;
-  margin: 0 auto 3rem;
-  padding: 2rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(109, 213, 237, 0.2);
-  border-radius: 12px;
-}
-
-.post-body {
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.8;
-  font-size: 1.0625rem;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.post-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(109, 213, 237, 0.1);
-}
-
-.btn-action {
-  padding: 0.625rem 1.25rem;
-  background: rgba(109, 213, 237, 0.1);
-  border: 1px solid rgba(109, 213, 237, 0.3);
-  border-radius: 8px;
-  color: #6dd5ed;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.btn-action:hover {
-  background: rgba(109, 213, 237, 0.2);
-  transform: translateY(-1px);
-}
-
-.btn-action.liked {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-}
-
-.btn-action.btn-danger {
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-}
-
-.btn-action.btn-danger:hover {
-  background: rgba(239, 68, 68, 0.2);
-}
+/* Post Header styles moved to PostHeader.module.css */
 
 /* Comments Section */
 .comments-section {
@@ -359,6 +167,121 @@
   color: #6dd5ed;
   text-decoration: none;
   font-weight: 600;
+}
+
+/* Inline Comment Form (appears below comments when replying) */
+.inline-comment-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(109, 213, 237, 0.15);
+  border-radius: 8px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inline-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(109, 213, 237, 0.1);
+}
+
+.replying-to {
+  font-size: 0.8125rem;
+  color: #6dd5ed;
+  font-weight: 500;
+}
+
+.btn-cancel-inline-reply {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s;
+}
+
+.btn-cancel-inline-reply:hover {
+  color: #ef4444;
+}
+
+.inline-comment-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 80px;
+}
+
+.inline-comment-input:focus {
+  border-color: #6dd5ed;
+}
+
+.inline-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn-cancel-inline {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel-inline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.btn-submit-inline {
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-submit-inline:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-submit-inline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Comments List */

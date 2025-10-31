@@ -12,7 +12,10 @@ export function PostDetailProvider({ children }) {
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
 
-  const [replyTo, setReplyTo] = useState(null); // { parentId, username }
+  // Track which comment is being replied to: { commentId, parentId, username }
+  // commentId: ID of the comment where the inline form appears
+  // parentId: ID to use for the reply (could be same as commentId or its parent)
+  const [replyTo, setReplyTo] = useState(null);
 
   // Fetch post with React Query
   const {

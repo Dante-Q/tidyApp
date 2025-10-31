@@ -50,15 +50,15 @@ function PostDetailContent() {
 
       {/* Comments Section */}
       <div className="comments-section">
+        {/* Comment Form */}
+        <CommentForm />
+
         <h2 className="comments-title">
           💬 {comments.length} {pluralize(comments.length, "Comment")}
         </h2>
 
         {/* Comments List */}
         <CommentsList />
-
-        {/* Comment Form */}
-        <CommentForm />
       </div>
     </div>
   );
