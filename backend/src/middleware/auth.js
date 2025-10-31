@@ -5,9 +5,6 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    console.log("Auth middleware - Headers:", req.headers.authorization);
-    console.log("Auth middleware - Cookies:", req.cookies);
-
     // Check for token in Authorization header
     if (
       req.headers.authorization &&
@@ -19,8 +16,6 @@ export const protect = async (req, res, next) => {
     else if (req.cookies && req.cookies.token) {
       token = req.cookies.token;
     }
-
-    console.log("Auth middleware - Token found:", !!token);
 
     if (!token) {
       return res.status(401).json({ message: "Not authorized, no token" });

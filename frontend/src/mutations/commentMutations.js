@@ -22,10 +22,16 @@ export function createCreateCommentMutation(
     mutationFn: (commentData) => createComment(commentData),
 
     onSuccess: () => {
-      // Invalidate both comments and post queries
+      // Invalidate and refetch both comments and post queries
       // (post query needs refresh to update comment count)
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
-      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+      queryClient.invalidateQueries({
+        queryKey: ["comments", postId],
+        refetchType: "active",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["post", postId],
+        refetchType: "active",
+      });
     },
 
     onError: (error) => {

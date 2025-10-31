@@ -26,9 +26,16 @@ export default function InlineCommentForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
+  // Get the base mutation configuration
+  const baseMutation = createCreateCommentMutation(queryClient, postId);
+
   const createCommentMutation = useMutation({
-    ...createCreateCommentMutation(queryClient, postId),
-    onSuccess: () => {
+    ...baseMutation,
+    onSuccess: (data, variables, context) => {
+      // Call the original onSuccess first (invalidates queries)
+      baseMutation.onSuccess(data, variables, context);
+
+      // Then clear form and close inline form
       setCommentContent("");
       setReplyTo(null); // Close the inline form
     },

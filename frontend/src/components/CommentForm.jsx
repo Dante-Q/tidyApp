@@ -12,11 +12,17 @@ export default function CommentForm() {
   // Component owns its form state
   const [commentContent, setCommentContent] = useState("");
 
+  // Get the base mutation configuration
+  const baseMutation = createCreateCommentMutation(queryClient, postId);
+
   // Use centralized mutation configuration
   const createCommentMutation = useMutation({
-    ...createCreateCommentMutation(queryClient, postId),
-    onSuccess: () => {
-      // Clear form after successful comment creation
+    ...baseMutation,
+    onSuccess: (data, variables, context) => {
+      // Call the original onSuccess first (invalidates queries)
+      baseMutation.onSuccess(data, variables, context);
+
+      // Then clear form after successful comment creation
       setCommentContent("");
     },
   });

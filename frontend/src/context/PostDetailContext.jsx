@@ -42,6 +42,7 @@ export function PostDetailProvider({ children }) {
       return data.comments || [];
     },
     enabled: !!postId,
+    staleTime: 0, // Always refetch when invalidated
   });
 
   const post = rawPost || null;
