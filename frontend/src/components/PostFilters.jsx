@@ -55,6 +55,10 @@ export default function PostFilters({ onFilterChange }) {
           onChange={handleTagChange}
           searchable
           clearable
+          comboboxProps={{
+            position: "bottom",
+            middlewares: { flip: false, shift: false },
+          }}
           classNames={{
             root: "filter-tags-root",
             input: "filter-tags-input",

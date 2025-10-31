@@ -230,6 +230,10 @@ export default function CreatePostPage() {
                 clearable
                 hidePickedOptions
                 maxValues={2}
+                comboboxProps={{
+                  position: "bottom",
+                  middlewares: { flip: false, shift: false },
+                }}
                 onDropdownClose={() => {}}
                 onOptionSubmit={(value) => {
                   // Check if user already has 2 tags and is trying to add another
