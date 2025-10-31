@@ -5,10 +5,10 @@
   background: var(--color-bg-dark);
 }
 
-/* Hero Section - Matching ForumHomePage style */
+/* Hero Section */
 .create-post-hero {
   position: relative;
-  height: 300px;
+  height: 350px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -31,9 +31,32 @@
 }
 
 .create-post-hero-content {
-  text-align: center;
-  max-width: 800px;
+  max-width: 1200px;
+  width: 100%;
   padding: 2rem;
+}
+
+.create-post-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.create-post-breadcrumb a {
+  color: #6dd5ed;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.create-post-breadcrumb a:hover {
+  color: #2193b0;
+}
+
+.create-post-breadcrumb span:not(:has(a)) {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .create-post-title {
@@ -41,15 +64,18 @@
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.create-post-icon-large {
+  font-size: 3.5rem;
 }
 
 .create-post-subtitle {
-  font-size: 1.125rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   margin: 0;
 }

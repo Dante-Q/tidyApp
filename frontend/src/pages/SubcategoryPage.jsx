@@ -60,7 +60,10 @@ export default function SubcategoryPage() {
           <p className="subcategory-description">{subcategory.description}</p>
         </div>
         <div className="subcategory-actions">
-          <Link to="/forum/create-post" className="btn-new-post">
+          <Link
+            to={`/forum/create-post?category=${categorySlug}&subcategory=${subcategorySlug}`}
+            className="btn-new-post"
+          >
             ✍️ New Post
           </Link>
         </div>
@@ -79,7 +82,10 @@ export default function SubcategoryPage() {
               <div className="empty-icon">{subcategory.icon}</div>
               <h3>No posts yet in {subcategory.name}</h3>
               <p>Be the first to start a discussion!</p>
-              <Link to="/forum/create-post" className="btn-first-post">
+              <Link
+                to={`/forum/create-post?category=${categorySlug}&subcategory=${subcategorySlug}`}
+                className="btn-first-post"
+              >
                 Create First Post
               </Link>
             </div>

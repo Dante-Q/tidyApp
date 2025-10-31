@@ -1,15 +1,19 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext.js";
 import { createCreatePostMutation } from "../mutations/postMutations.js";
-import FORUM_CATEGORIES from "../config/forumCategories.js";
+import FORUM_CATEGORIES, {
+  getCategoryBySlug,
+  getSubcategoryBySlug,
+} from "../config/forumCategories.js";
 import "./CreatePostPage.css";
 
 export default function CreatePostPage() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
 
   const [formData, setFormData] = useState({
     category: "",
@@ -18,6 +22,20 @@ export default function CreatePostPage() {
     content: "",
   });
   const [error, setError] = useState("");
+
+  // Pre-fill category and subcategory from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    const subcategoryParam = searchParams.get("subcategory");
+
+    if (categoryParam || subcategoryParam) {
+      setFormData((prev) => ({
+        ...prev,
+        ...(categoryParam && { category: categoryParam }),
+        ...(subcategoryParam && { subcategory: subcategoryParam }),
+      }));
+    }
+  }, [searchParams]);
 
   // Use centralized mutation configuration with error handling
   const createPostMutation = useMutation(
@@ -60,6 +78,15 @@ export default function CreatePostPage() {
     }
   };
 
+  // Get category and subcategory info for breadcrumb
+  const categoryParam = searchParams.get("category");
+  const subcategoryParam = searchParams.get("subcategory");
+  const category = categoryParam ? getCategoryBySlug(categoryParam) : null;
+  const subcategoryResult = subcategoryParam
+    ? getSubcategoryBySlug(subcategoryParam)
+    : null;
+  const subcategory = subcategoryResult?.subcategory;
+
   return (
     <div className="create-post-page">
       {/* Hero Section */}
@@ -71,7 +98,34 @@ export default function CreatePostPage() {
       >
         <div className="create-post-hero-overlay">
           <div className="create-post-hero-content">
-            <h1 className="create-post-title">Create New Post</h1>
+            {/* Breadcrumb */}
+            <div className="create-post-breadcrumb">
+              <Link to="/forum">Forum</Link>
+              <span>/</span>
+              {category && (
+                <>
+                  <Link to={`/forum/category/${category.slug}`}>
+                    {category.name}
+                  </Link>
+                  <span>/</span>
+                </>
+              )}
+              {subcategory && categoryParam && (
+                <>
+                  <Link
+                    to={`/forum/category/${categoryParam}/${subcategory.slug}`}
+                  >
+                    {subcategory.name}
+                  </Link>
+                  <span>/</span>
+                </>
+              )}
+              <span>Create Post</span>
+            </div>
+            <h1 className="create-post-title">
+              <span className="create-post-icon-large">✍️</span>
+              Create New Post
+            </h1>
             <p className="create-post-subtitle">
               Share your thoughts, questions, or experiences with the community
             </p>

@@ -101,7 +101,10 @@ export default function CategoryPage() {
           <div className="category-posts-section">
             <div className="section-header">
               <h2 className="section-title">All Posts</h2>
-              <Link to="/forum/create-post" className="btn-create-post">
+              <Link
+                to={`/forum/create-post?category=${categorySlug}`}
+                className="btn-create-post"
+              >
                 ✍️ New Post
               </Link>
             </div>
@@ -114,7 +117,10 @@ export default function CategoryPage() {
             ) : posts.length === 0 ? (
               <div className="empty-state">
                 <p>No posts in this category yet.</p>
-                <Link to="/forum/create-post" className="btn-first-post">
+                <Link
+                  to={`/forum/create-post?category=${categorySlug}`}
+                  className="btn-first-post"
+                >
                   Be the first to post!
                 </Link>
               </div>
