@@ -255,6 +255,22 @@
   }
 }
 
+/* Filter Results Message */
+.filter-results-message {
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9375rem;
+}
+
+.filter-results-message .no-results {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;

@@ -1,0 +1,153 @@
+/* Post Filters Component */
+.post-filters {
+  margin-bottom: 2rem;
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Search Input Styling */
+.filter-search-root {
+  position: relative;
+}
+
+.filter-search-input {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(109, 213, 237, 0.2) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  min-height: auto !important;
+  transition: all 0.3s ease !important;
+}
+
+.filter-search-input:focus {
+  border-color: #6dd5ed !important;
+  box-shadow: 0 0 0 3px rgba(109, 213, 237, 0.1) !important;
+}
+
+.filter-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Tags MultiSelect Styling */
+.filter-tags-root {
+  cursor: pointer;
+}
+
+.filter-tags-input {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(109, 213, 237, 0.2) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  transition: all 0.3s ease !important;
+  min-height: auto !important;
+  cursor: pointer !important;
+}
+
+.filter-tags-input:focus,
+.filter-tags-input:focus-within {
+  border-color: rgba(109, 213, 237, 0.2) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.filter-tags-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.filter-tags-pill {
+  background-color: rgba(109, 213, 237, 0.2) !important;
+  color: #6dd5ed !important;
+  border: 1px solid rgba(109, 213, 237, 0.3) !important;
+  padding: 0.25rem 0.5rem !important;
+  height: auto !important;
+}
+
+.filter-tags-dropdown {
+  background-color: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(109, 213, 237, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 0.5rem !important;
+}
+
+.filter-tags-option {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  border-radius: 6px !important;
+  padding: 0.5rem !important;
+  cursor: pointer !important;
+}
+
+/* Clear Filters Button */
+.btn-clear-filters {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-clear-filters:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-clear-filters:active {
+  transform: translateY(0);
+}
+
+/* Mantine Focus Overrides */
+.post-filters .mantine-MultiSelect-root *:focus,
+.post-filters .mantine-MultiSelect-root *:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.post-filters .mantine-Input-wrapper:focus-within {
+  box-shadow: none !important;
+}
+
+/* Mantine clear button and chevron */
+.post-filters .mantine-InputClearButton-root {
+  background-color: transparent !important;
+  color: #6dd5ed !important;
+}
+
+.post-filters .mantine-ComboboxChevron-chevron {
+  color: #6dd5ed !important;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-clear-filters {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-search-input,
+  .filter-tags-input {
+    font-size: 0.9375rem !important;
+    padding: 0.625rem 0.875rem !important;
+  }
+}

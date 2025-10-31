@@ -326,13 +326,13 @@ export default function CreatePostPage() {
           <aside className="post-guidelines">
             <h3 className="guidelines-title">Posting Guidelines</h3>
             <ul className="guidelines-list">
-              <li>✓ Be respectful and courteous to others</li>
-              <li>✓ Stay on topic for the selected category</li>
-              <li>✓ Use clear and descriptive titles</li>
-              <li>✓ Check for duplicate posts before submitting</li>
-              <li>✓ Share accurate and helpful information</li>
-              <li>✗ No spam or self-promotion</li>
-              <li>✗ No offensive or inappropriate content</li>
+              <li>✅ Be respectful and courteous to others</li>
+              <li>✅ Stay on topic for the selected category</li>
+              <li>✅ Use clear and descriptive titles</li>
+              <li>✅ Check for duplicate posts before submitting</li>
+              <li>✅ Share accurate and helpful information</li>
+              <li>❌ No spam or self-promotion</li>
+              <li>❌ No offensive or inappropriate content</li>
             </ul>
           </aside>
         </div>
