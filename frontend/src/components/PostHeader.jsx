@@ -12,13 +12,14 @@ import {
   createDeletePostMutation,
 } from "../mutations/postMutations.js";
 
+import styles from "./PostHeader.module.css";
+
 export default function PostHeader() {
   const { post, user, postId } = usePostDetail();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isAuthor = user && post && post.author && post.author._id === user.id;
 
-  // Use centralized mutation configurations
   const likeMutation = useMutation(createLikePostMutation(queryClient, postId));
   const deleteMutation = useMutation(
     createDeletePostMutation(queryClient, navigate)
@@ -44,40 +45,42 @@ export default function PostHeader() {
   };
 
   return (
-    <div className="post-header">
-      <div className="post-category">
-        <div className="category-info">
-          <span className="category-emoji">
+    <div className={styles.postHeader}>
+      <div className={styles.postCategory}>
+        <div className={styles.categoryInfo}>
+          <span className={styles.categoryEmoji}>
             {getCategoryEmoji(post.category)}
           </span>
-          <span className="category-name">
+          <span className={styles.categoryName}>
             {getCategoryLabel(post.category)}
           </span>
         </div>
         <button
           onClick={onLike}
-          className={`btn-like-post ${post.isLiked ? "liked" : ""}`}
+          className={`${styles.btnLikePost} ${
+            post.isLiked ? styles.liked : ""
+          }`}
         >
           {post.isLiked ? "❤️" : "🤍"} {post.likes || 0}
         </button>
       </div>
-      <h1 className="post-title">{post.title}</h1>
+      <h1 className={styles.postTitle}>{post.title}</h1>
 
       {/* Post Content */}
-      <div className="post-body">{post.content}</div>
+      <div className={styles.postBody}>{post.content}</div>
 
-      <div className="post-meta">
-        <Link to={`/profile/${post.author._id}`} className="post-author">
-          <div className="author-avatar">
+      <div className={styles.postMeta}>
+        <Link to={`/profile/${post.author._id}`} className={styles.postAuthor}>
+          <div className={styles.authorAvatar}>
             {getUserInitial(post.author.name)}
           </div>
-          <div className="author-info">
-            <span className="author-name">{post.author.name}</span>
-            <span className="post-date">
+          <div className={styles.authorInfo}>
+            <span className={styles.authorName}>{post.author.name}</span>
+            <span className={styles.postDate}>
               {formatDate(post.createdAt)}
               {post.editedAt && (
                 <span
-                  className="edited-tag"
+                  className={styles.editedTag}
                   title={`Last edited: ${formatDate(post.editedAt)}`}
                 >
                   {" "}
@@ -88,20 +91,25 @@ export default function PostHeader() {
           </div>
         </Link>
 
-        <div className="post-stats">
-          <span className="stat">👁️ {post.views} views</span>
-          <span className="stat">💬 {post.commentCount || 0} comments</span>
-          <span className="stat">❤️ {post.likes || 0} likes</span>
+        <div className={styles.postStats}>
+          <span className={styles.stat}>👁️ {post.views} views</span>
+          <span className={styles.stat}>
+            💬 {post.commentCount || 0} comments
+          </span>
+          <span className={styles.stat}>❤️ {post.likes || 0} likes</span>
         </div>
       </div>
 
       {/* Post Actions */}
       {isAuthor && (
-        <div className="post-actions">
-          <Link to={`/forum/edit/${post._id}`} className="btn-action">
+        <div className={styles.postActions}>
+          <Link to={`/forum/edit/${post._id}`} className={styles.btnAction}>
             ✏️ Edit
           </Link>
-          <button onClick={onDelete} className="btn-action btn-danger">
+          <button
+            onClick={onDelete}
+            className={`${styles.btnAction} ${styles.btnDanger}`}
+          >
             🗑️ Delete
           </button>
         </div>

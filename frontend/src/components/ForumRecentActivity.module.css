@@ -1,12 +1,12 @@
 /* Forum Recent Activity Styles */
-.forum-recent {
+.forumRecent {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 0;
 }
 
-.section-title {
+.sectionTitle {
   font-size: 2rem;
   font-weight: 700;
   color: #ffffff;
@@ -17,20 +17,20 @@
   background-clip: text;
 }
 
-.recent-posts {
+.recentPosts {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
 /* Post Preview Card */
-.post-preview {
+.postPreview {
   display: flex;
   flex-direction: column;
-  gap: 1rem !important;
-  padding: 1.5rem !important;
-  padding-left: 3rem !important;
-  padding-right: 3rem !important;
+  gap: 1rem;
+  padding: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   background: rgba(30, 41, 59, 0.6);
   border: 1px solid rgba(109, 213, 237, 0.2);
   border-radius: 12px;
@@ -40,7 +40,7 @@
   cursor: pointer;
 }
 
-.post-preview:hover {
+.postPreview:hover {
   border-color: rgba(109, 213, 237, 0.5);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(109, 213, 237, 0.25);
@@ -48,7 +48,7 @@
 }
 
 /* Top Row - Author & Category */
-.post-top-row {
+.postTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,14 +56,14 @@
   width: 100%;
 }
 
-.post-author-section {
+.postAuthorSection {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
 }
 
-.post-avatar {
+.postAvatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -78,20 +78,20 @@
   box-shadow: 0 2px 8px rgba(33, 147, 176, 0.3);
 }
 
-.post-author-name {
+.postAuthorName {
   font-size: 0.9rem;
   font-weight: 600;
   color: #6dd5ed;
 }
 
-.post-category-section {
+.postCategorySection {
   display: flex;
   align-items: center;
   margin-left: auto;
   flex-shrink: 0;
 }
 
-.category-tag {
+.categoryTag {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -108,98 +108,97 @@
 }
 
 /* Post Title */
-.post-title {
+.postTitle {
   font-size: 1.25rem;
   font-weight: 600;
   color: #ffffff;
-  margin: 0 0 0 3.15rem !important;
   line-height: 1.4;
 }
 
 /* Post Excerpt */
-.post-excerpt {
+.postExcerpt {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
-  margin: 0 0 0 3.15rem !important;
+  margin: 0 0 0 3.15rem;
 }
 
 /* Post Footer */
-.post-footer {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 1rem !important;
-  padding-top: 1rem !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  width: 100% !important;
-  border-top: 1px solid rgba(109, 213, 237, 0.1) !important;
-  border-bottom: none !important;
-  border-left: none !important;
-  border-right: none !important;
+.postFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  border-top: 1px solid rgba(109, 213, 237, 0.1);
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
 }
 
-.post-meta {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.35rem !important;
-  font-size: 0.85rem !important;
-  color: rgba(255, 255, 255, 0.5) !important;
-  flex-shrink: 0 !important;
-  border: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.5 !important;
+.postMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  border: none;
+  border-top: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
 }
 
-.post-meta > span {
-  display: inline-flex !important;
-  align-items: center !important;
-  line-height: 1.5 !important;
-  margin: 0 !important;
+.postMeta > span {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.5;
+  margin: 0;
 }
 
-.edited-indicator {
-  font-style: italic !important;
-  color: rgba(255, 255, 255, 0.4) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.35rem !important;
-  line-height: 1.5 !important;
-  margin: 0 !important;
+.editedIndicator {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
-.edited-indicator::before {
+.editedIndicator::before {
   content: "•";
   color: rgba(255, 255, 255, 0.3);
 }
 
-.post-stats {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.65rem !important;
-  margin-left: auto !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  margin-right: 0 !important;
-  flex-shrink: 0 !important;
+.postStats {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-left: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  flex-shrink: 0;
 }
 
 .stat {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.3rem !important;
-  font-size: 0.85rem !important;
-  color: rgba(255, 255, 255, 0.6) !important;
-  background: rgba(109, 213, 237, 0.1) !important;
-  padding: 0.3rem 0.65rem !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(109, 213, 237, 0.15) !important;
-  transition: all 0.2s ease !important;
-  line-height: 1.5 !important;
-  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(109, 213, 237, 0.1);
+  padding: 0.3rem 0.65rem;
+  border-radius: 12px;
+  border: 1px solid rgba(109, 213, 237, 0.15);
+  transition: all 0.2s ease;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .stat:hover {
@@ -210,43 +209,43 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .post-top-row {
+  .postTopRow {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
   }
 
-  .post-category-section {
+  .postCategorySection {
     margin-left: 0;
   }
 
-  .post-title,
-  .post-excerpt {
+  .postTitle,
+  .postExcerpt {
     margin-left: 0;
   }
 
-  .post-footer {
+  .postFooter {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
   }
 
-  .post-stats {
+  .postStats {
     width: 100%;
     justify-content: flex-start;
   }
 }
 
 @media (max-width: 480px) {
-  .post-preview {
+  .postPreview {
     padding: 1.5rem;
   }
 
-  .post-title {
+  .postTitle {
     font-size: 1.1rem;
   }
 
-  .post-avatar {
+  .postAvatar {
     width: 36px;
     height: 36px;
     font-size: 0.9rem;

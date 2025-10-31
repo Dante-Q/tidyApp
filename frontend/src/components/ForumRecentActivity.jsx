@@ -4,7 +4,7 @@ import {
   getCategoryEmoji,
   getCategoryLabel,
 } from "../utils/forumHelpers.js";
-import "./ForumRecentActivity.css";
+import styles from "./ForumRecentActivity.module.css";
 
 export default function ForumRecentActivity({ recentPosts, loading }) {
   const formatTimeAgo = (dateString) => {
@@ -24,8 +24,8 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
   };
 
   return (
-    <div className="forum-recent">
-      <h2 className="section-title">Recent Activity</h2>
+    <div className={styles.forumRecent}>
+      <h2 className={styles.sectionTitle}>Recent Activity</h2>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem", color: "#fff" }}>
           Loading posts...
@@ -35,50 +35,54 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
           No posts yet. Be the first to start a discussion!
         </div>
       ) : (
-        <div className="recent-posts">
+        <div className={styles.recentPosts}>
           {recentPosts.map((post) => {
             return (
               <Link
                 key={post._id}
                 to={`/forum/post/${post._id}`}
-                className="post-preview"
+                className={styles.postPreview}
               >
-                <div className="post-top-row">
-                  <div className="post-author-section">
-                    <div className="post-avatar">
+                <div className={styles.postTopRow}>
+                  <div className={styles.postAuthorSection}>
+                    <div className={styles.postAvatar}>
                       {getUserInitial(post.author.name)}
                     </div>
-                    <span className="post-author-name">{post.author.name}</span>
+                    <span className={styles.postAuthorName}>
+                      {post.author.name}
+                    </span>
                   </div>
-                  <div className="post-category-section">
-                    <div className="category-tag">
+                  <div className={styles.postCategorySection}>
+                    <div className={styles.categoryTag}>
                       <span>{getCategoryEmoji(post.category)}</span>
                       <span>{getCategoryLabel(post.category)}</span>
                     </div>
                   </div>
                 </div>
 
-                <h4 className="post-title">{post.title}</h4>
+                <h4 className={styles.postTitle}>{post.title}</h4>
 
                 {post.content && (
-                  <p className="post-excerpt">{truncateText(post.content)}</p>
+                  <p className={styles.postExcerpt}>
+                    {truncateText(post.content)}
+                  </p>
                 )}
 
-                <div className="post-footer">
-                  <div className="post-meta">
+                <div className={styles.postFooter}>
+                  <div className={styles.postMeta}>
                     <span>{formatTimeAgo(post.createdAt)}</span>
                     {post.editedAt && (
-                      <span className="edited-indicator">(edited)</span>
+                      <span className={styles.editedIndicator}>(edited)</span>
                     )}
                   </div>
-                  <div className="post-stats">
-                    <span className="stat stat-views">
+                  <div className={styles.postStats}>
+                    <span className={`${styles.stat} ${styles.statViews}`}>
                       👁️ {post.views || 0}
                     </span>
-                    <span className="stat stat-comments">
+                    <span className={`${styles.stat} ${styles.statComments}`}>
                       💬 {post.commentCount || 0}
                     </span>
-                    <span className="stat stat-likes">
+                    <span className={`${styles.stat} ${styles.statLikes}`}>
                       ❤️ {post.likes?.length || 0}
                     </span>
                   </div>
