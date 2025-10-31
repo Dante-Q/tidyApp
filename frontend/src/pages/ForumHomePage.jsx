@@ -16,7 +16,7 @@ export default function ForumHomePage() {
   // Fetch recent posts for activity section
   const { data: recentPostsData, isLoading: loadingRecentPosts } = useQuery({
     queryKey: ["recentPosts"],
-    queryFn: () => getPosts({ limit: 5, sortBy: "createdAt" }),
+    queryFn: () => getPosts({ limit: 50, sortBy: "createdAt" }), // Fetch more posts for show more functionality
   });
 
   const allPosts = allPostsData?.posts || [];
