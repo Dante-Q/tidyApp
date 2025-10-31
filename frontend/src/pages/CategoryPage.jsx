@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
@@ -7,6 +8,8 @@ import "./CategoryPage.css";
 export default function CategoryPage() {
   const { categorySlug } = useParams();
   const navigate = useNavigate();
+  const POSTS_PER_PAGE = 10;
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
 
   // Get category details from config
   const category = getCategoryBySlug(categorySlug);
@@ -125,42 +128,78 @@ export default function CategoryPage() {
                 </Link>
               </div>
             ) : (
-              <div className="posts-list">
-                {posts.map((post) => (
-                  <Link
-                    key={post._id}
-                    to={`/forum/post/${post._id}`}
-                    className="post-item"
-                  >
-                    <div className="post-item-header">
-                      <h3 className="post-item-title">{post.title}</h3>
-                      {post.subcategory && (
-                        <span className="post-subcategory-tag">
-                          {
-                            category.subcategories.find(
-                              (s) => s.slug === post.subcategory
-                            )?.icon
-                          }{" "}
-                          {
-                            category.subcategories.find(
-                              (s) => s.slug === post.subcategory
-                            )?.name
-                          }
+              <>
+                <div className="posts-list">
+                  {posts.slice(0, visibleCount).map((post) => (
+                    <Link
+                      key={post._id}
+                      to={`/forum/post/${post._id}`}
+                      className="post-item"
+                    >
+                      <div className="post-item-header">
+                        <h3 className="post-item-title">{post.title}</h3>
+                        {post.subcategory && (
+                          <span className="post-subcategory-tag">
+                            {
+                              category.subcategories.find(
+                                (s) => s.slug === post.subcategory
+                              )?.icon
+                            }{" "}
+                            {
+                              category.subcategories.find(
+                                (s) => s.slug === post.subcategory
+                              )?.name
+                            }
+                          </span>
+                        )}
+                      </div>
+                      <div className="post-item-meta">
+                        <span className="post-author">
+                          by {post.author?.name || "Unknown"}
                         </span>
-                      )}
-                    </div>
-                    <div className="post-item-meta">
-                      <span className="post-author">
-                        by {post.author?.name || "Unknown"}
-                      </span>
-                      <span className="post-stats">
-                        💬 {post.commentCount || 0} · ❤️{" "}
-                        {post.likes?.length || 0} · 👁️ {post.views || 0}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                        <span className="post-stats">
+                          💬 {post.commentCount || 0} · ❤️{" "}
+                          {post.likes?.length || 0} · 👁️ {post.views || 0}
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {(posts.length > visibleCount ||
+                  visibleCount > POSTS_PER_PAGE) && (
+                  <div className="show-more-container">
+                    {posts.length > visibleCount && (
+                      <>
+                        <button
+                          onClick={() =>
+                            setVisibleCount((prev) => prev + POSTS_PER_PAGE)
+                          }
+                          className="show-more-btn"
+                        >
+                          Show More Posts
+                        </button>
+                        <span className="posts-remaining">
+                          {posts.length - visibleCount} more posts
+                        </span>
+                      </>
+                    )}
+                    {visibleCount > POSTS_PER_PAGE && (
+                      <>
+                        {posts.length > visibleCount && (
+                          <span className="button-separator">•</span>
+                        )}
+                        <button
+                          onClick={() => setVisibleCount(POSTS_PER_PAGE)}
+                          className="show-more-btn"
+                        >
+                          Hide
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

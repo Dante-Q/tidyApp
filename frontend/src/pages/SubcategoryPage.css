@@ -291,6 +291,47 @@
   box-shadow: 0 6px 20px rgba(109, 213, 237, 0.4);
 }
 
+/* Show More Button */
+.show-more-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(109, 213, 237, 0.2);
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  color: #6dd5ed;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.show-more-btn:hover {
+  color: #2193b0;
+  text-decoration: underline;
+}
+
+.show-more-btn:active {
+  color: #2193b0;
+}
+
+.posts-remaining {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.button-separator {
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 0.5rem;
+}
+
 .error-container {
   text-align: center;
   padding: 4rem 2rem;
