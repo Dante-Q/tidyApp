@@ -121,6 +121,32 @@ export const FORUM_CATEGORIES = [
     ],
   },
   {
+    slug: "food-hangouts",
+    name: "Food & Hangouts",
+    icon: "🍔",
+    description: "Best places to eat and hang out near the beach",
+    subcategories: [
+      {
+        slug: "cafes-takeaways",
+        name: "Cafés & Takeaways",
+        icon: "☕",
+        description: "Coffee shops and quick bites",
+      },
+      {
+        slug: "bars-sundowners",
+        name: "Bars & Sundowners",
+        icon: "🍹",
+        description: "Best spots for drinks and sunset views",
+      },
+      {
+        slug: "chill-spots",
+        name: "Chill Spots",
+        icon: "🌴",
+        description: "Relaxed hangout spots and beach lounges",
+      },
+    ],
+  },
+  {
     slug: "safety",
     name: "Safety & Awareness",
     icon: "⚠️",
@@ -147,7 +173,7 @@ export const FORUM_CATEGORIES = [
       {
         slug: "parking-access",
         name: "Parking & Access",
-        icon: "🅿️",
+        icon: "�️",
         description: "Parking info and beach access details",
       },
       {
@@ -155,32 +181,6 @@ export const FORUM_CATEGORIES = [
         name: "Emergencies",
         icon: "🆘",
         description: "Emergency contacts and urgent situations",
-      },
-    ],
-  },
-  {
-    slug: "food-hangouts",
-    name: "Food & Hangouts",
-    icon: "🍔",
-    description: "Best places to eat and hang out near the beach",
-    subcategories: [
-      {
-        slug: "cafes-takeaways",
-        name: "Cafés & Takeaways",
-        icon: "☕",
-        description: "Coffee shops and quick bites",
-      },
-      {
-        slug: "bars-sundowners",
-        name: "Bars & Sundowners",
-        icon: "🍹",
-        description: "Best spots for drinks and sunset views",
-      },
-      {
-        slug: "chill-spots",
-        name: "Chill Spots",
-        icon: "🛋️",
-        description: "Relaxing hangout spots near the beach",
       },
     ],
   },

@@ -34,6 +34,11 @@ export const FORUM_CATEGORIES = [
     ],
   },
   {
+    slug: "food-hangouts",
+    name: "Food & Hangouts",
+    subcategories: ["cafes-takeaways", "bars-sundowners", "chill-spots"],
+  },
+  {
     slug: "safety",
     name: "Safety & Awareness",
     subcategories: [
@@ -43,11 +48,6 @@ export const FORUM_CATEGORIES = [
       "parking-access",
       "emergencies",
     ],
-  },
-  {
-    slug: "food-hangouts",
-    name: "Food & Hangouts",
-    subcategories: ["cafes-takeaways", "bars-sundowners", "chill-spots"],
   },
   {
     slug: "wildlife",
