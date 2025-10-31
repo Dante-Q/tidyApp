@@ -6,6 +6,7 @@ import { getCategoryBySlug } from "../config/forumCategories.js";
 import { getBeachTagBySlug } from "../config/beachTags.js";
 import { formatDate } from "../utils/forumHelpers.js";
 import PostFilters from "../components/PostFilters.jsx";
+import forumHeroImage from "../assets/images/forum-hero.jpg";
 import "./CategoryPage.css";
 
 export default function CategoryPage() {
@@ -76,7 +77,7 @@ export default function CategoryPage() {
       <div
         className="category-hero"
         style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200)`,
+          backgroundImage: `url(${forumHeroImage})`,
         }}
       >
         <div className="category-hero-overlay">
