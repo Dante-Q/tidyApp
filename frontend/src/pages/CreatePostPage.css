@@ -303,7 +303,6 @@
   cursor: pointer !important;
 }
 
-/* Tag limit error - red border flash */
 /* Tag limit error - soft pulsing highlight using box-shadow (avoids animating border-color)
    Reasons:
    - Mantine may set inline border styles which can interfere with border-color keyframe animations
@@ -329,42 +328,6 @@
   70%,
   100% {
     box-shadow: inset 0 0 0 1px rgba(109, 213, 237, 0.2);
-  }
-}
-
-@keyframes errorPulsePill {
-  0% {
-    box-shadow: none;
-    transform: none;
-    background-color: rgba(109, 213, 237, 0.2);
-    border-color: rgba(109, 213, 237, 0.3);
-  }
-  12% {
-    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4),
-      0 2px 8px rgba(255, 107, 107, 0.2);
-    transform: translateY(-2px) scale(1.02);
-    background-color: rgba(255, 107, 107, 0.25);
-    border-color: rgba(255, 107, 107, 0.6);
-  }
-  30% {
-    box-shadow: none;
-    transform: none;
-    background-color: rgba(109, 213, 237, 0.2);
-    border-color: rgba(109, 213, 237, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4),
-      0 2px 8px rgba(255, 107, 107, 0.2);
-    transform: translateY(-2px) scale(1.02);
-    background-color: rgba(255, 107, 107, 0.25);
-    border-color: rgba(255, 107, 107, 0.6);
-  }
-  70%,
-  100% {
-    box-shadow: none;
-    transform: none;
-    background-color: rgba(109, 213, 237, 0.2);
-    border-color: rgba(109, 213, 237, 0.3);
   }
 }
 
