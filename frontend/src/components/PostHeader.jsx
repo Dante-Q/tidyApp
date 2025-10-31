@@ -49,10 +49,10 @@ export default function PostHeader() {
       <div className={styles.postCategory}>
         <div className={styles.categoryInfo}>
           <span className={styles.categoryEmoji}>
-            {getCategoryEmoji(post.category)}
+            {getCategoryEmoji(post.subcategory || post.category)}
           </span>
           <span className={styles.categoryName}>
-            {getCategoryLabel(post.category)}
+            {getCategoryLabel(post.subcategory || post.category)}
           </span>
         </div>
         <button

@@ -13,6 +13,8 @@ import DashboardPage from "./pages/DashboardPage";
 import BeachPage from "./pages/BeachPage";
 import InfoPage from "./pages/InfoPage.jsx";
 import ForumHomePage from "./pages/ForumHomePage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
+import SubcategoryPage from "./pages/SubcategoryPage.jsx";
 import CreatePostPage from "./pages/CreatePostPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import EditPostPage from "./pages/EditPostPage.jsx";
@@ -39,6 +41,14 @@ export default function App() {
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
                   <Route path="/forum" element={<ForumHomePage />} />
+                  <Route
+                    path="/forum/category/:categorySlug"
+                    element={<CategoryPage />}
+                  />
+                  <Route
+                    path="/forum/category/:categorySlug/:subcategorySlug"
+                    element={<SubcategoryPage />}
+                  />
                   <Route
                     path="/forum/post/:postId"
                     element={<PostDetailPage />}

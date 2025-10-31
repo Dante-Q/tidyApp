@@ -1,0 +1,356 @@
+/* Subcategory Page Styles */
+
+.subcategory-page {
+  min-height: 100vh;
+  background: var(--color-bg-dark);
+}
+
+/* Header Section */
+.subcategory-header {
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 41, 59, 0.9),
+    rgba(15, 23, 42, 0.95)
+  );
+  border-bottom: 1px solid rgba(109, 213, 237, 0.2);
+  padding: 2rem;
+}
+
+.subcategory-breadcrumb {
+  max-width: 1200px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.subcategory-breadcrumb a {
+  color: #6dd5ed;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.subcategory-breadcrumb a:hover {
+  color: #2193b0;
+}
+
+.subcategory-breadcrumb span:not(:has(a)) {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subcategory-title-section {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+}
+
+.subcategory-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.subcategory-icon-large {
+  font-size: 3rem;
+}
+
+.subcategory-description {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.subcategory-actions {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.btn-new-post {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-new-post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(109, 213, 237, 0.4);
+}
+
+/* Content Section */
+.subcategory-content {
+  padding: 2rem;
+}
+
+.subcategory-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Posts Table */
+.posts-table {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.posts-table-header {
+  display: grid;
+  grid-template-columns: 1fr 200px 150px;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(30, 41, 59, 0.8);
+  border-bottom: 1px solid rgba(109, 213, 237, 0.2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.posts-table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-row {
+  display: grid;
+  grid-template-columns: 1fr 200px 150px;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(109, 213, 237, 0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.post-row:last-child {
+  border-bottom: none;
+}
+
+.post-row:hover {
+  background: rgba(109, 213, 237, 0.05);
+}
+
+.post-col-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-row-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.post-row-excerpt {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.post-col-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.author-avatar-small {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.author-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.post-date {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.post-col-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-icon {
+  font-size: 1rem;
+}
+
+.stat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Loading and Empty States */
+.loading-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(109, 213, 237, 0.2);
+  border-top-color: #6dd5ed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+}
+
+.btn-first-post {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-first-post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(109, 213, 237, 0.4);
+}
+
+.error-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .posts-table-header {
+    grid-template-columns: 1fr 150px;
+  }
+
+  .posts-table-header .col-stats {
+    display: none;
+  }
+
+  .post-row {
+    grid-template-columns: 1fr 150px;
+  }
+
+  .post-col-stats {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .subcategory-title {
+    font-size: 2rem;
+  }
+
+  .subcategory-icon-large {
+    font-size: 2.5rem;
+  }
+
+  .subcategory-description {
+    font-size: 1rem;
+  }
+
+  .posts-table-header {
+    grid-template-columns: 1fr;
+  }
+
+  .posts-table-header .col-author,
+  .posts-table-header .col-stats {
+    display: none;
+  }
+
+  .post-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .post-col-author {
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(109, 213, 237, 0.1);
+  }
+
+  .post-col-stats {
+    display: flex;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(109, 213, 237, 0.1);
+  }
+}

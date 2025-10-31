@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext.js";
 import { getPostById } from "../services/forumService.js";
 import { createUpdatePostMutation } from "../mutations/postMutations.js";
+import FORUM_CATEGORIES from "../config/forumCategories.js";
 import "./EditPostPage.css";
 
 export default function EditPostPage() {
@@ -14,6 +15,7 @@ export default function EditPostPage() {
 
   const [formData, setFormData] = useState({
     category: "",
+    subcategory: "",
     title: "",
     content: "",
   });
@@ -25,12 +27,11 @@ export default function EditPostPage() {
     createUpdatePostMutation(queryClient, postId, navigate, setError)
   );
 
-  const categories = [
-    { value: "surf-reports", label: "🌊 Surf Reports" },
-    { value: "beach-safety", label: "🏖️ Beach Safety" },
-    { value: "general-discussion", label: "🌅 General Discussion" },
-    { value: "events-meetups", label: "📅 Events & Meetups" },
-  ];
+  // Get subcategories for selected category
+  const selectedCategory = FORUM_CATEGORIES.find(
+    (cat) => cat.slug === formData.category
+  );
+  const subcategories = selectedCategory?.subcategories || [];
 
   useEffect(() => {
     fetchPost();
@@ -50,6 +51,7 @@ export default function EditPostPage() {
 
       setFormData({
         category: post.category,
+        subcategory: post.subcategory || "",
         title: post.title,
         content: post.content,
       });
@@ -74,10 +76,21 @@ export default function EditPostPage() {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    // If category changes, reset subcategory
+    if (name === "category") {
+      setFormData({
+        ...formData,
+        category: value,
+        subcategory: "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   if (loading) {
@@ -138,13 +151,45 @@ export default function EditPostPage() {
                 required
               >
                 <option value="">-- Choose a category --</option>
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
+                {FORUM_CATEGORIES.map((cat) => (
+                  <option key={cat.slug} value={cat.slug}>
+                    {cat.icon} {cat.name}
                   </option>
                 ))}
               </select>
+              <p className="form-helper">
+                {selectedCategory?.description ||
+                  "Choose the main category for your post"}
+              </p>
             </div>
+
+            {/* Subcategory Selection (conditional) */}
+            {formData.category && subcategories.length > 0 && (
+              <div className="form-group">
+                <label htmlFor="subcategory" className="form-label">
+                  Select Topic <span className="required">*</span>
+                </label>
+                <select
+                  id="subcategory"
+                  name="subcategory"
+                  value={formData.subcategory}
+                  onChange={handleChange}
+                  className="form-select"
+                  required
+                >
+                  <option value="">-- Choose a topic --</option>
+                  {subcategories.map((sub) => (
+                    <option key={sub.slug} value={sub.slug}>
+                      {sub.icon} {sub.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="form-helper">
+                  {subcategories.find((s) => s.slug === formData.subcategory)
+                    ?.description || "Choose a specific topic for your post"}
+                </p>
+              </div>
+            )}
 
             {/* Post Title */}
             <div className="form-group">

@@ -1,3 +1,9 @@
+import {
+  getCategoryIcon,
+  getCategoryName,
+  getSubcategoryName,
+} from "../config/forumCategories.js";
+
 /**
  * Format a date string into a relative time format
  * @param {string} dateString - ISO date string
@@ -19,33 +25,27 @@ export const formatDate = (dateString) => {
 };
 
 /**
- * Get emoji for a forum category
- * @param {string} category - Category slug
- * @returns {string} Emoji character
+ * Get emoji/icon for a category or subcategory
+ * @param {string} slug - Category or subcategory slug
+ * @returns {string} Icon/emoji character
  */
-export const getCategoryEmoji = (category) => {
-  const emojis = {
-    "surf-reports": "🌊",
-    "beach-safety": "🏖️",
-    "general-discussion": "🌅",
-    "events-meetups": "📅",
-  };
-  return emojis[category] || "📝";
+export const getCategoryEmoji = (slug) => {
+  return getCategoryIcon(slug);
 };
 
 /**
- * Get human-readable label for a forum category
- * @param {string} category - Category slug
- * @returns {string} Category label
+ * Get human-readable label for a category or subcategory
+ * @param {string} slug - Category or subcategory slug
+ * @returns {string} Display label
  */
-export const getCategoryLabel = (category) => {
-  const labels = {
-    "surf-reports": "Surf Reports",
-    "beach-safety": "Beach Safety",
-    "general-discussion": "General Discussion",
-    "events-meetups": "Events & Meetups",
-  };
-  return labels[category] || category;
+export const getCategoryLabel = (slug) => {
+  // First try as category
+  const categoryName = getCategoryName(slug);
+  if (categoryName !== slug) return categoryName;
+
+  // Then try as subcategory
+  const subcategoryName = getSubcategoryName(slug);
+  return subcategoryName;
 };
 
 /**

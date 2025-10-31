@@ -54,8 +54,12 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
                   </div>
                   <div className={styles.postCategorySection}>
                     <div className={styles.categoryTag}>
-                      <span>{getCategoryEmoji(post.category)}</span>
-                      <span>{getCategoryLabel(post.category)}</span>
+                      <span>
+                        {getCategoryEmoji(post.subcategory || post.category)}
+                      </span>
+                      <span>
+                        {getCategoryLabel(post.subcategory || post.category)}
+                      </span>
                     </div>
                   </div>
                 </div>

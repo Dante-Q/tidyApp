@@ -1,37 +1,8 @@
 import { Link } from "react-router-dom";
+import FORUM_CATEGORIES from "../config/forumCategories.js";
 import "./ForumCategories.css";
 
 export default function ForumCategories({ categories, loading }) {
-  const getCategoryInfo = (category) => {
-    const info = {
-      "surf-reports": {
-        icon: "🌊",
-        name: "Surf Reports",
-        description:
-          "Share and discuss surf conditions, wave forecasts, and session reports.",
-      },
-      "beach-safety": {
-        icon: "🏖️",
-        name: "Beach Safety",
-        description:
-          "Discuss safety tips, current conditions, and best practices for beach activities.",
-      },
-      "general-discussion": {
-        icon: "🌅",
-        name: "General Discussion",
-        description:
-          "Chat about anything related to Cape Town's beaches, events, and community.",
-      },
-      "events-meetups": {
-        icon: "📅",
-        name: "Events & Meetups",
-        description:
-          "Organize and join beach cleanups, surf sessions, and community events.",
-      },
-    };
-    return info[category] || { icon: "📝", name: category, description: "" };
-  };
-
   return (
     <div className="forum-categories">
       <div className="forum-categories-header">
@@ -44,26 +15,51 @@ export default function ForumCategories({ categories, loading }) {
         </div>
       ) : (
         <div className="categories-grid">
-          {categories.map((cat) => {
-            const info = getCategoryInfo(cat.category);
+          {FORUM_CATEGORIES.map((category) => {
+            // Find stats for this category from the API data
+            const stats = categories.find(
+              (cat) => cat.category === category.slug
+            ) || {
+              totalPosts: 0,
+              totalComments: 0,
+            };
+
             return (
               <Link
-                key={cat.category}
-                to={`/forum?category=${cat.category}`}
+                key={category.slug}
+                to={`/forum/category/${category.slug}`}
                 className="category-card"
               >
                 <div className="category-header">
-                  <div className="category-icon">{info.icon}</div>
-                  <h3 className="category-name">{info.name}</h3>
+                  <div className="category-icon">{category.icon}</div>
+                  <h3 className="category-name">{category.name}</h3>
                 </div>
-                <p className="category-description">{info.description}</p>
+                <p className="category-description">{category.description}</p>
+
+                {/* Show subcategories */}
+                {category.subcategories &&
+                  category.subcategories.length > 0 && (
+                    <div className="subcategories-list">
+                      {category.subcategories.slice(0, 3).map((sub) => (
+                        <span key={sub.slug} className="subcategory-tag">
+                          {sub.icon} {sub.name}
+                        </span>
+                      ))}
+                      {category.subcategories.length > 3 && (
+                        <span className="subcategory-more">
+                          +{category.subcategories.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                 <div className="category-stats">
                   <span className="stat-item">
-                    <strong>{cat.totalPosts}</strong> Posts
+                    <strong>{stats.totalPosts}</strong> Posts
                   </span>
                   <span className="stat-divider">•</span>
                   <span className="stat-item">
-                    <strong>{cat.totalComments}</strong> Comments
+                    <strong>{stats.totalComments}</strong> Comments
                   </span>
                 </div>
               </Link>

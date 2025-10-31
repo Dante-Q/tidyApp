@@ -1,14 +1,24 @@
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
+import { isValidCategorySubcategory } from "../config/forumCategories.js";
 
 // Get all posts with pagination and filtering
 export const getPosts = async (req, res) => {
   try {
-    const { category, page = 1, limit = 20, sort = "-createdAt" } = req.query;
+    const {
+      category,
+      subcategory,
+      page = 1,
+      limit = 20,
+      sort = "-createdAt",
+    } = req.query;
 
     const query = {};
     if (category) {
       query.category = category;
+    }
+    if (subcategory) {
+      query.subcategory = subcategory;
     }
 
     const skip = (page - 1) * limit;
@@ -64,12 +74,20 @@ export const getPostById = async (req, res) => {
 // Create new post
 export const createPost = async (req, res) => {
   try {
-    const { title, content, category } = req.body;
+    const { title, content, category, subcategory } = req.body;
+
+    // Validate category and subcategory combination
+    if (subcategory && !isValidCategorySubcategory(category, subcategory)) {
+      return res.status(400).json({
+        message: "Invalid category and subcategory combination",
+      });
+    }
 
     const post = await Post.create({
       title,
       content,
       category,
+      subcategory: subcategory || null,
       author: req.user._id,
     });
 
@@ -102,11 +120,22 @@ export const updatePost = async (req, res) => {
         .json({ message: "Not authorized to update this post" });
     }
 
-    const { title, content, category } = req.body;
+    const { title, content, category, subcategory } = req.body;
+
+    // Validate category and subcategory combination if both are being updated
+    if ((category || post.category) && subcategory) {
+      const categoryToValidate = category || post.category;
+      if (!isValidCategorySubcategory(categoryToValidate, subcategory)) {
+        return res.status(400).json({
+          message: "Invalid category and subcategory combination",
+        });
+      }
+    }
 
     if (title) post.title = title;
     if (content) post.content = content;
     if (category) post.category = category;
+    if (subcategory !== undefined) post.subcategory = subcategory || null;
 
     // Set editedAt timestamp to mark this as an intentional edit
     post.editedAt = new Date();

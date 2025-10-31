@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import {
+  getAllCategorySlugs,
+  getAllSubcategorySlugs,
+} from "../config/forumCategories.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -16,13 +20,14 @@ const postSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Category is required"],
-      enum: [
-        "surf-reports",
-        "beach-safety",
-        "general-discussion",
-        "events-meetups",
-      ],
+      enum: getAllCategorySlugs(),
       lowercase: true,
+    },
+    subcategory: {
+      type: String,
+      enum: getAllSubcategorySlugs(),
+      lowercase: true,
+      default: null,
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -68,7 +73,7 @@ postSchema.virtual("commentCount", {
 });
 
 // Index for faster queries
-postSchema.index({ category: 1, createdAt: -1 });
+postSchema.index({ category: 1, subcategory: 1, createdAt: -1 });
 postSchema.index({ author: 1 });
 
 const Post = mongoose.model("Post", postSchema);
