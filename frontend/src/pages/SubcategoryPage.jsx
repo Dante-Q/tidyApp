@@ -48,7 +48,7 @@ export default function SubcategoryPage() {
         <div className="subcategory-breadcrumb">
           <Link to="/forum">Forum</Link>
           <span>/</span>
-          <Link to={`/forum/category/${category.slug}`}>{category.name}</Link>
+          <Link to={`/forum/category/${categorySlug}`}>{category.name}</Link>
           <span>/</span>
           <span>{subcategory.name}</span>
         </div>

@@ -40,7 +40,9 @@ function PostDetailContent() {
       <div className="breadcrumb">
         <Link to="/forum">Forum</Link>
         <span>/</span>
-        <Link to="/forum">{getCategoryLabel(post.category)}</Link>
+        <Link to={`/forum/category/${post.category}`}>
+          {getCategoryLabel(post.category)}
+        </Link>
         <span>/</span>
         <span>{post.title}</span>
       </div>
