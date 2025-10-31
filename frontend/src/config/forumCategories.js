@@ -129,8 +129,8 @@ export const FORUM_CATEGORIES = [
       {
         slug: "general-safety",
         name: "General Safety",
-        icon: "🛟",
-        description: "Beach safety tips and best practices",
+        icon: "⚠️",
+        description: "General safety tips and precautions",
       },
       {
         slug: "local-alerts",

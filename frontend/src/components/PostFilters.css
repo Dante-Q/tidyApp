@@ -1,6 +1,8 @@
 /* Post Filters Component */
 .post-filters {
   margin-bottom: 2rem;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .filters-row {
@@ -8,6 +10,8 @@
   grid-template-columns: 1fr 1fr auto;
   gap: 1rem;
   align-items: center;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Search Input Styling */
