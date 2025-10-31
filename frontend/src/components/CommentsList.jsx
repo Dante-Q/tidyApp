@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostDetail } from "../context/PostDetailContext.js";
+import InlineCommentForm from "./InlineCommentForm.jsx";
 import {
   createLikeCommentMutation,
   createDeleteCommentMutation,
@@ -39,7 +40,7 @@ function CommentItem({
   queryClient,
   parentCommentId = null,
 }) {
-  const { setReplyTo } = usePostDetail();
+  const { setReplyTo, replyTo } = usePostDetail();
   const [showReplies, setShowReplies] = useState(true);
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -167,7 +168,8 @@ function CommentItem({
         <button
           onClick={() =>
             setReplyTo({
-              parentId: parentCommentId || comment._id,
+              commentId: comment._id, // Where the form appears
+              parentId: parentCommentId || comment._id, // Parent for the reply
               username: comment.author.name,
             })
           }
@@ -192,6 +194,14 @@ function CommentItem({
           </>
         )}
       </div>
+
+      {/* Inline Reply Form - appears when replying to this specific comment */}
+      {replyTo && replyTo.commentId === comment._id && (
+        <InlineCommentForm
+          replyToUsername={replyTo.username}
+          parentCommentId={replyTo.parentId}
+        />
+      )}
 
       {/* Nested Replies */}
       {comment.replies && comment.replies.length > 0 && (
