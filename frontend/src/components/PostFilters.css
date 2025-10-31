@@ -15,7 +15,8 @@
   position: relative;
 }
 
-.filter-search-input {
+.filter-search-input,
+.post-filters .mantine-TextInput-input {
   background-color: rgba(15, 23, 42, 0.8) !important;
   border: 1px solid rgba(109, 213, 237, 0.2) !important;
   color: #ffffff !important;
@@ -23,16 +24,18 @@
   padding: 0.875rem 1rem !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
-  min-height: auto !important;
+  min-height: 55px !important;
   transition: all 0.3s ease !important;
 }
 
-.filter-search-input:focus {
+.filter-search-input:focus,
+.post-filters .mantine-TextInput-input:focus {
   border-color: #6dd5ed !important;
   box-shadow: 0 0 0 3px rgba(109, 213, 237, 0.1) !important;
 }
 
-.filter-search-input::placeholder {
+.filter-search-input::placeholder,
+.post-filters .mantine-TextInput-input::placeholder {
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
@@ -41,7 +44,8 @@
   cursor: pointer;
 }
 
-.filter-tags-input {
+.filter-tags-input,
+.post-filters .mantine-MultiSelect-input {
   background-color: rgba(15, 23, 42, 0.8) !important;
   border: 1px solid rgba(109, 213, 237, 0.2) !important;
   color: #ffffff !important;
@@ -49,19 +53,22 @@
   padding: 0.875rem 1rem !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
+  min-height: 48px !important;
   transition: all 0.3s ease !important;
-  min-height: auto !important;
   cursor: pointer !important;
 }
 
 .filter-tags-input:focus,
-.filter-tags-input:focus-within {
+.filter-tags-input:focus-within,
+.post-filters .mantine-MultiSelect-input:focus,
+.post-filters .mantine-MultiSelect-input:focus-within {
   border-color: rgba(109, 213, 237, 0.2) !important;
   box-shadow: none !important;
   outline: none !important;
 }
 
-.filter-tags-input::placeholder {
+.filter-tags-input::placeholder,
+.post-filters .mantine-MultiSelect-input::placeholder {
   color: rgba(255, 255, 255, 0.4) !important;
 }
 

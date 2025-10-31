@@ -42,16 +42,6 @@ export default function PostFilters({ onFilterChange }) {
             root: "filter-search-root",
             input: "filter-search-input",
           }}
-          styles={{
-            input: {
-              backgroundColor: "rgba(15, 23, 42, 0.8)",
-              border: "1px solid rgba(109, 213, 237, 0.2)",
-              color: "#ffffff",
-              borderRadius: "8px",
-              padding: "0.875rem 1rem",
-              lineHeight: "1.5",
-            },
-          }}
         />
 
         {/* Beach Tags Filter */}
@@ -71,14 +61,6 @@ export default function PostFilters({ onFilterChange }) {
             pill: "filter-tags-pill",
             dropdown: "filter-tags-dropdown",
             option: "filter-tags-option",
-          }}
-          styles={{
-            input: {
-              backgroundColor: "rgba(15, 23, 42, 0.8)",
-              border: "1px solid rgba(109, 213, 237, 0.2)",
-              color: "#ffffff",
-              borderRadius: "8px",
-            },
           }}
         />
 
