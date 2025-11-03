@@ -131,6 +131,7 @@ export default function LoginPage({ onLogin, onForgotPassword }) {
             {onForgotPassword ? (
               <Text
                 component="button"
+                type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   onForgotPassword();

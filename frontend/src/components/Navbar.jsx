@@ -62,6 +62,12 @@ export default function Navbar() {
 
         <Group gap="sm">
           <Group gap="xs" className="navbar-nav-links">
+            <Link to="/" className="navbar-link">
+              <Button variant="subtle" className="navbar-btn navbar-btn-home">
+                Home
+              </Button>
+            </Link>
+
             <div
               className="navbar-dropdown"
               onMouseEnter={() => setBeachesOpen(true)}
