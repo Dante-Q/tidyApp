@@ -217,10 +217,11 @@ select:focus {
   font-size: 1.2em;
   margin-right: 0.2em;
   animation: wave 2.5s ease-in-out infinite;
-  background: none;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-  background-clip: initial;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  color: inherit;
 }
 
 @keyframes wave {

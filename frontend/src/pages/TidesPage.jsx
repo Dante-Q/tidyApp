@@ -17,7 +17,9 @@ export default function TidesPage() {
   return (
     <div className="tools-page">
       <div className="tools-hero">
-        <h1 className="tools-title">🌊 Tides & Wave Heights</h1>
+        <h1 className="tools-title">
+          <span className="hero-emoji">🌊</span> Tides & Wave Heights
+        </h1>
         <p className="tools-description">
           Understanding ocean patterns for Cape Town beaches
         </p>

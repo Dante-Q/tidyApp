@@ -10,7 +10,9 @@ export default function SurfReportPage() {
   return (
     <div className="tools-page">
       <div className="tools-hero">
-        <h1 className="tools-title">🏄‍♂️ Surf Report</h1>
+        <h1 className="tools-title">
+          <span className="hero-emoji">🏄‍♂️</span> Surf Report
+        </h1>
         <p className="tools-description">
           Real-time wave height and surf conditions for Cape Town beaches
         </p>

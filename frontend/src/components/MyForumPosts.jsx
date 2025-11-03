@@ -29,7 +29,9 @@ export default function MyForumPosts() {
   if (loading) {
     return (
       <div className={styles.myPostsSection}>
-        <h2 className={styles.sectionTitle}>📝 My Posts</h2>
+        <h2 className={styles.sectionTitle}>
+          <span className="hero-emoji">📝</span> My Posts
+        </h2>
         <div className={styles.loadingContainer}>
           <div className={styles.loadingSpinner}></div>
           <p className={styles.loadingText}>Loading your posts...</p>
@@ -41,7 +43,9 @@ export default function MyForumPosts() {
   if (error) {
     return (
       <div className={styles.myPostsSection}>
-        <h2 className={styles.sectionTitle}>📝 My Posts</h2>
+        <h2 className={styles.sectionTitle}>
+          <span className="hero-emoji">📝</span> My Posts
+        </h2>
         <div className={styles.errorContainer}>
           <p className={styles.errorText}>⚠️ {error}</p>
         </div>

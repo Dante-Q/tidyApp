@@ -14,7 +14,9 @@ export default function WindPage() {
   return (
     <div className="tools-page">
       <div className="tools-hero">
-        <h1 className="tools-title">💨 Wind Conditions</h1>
+        <h1 className="tools-title">
+          <span className="hero-emoji">💨</span> Wind Conditions
+        </h1>
         <p className="tools-description">
           Live wind speed, direction, and gusts for Cape Town beaches
         </p>

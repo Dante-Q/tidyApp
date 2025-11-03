@@ -5,7 +5,9 @@ export default function MapPage() {
   return (
     <div className="tools-page">
       <div className="tools-hero">
-        <h1 className="tools-title">🗺️ Beach Map</h1>
+        <h1 className="tools-title">
+          <span className="hero-emoji">🗺️</span> Beach Map
+        </h1>
         <p className="tools-description">
           Interactive map of Cape Town beaches with conditions
         </p>
