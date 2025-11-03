@@ -1,11 +1,16 @@
 import { useMemo } from "react";
 import useTideData from "../hooks/useTideData";
+import useSeaLevelData from "../hooks/useSeaLevelData";
 import {
   getNextTides,
   getCurrentTideHeight,
   formatTideTime,
   formatTideDate,
 } from "../services/tideService";
+import {
+  getCurrentSeaLevel,
+  getNextHoursSeaLevel,
+} from "../services/seaLevelService";
 import "./TideChart.css";
 
 /**
@@ -31,20 +36,41 @@ const TideChart = ({
   // Fetch tide data for selected beach
   const { extremes, loading, error } = useTideData(selectedBeach);
 
-  // Get next high and low tides
+  // Fetch sea level data for selected beach (hourly data for smooth curves)
+  // Sea level is optional - gracefully degrades to extremes if unavailable
+  const { seaLevel } = useSeaLevelData(selectedBeach);
+
+  // Determine if we're using sea level data or extremes
+  const hasSeaLevelData = seaLevel && seaLevel.length > 0;
+
+  // Get next high and low tides (always from extremes)
   const { nextHigh, nextLow } = useMemo(
     () => getNextTides(extremes),
     [extremes]
   );
 
-  // Get current tide height
-  const currentHeight = useMemo(
-    () => getCurrentTideHeight(extremes),
-    [extremes]
-  );
+  // Get current tide height (prefer sea level if available)
+  const currentHeight = useMemo(() => {
+    if (hasSeaLevelData) {
+      return getCurrentSeaLevel(seaLevel);
+    }
+    return getCurrentTideHeight(extremes);
+  }, [hasSeaLevelData, seaLevel, extremes]);
 
-  // Get next 24 hours of tides for chart (12 data points)
+  // Get next 24 hours of tides for chart
   const chartData = useMemo(() => {
+    // Prefer sea level data for smooth curve
+    if (hasSeaLevelData) {
+      const next24Hours = getNextHoursSeaLevel(seaLevel, 24);
+      // Convert to format that matches extremes structure
+      return next24Hours.map((reading) => ({
+        time: reading.time,
+        height: reading.height,
+        type: "sea-level", // Mark as sea level data
+      }));
+    }
+
+    // Fallback to extremes (discrete high/low points)
     if (!extremes || extremes.length === 0) return [];
 
     const now = new Date();
@@ -57,7 +83,7 @@ const TideChart = ({
     });
 
     return tidesIn24h.slice(0, 12); // Max 12 data points for chart
-  }, [extremes]);
+  }, [hasSeaLevelData, seaLevel, extremes]);
 
   // Calculate max height for scaling
   const maxHeight = useMemo(() => {
@@ -71,7 +97,7 @@ const TideChart = ({
     return (height / maxHeight) * 100;
   };
 
-  // Loading state
+  // Loading state (wait for both if needed)
   if (loading) {
     return (
       <div className="tide-chart">
@@ -86,7 +112,7 @@ const TideChart = ({
     );
   }
 
-  // Error state
+  // Error state (tide extremes are required, sea level is optional)
   if (error) {
     return (
       <div className="tide-chart">
@@ -120,7 +146,20 @@ const TideChart = ({
     <div className="tide-chart">
       <div className="tide-chart-header">
         <h2>Tide Chart</h2>
-        <p>24-Hour Tide Predictions</p>
+        <p>
+          24-Hour Tide Predictions
+          {hasSeaLevelData && (
+            <span
+              style={{
+                fontSize: "0.75rem",
+                marginLeft: "0.5rem",
+                opacity: 0.7,
+              }}
+            >
+              (Hourly Data)
+            </span>
+          )}
+        </p>
         {/* Beach selector */}
         <select
           value={selectedBeach}
@@ -190,18 +229,29 @@ const TideChart = ({
             <div className="tide-bars">
               {chartData.map((tide, index) => (
                 <div key={index} className="tide-bar-wrapper">
-                  {/* High/Low label */}
-                  <div className={`tide-label tide-label-${tide.type}`}>
-                    {tide.type === "high" ? "High" : "Low"}
-                  </div>
+                  {/* High/Low label (only for extremes, not sea level) */}
+                  {tide.type !== "sea-level" && (
+                    <div className={`tide-label tide-label-${tide.type}`}>
+                      {tide.type === "high" ? "High" : "Low"}
+                    </div>
+                  )}
 
                   {/* Bar */}
                   <div className="tide-bar-container">
                     <div
-                      className={`tide-bar tide-bar-${tide.type}`}
+                      className={`tide-bar ${
+                        tide.type === "sea-level"
+                          ? "tide-bar-sea-level"
+                          : `tide-bar-${tide.type}`
+                      }`}
                       style={{ height: `${getBarHeight(tide.height)}%` }}
                     >
-                      <span className="tide-height">{tide.height}m</span>
+                      <span className="tide-height">
+                        {typeof tide.height === "number"
+                          ? tide.height.toFixed(2)
+                          : tide.height}
+                        m
+                      </span>
                     </div>
                   </div>
 
@@ -222,14 +272,23 @@ const TideChart = ({
 
         {/* Legend */}
         <div className="tide-legend">
-          <div className="tide-legend-item">
-            <div className="tide-legend-dot high"></div>
-            <span>High Tide</span>
-          </div>
-          <div className="tide-legend-item">
-            <div className="tide-legend-dot low"></div>
-            <span>Low Tide</span>
-          </div>
+          {hasSeaLevelData ? (
+            <div className="tide-legend-item">
+              <div className="tide-legend-dot sea-level"></div>
+              <span>Hourly Sea Level</span>
+            </div>
+          ) : (
+            <>
+              <div className="tide-legend-item">
+                <div className="tide-legend-dot high"></div>
+                <span>High Tide</span>
+              </div>
+              <div className="tide-legend-item">
+                <div className="tide-legend-dot low"></div>
+                <span>Low Tide</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -148,7 +148,16 @@ async function fetchBeachTideData(beachKey, beach) {
  * @returns {Promise<Object>} Complete tide data object
  */
 async function fetchAllBeachTides(options = { partialUpdates: true }) {
-  console.log("Starting tide data fetch...\n");
+  const startTime = new Date();
+  console.log("=".repeat(60));
+  console.log("🌊 TIDE EXTREMES FETCH STARTED");
+  console.log("=".repeat(60));
+  console.log(`Start Time: ${startTime.toISOString()}`);
+  console.log(`Local Time: ${startTime.toLocaleString()}`);
+  console.log(`Script: fetchTideData.js`);
+  console.log(`Schedule: ODD DATES (1, 3, 5, 7, etc.)`);
+  console.log("=".repeat(60));
+  console.log();
 
   // Load existing data for fallback
   const existingData = loadExistingData();
@@ -259,6 +268,7 @@ async function fetchAllBeachTides(options = { partialUpdates: true }) {
 }
 
 // Run the script
+const startTime = new Date();
 fetchAllBeachTides({ partialUpdates: true })
   .then((results) => {
     console.log("\n✅ Tide data fetch complete!");
@@ -283,12 +293,32 @@ fetchAllBeachTides({ partialUpdates: true })
       process.exit(1);
     }
 
-    console.log(
-      "\n💡 Tip: Run this script once daily to stay within API limits"
-    );
+    const endTime = new Date();
+    const duration = ((endTime - startTime) / 1000).toFixed(2);
+
+    console.log();
+    console.log("=".repeat(60));
+    console.log("🌊 TIDE EXTREMES FETCH COMPLETED");
+    console.log("=".repeat(60));
+    console.log(`End Time: ${endTime.toISOString()}`);
+    console.log(`Duration: ${duration} seconds`);
+    console.log(`Status: SUCCESS ✓`);
+    console.log("=".repeat(60));
+
     process.exit(0);
   })
   .catch((error) => {
-    console.error("\n❌ Fatal error:", error.message);
+    const endTime = new Date();
+    const duration = ((endTime - startTime) / 1000).toFixed(2);
+
+    console.log();
+    console.log("=".repeat(60));
+    console.log("❌ TIDE EXTREMES FETCH FAILED");
+    console.log("=".repeat(60));
+    console.log(`End Time: ${endTime.toISOString()}`);
+    console.log(`Duration: ${duration} seconds`);
+    console.log(`Error: ${error.message}`);
+    console.log("=".repeat(60));
+
     process.exit(1);
   });

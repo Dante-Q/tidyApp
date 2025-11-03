@@ -129,9 +129,10 @@ async function fetchBeachSeaLevel(beachKey, beach) {
 
     // Extract and format hourly data
     // Stormglass returns { data: [...], meta: {...} }
+    // Each data point: { time: "2025-11-03T00:00:00+00:00", waterLevel: { sg: 1.23 } }
     const seaLevel = (seaLevelResponse.data || []).map((hour) => ({
       time: hour.time,
-      height: hour.waterLevel?.[0]?.sg || 0, // Stormglass prediction
+      height: hour.waterLevel?.sg || 0, // Stormglass prediction (not an array)
     }));
 
     console.log(
@@ -170,7 +171,16 @@ async function fetchBeachSeaLevel(beachKey, beach) {
  * @returns {Promise<Object>} Complete sea level data object
  */
 async function fetchAllBeachSeaLevels(options = { partialUpdates: true }) {
-  console.log("Starting sea level data fetch...\n");
+  const startTime = new Date();
+  console.log("=".repeat(60));
+  console.log("🌊 SEA LEVEL FETCH STARTED");
+  console.log("=".repeat(60));
+  console.log(`Start Time: ${startTime.toISOString()}`);
+  console.log(`Local Time: ${startTime.toLocaleString()}`);
+  console.log(`Script: fetchSeaLevelData.js`);
+  console.log(`Schedule: EVEN DATES (2, 4, 6, 8, etc.)`);
+  console.log("=".repeat(60));
+  console.log();
 
   // Load existing data for fallback
   const existingData = loadExistingData();
@@ -284,6 +294,7 @@ async function fetchAllBeachSeaLevels(options = { partialUpdates: true }) {
 }
 
 // Run the script
+const startTime = new Date();
 fetchAllBeachSeaLevels({ partialUpdates: true })
   .then((results) => {
     console.log("\n✅ Sea level data fetch complete!");
@@ -308,14 +319,32 @@ fetchAllBeachSeaLevels({ partialUpdates: true })
       process.exit(1);
     }
 
-    console.log(
-      "\n💡 Tip: Run this script on EVEN DAYS to alternate with tide extremes"
-    );
-    console.log("   Odd days: fetchTideData.js (extremes)");
-    console.log("   Even days: fetchSeaLevelData.js (hourly)");
+    const endTime = new Date();
+    const duration = ((endTime - startTime) / 1000).toFixed(2);
+
+    console.log();
+    console.log("=".repeat(60));
+    console.log("🌊 SEA LEVEL FETCH COMPLETED");
+    console.log("=".repeat(60));
+    console.log(`End Time: ${endTime.toISOString()}`);
+    console.log(`Duration: ${duration} seconds`);
+    console.log(`Status: SUCCESS ✓`);
+    console.log("=".repeat(60));
+
     process.exit(0);
   })
   .catch((error) => {
-    console.error("\n❌ Fatal error:", error.message);
+    const endTime = new Date();
+    const duration = ((endTime - startTime) / 1000).toFixed(2);
+
+    console.log();
+    console.log("=".repeat(60));
+    console.log("❌ SEA LEVEL FETCH FAILED");
+    console.log("=".repeat(60));
+    console.log(`End Time: ${endTime.toISOString()}`);
+    console.log(`Duration: ${duration} seconds`);
+    console.log(`Error: ${error.message}`);
+    console.log("=".repeat(60));
+
     process.exit(1);
   });

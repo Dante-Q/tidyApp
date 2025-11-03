@@ -245,6 +245,10 @@
   background: linear-gradient(to top, #dc2626, #ef4444);
 }
 
+.tide-bar-sea-level {
+  background: linear-gradient(to top, #0891b2, #06b6d4);
+}
+
 .tide-bar:hover {
   filter: brightness(1.2);
   transform: scaleY(1.02);
@@ -310,6 +314,10 @@
 
 .tide-legend-dot.low {
   background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.tide-legend-dot.sea-level {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
 }
 
 .tide-legend-item span {
