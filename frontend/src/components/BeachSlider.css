@@ -66,10 +66,9 @@
 }
 
 .beach-slider .conditions-card-link:hover .conditions-card {
-  box-shadow: 0 8px 24px rgba(109, 213, 237, 0.4),
-    0 0 20px rgba(109, 213, 237, 0.2);
+  box-shadow: 0 8px 24px rgba(109, 213, 237, 0.3);
   border-color: rgba(109, 213, 237, 0.5);
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.95);
 }
 
 .beach-slider .conditions-card-image {
