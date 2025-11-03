@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import useMarineData from "../hooks/useMarineData";
+import useWeatherData from "../hooks/useWeatherData";
 import "./BeachSlider.css";
 
 // Import beach images
@@ -10,67 +12,79 @@ import kalkbayImg from "../assets/images/david-watkis-kalkbay.jpg";
 import milnertonImg from "../assets/images/sam-wermut-misc.jpg";
 import strandImg from "../assets/images/untitled-photo-misc.jpg";
 
+// Beach configuration with images
+const beachConfig = [
+  { id: "kalkbay", name: "Kalk Bay", imageUrl: kalkbayImg },
+  { id: "clifton", name: "Clifton", imageUrl: cliftonImg },
+  { id: "bloubergstrand", name: "Bloubergstrand", imageUrl: bloubergImg },
+  { id: "milnerton", name: "Milnerton", imageUrl: milnertonImg },
+  { id: "muizenberg", name: "Muizenberg", imageUrl: muizenbergImg },
+  { id: "strand", name: "Strand", imageUrl: strandImg },
+];
+
+// Component for individual beach card with data fetching
+function BeachCard({ beach }) {
+  const { current: marineData } = useMarineData(beach.id);
+  const { current: weatherData } = useWeatherData(beach.id);
+
+  // Calculate condition based on wave height and wind speed
+  const getCondition = () => {
+    if (!marineData || !weatherData) return "Loading...";
+
+    const waveHeight = marineData.wave_height || 0;
+    const windSpeed = weatherData.wind_speed_10m || 0;
+
+    // Simple condition logic - can be customized
+    if (waveHeight > 1.5 && windSpeed < 15) return "Excellent";
+    if (waveHeight > 1.0 && windSpeed < 20) return "Good";
+    return "Fair";
+  };
+
+  const waveHeight = marineData?.wave_height
+    ? `${marineData.wave_height.toFixed(1)}m`
+    : "...";
+  const windSpeed = weatherData?.wind_speed_10m
+    ? `${Math.round(weatherData.wind_speed_10m)} km/h`
+    : "...";
+
+  return (
+    <Link to={`/beach/${beach.id}`} className="beach-card-link">
+      <div className="beach-card">
+        <div
+          className="beach-card-image"
+          style={{ backgroundImage: `url(${beach.imageUrl})` }}
+        >
+          <div className="beach-card-condition">{getCondition()}</div>
+        </div>
+        <div className="beach-card-content">
+          <h3 className="beach-card-title">{beach.name}</h3>
+          <div className="beach-card-stats">
+            <div className="beach-stat">
+              <span className="beach-stat-label">Wave Height</span>
+              <span className="beach-stat-value">{waveHeight}</span>
+            </div>
+            <div className="beach-stat">
+              <span className="beach-stat-label">Wind Speed</span>
+              <span className="beach-stat-value">{windSpeed}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 export default function BeachSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Placeholder beach data - replace with real data later
-  const beaches = [
-    {
-      id: "kalkbay",
-      name: "Kalk Bay",
-      condition: "Good",
-      waveHeight: "1.0m",
-      windSpeed: "18 km/h",
-      imageUrl: kalkbayImg,
-    },
-    {
-      id: "clifton",
-      name: "Clifton",
-      condition: "Fair",
-      waveHeight: "0.9m",
-      windSpeed: "20 km/h",
-      imageUrl: cliftonImg,
-    },
-    {
-      id: "bloubergstrand",
-      name: "Bloubergstrand",
-      condition: "Excellent",
-      waveHeight: "1.8m",
-      windSpeed: "10 km/h",
-      imageUrl: bloubergImg,
-    },
-    {
-      id: "milnerton",
-      name: "Milnerton",
-      condition: "Excellent",
-      waveHeight: "1.5m",
-      windSpeed: "14 km/h",
-      imageUrl: milnertonImg,
-    },
-    {
-      id: "muizenberg",
-      name: "Muizenberg",
-      condition: "Good",
-      waveHeight: "1.2m",
-      windSpeed: "15 km/h",
-      imageUrl: muizenbergImg,
-    },
-    {
-      id: "strand",
-      name: "Strand",
-      condition: "Good",
-      waveHeight: "1.1m",
-      windSpeed: "12 km/h",
-      imageUrl: strandImg,
-    },
-  ];
-
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % beaches.length);
+    setCurrentIndex((prev) => (prev + 1) % beachConfig.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + beaches.length) % beaches.length);
+    setCurrentIndex(
+      (prev) => (prev - 1 + beachConfig.length) % beachConfig.length
+    );
   };
 
   const goToSlide = (index) => {
@@ -102,40 +116,8 @@ export default function BeachSlider() {
               transform: `translateX(-${currentIndex * 100}%)`,
             }}
           >
-            {beaches.map((beach) => (
-              <Link
-                key={beach.id}
-                to={`/beach/${beach.id}`}
-                className="beach-card-link"
-              >
-                <div className="beach-card">
-                  <div
-                    className="beach-card-image"
-                    style={{ backgroundImage: `url(${beach.imageUrl})` }}
-                  >
-                    <div className="beach-card-condition">
-                      {beach.condition}
-                    </div>
-                  </div>
-                  <div className="beach-card-content">
-                    <h3 className="beach-card-title">{beach.name}</h3>
-                    <div className="beach-card-stats">
-                      <div className="beach-stat">
-                        <span className="beach-stat-label">Wave Height</span>
-                        <span className="beach-stat-value">
-                          {beach.waveHeight}
-                        </span>
-                      </div>
-                      <div className="beach-stat">
-                        <span className="beach-stat-label">Wind Speed</span>
-                        <span className="beach-stat-value">
-                          {beach.windSpeed}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+            {beachConfig.map((beach) => (
+              <BeachCard key={beach.id} beach={beach} />
             ))}
           </div>
         </div>
@@ -152,7 +134,7 @@ export default function BeachSlider() {
 
       {/* Dots Navigation */}
       <div className="beach-slider-dots">
-        {beaches.map((_, index) => (
+        {beachConfig.map((_, index) => (
           <button
             key={index}
             className={`beach-slider-dot ${
