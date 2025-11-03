@@ -6,7 +6,6 @@
  * Strategy: Fetch 2-3 times per day and cache results
  */
 
-const STORMGLASS_API_KEY = process.env.STORMGLASS_API_KEY;
 const STORMGLASS_BASE_URL = "https://api.stormglass.io/v2";
 
 /**
@@ -18,6 +17,8 @@ const STORMGLASS_BASE_URL = "https://api.stormglass.io/v2";
  * @returns {Promise<Object>} Tide data from Stormglass API
  */
 async function fetchTideData(lat, lng, start, end) {
+  const STORMGLASS_API_KEY = process.env.STORMGLASS_API_KEY;
+
   if (!STORMGLASS_API_KEY) {
     throw new Error("STORMGLASS_API_KEY is not configured");
   }
@@ -77,6 +78,8 @@ async function fetchTideData(lat, lng, start, end) {
  * @returns {Promise<Object>} Sea level data from Stormglass API
  */
 async function fetchSeaLevelData(lat, lng, start, end) {
+  const STORMGLASS_API_KEY = process.env.STORMGLASS_API_KEY;
+
   if (!STORMGLASS_API_KEY) {
     throw new Error("STORMGLASS_API_KEY is not configured");
   }
@@ -128,7 +131,4 @@ async function fetchSeaLevelData(lat, lng, start, end) {
   }
 }
 
-module.exports = {
-  fetchTideData,
-  fetchSeaLevelData,
-};
+export { fetchTideData, fetchSeaLevelData };

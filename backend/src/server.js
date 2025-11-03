@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
 import tideRoutes from "./routes/tides.js";
+import seaLevelRoutes from "./routes/seaLevel.js";
 import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -71,6 +72,9 @@ app.use("/api/comments", commentRoutes);
 
 // Tide data routes
 app.use("/api/tides", tideRoutes);
+
+// Sea level data routes
+app.use("/api/sea-level", seaLevelRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

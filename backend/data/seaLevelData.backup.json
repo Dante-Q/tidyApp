@@ -1,0 +1,79 @@
+{
+  "lastUpdated": "2025-11-03T07:04:29.559Z",
+  "beaches": {
+    "muizenberg": {
+      "beach": "muizenberg",
+      "name": "Muizenberg",
+      "coordinates": {
+        "lat": -34.1183,
+        "lng": 18.4717
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:30.869Z"
+    },
+    "bloubergstrand": {
+      "beach": "bloubergstrand",
+      "name": "Bloubergstrand",
+      "coordinates": {
+        "lat": -33.8116,
+        "lng": 18.4364
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:32.087Z"
+    },
+    "strand": {
+      "beach": "strand",
+      "name": "Strand",
+      "coordinates": {
+        "lat": -34.1236,
+        "lng": 18.8258
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:33.307Z"
+    },
+    "clifton": {
+      "beach": "clifton",
+      "name": "Clifton",
+      "coordinates": {
+        "lat": -33.9394,
+        "lng": 18.3772
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:34.532Z"
+    },
+    "kalkbay": {
+      "beach": "kalkbay",
+      "name": "Kalk Bay",
+      "coordinates": {
+        "lat": -34.1281,
+        "lng": 18.4506
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:35.762Z"
+    },
+    "milnerton": {
+      "beach": "milnerton",
+      "name": "Milnerton",
+      "coordinates": {
+        "lat": -33.8615,
+        "lng": 18.4959
+      },
+      "seaLevel": [],
+      "hourlyDataPoints": 0,
+      "lastUpdated": "2025-11-03T07:04:36.974Z"
+    }
+  },
+  "meta": {
+    "totalBeaches": 6,
+    "daysOfPredictions": 7,
+    "dataPoints": "hourly",
+    "apiProvider": "Stormglass.io",
+    "fetchStatus": "complete",
+    "failedBeaches": []
+  }
+}

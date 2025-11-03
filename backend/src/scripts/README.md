@@ -30,9 +30,9 @@ Example:
 node src/scripts/deleteUser.js 67234abc123def456789
 ```
 
-## Fetch Tide Data
+## Fetch Tide Data (Extremes)
 
-Fetch tide predictions from Stormglass API for all beaches:
+Fetch tide extremes (high/low) from Stormglass API for all beaches:
 
 ```bash
 cd backend
@@ -43,16 +43,43 @@ node src/scripts/fetchTideData.js
 
 - Requires `STORMGLASS_API_KEY` in `backend/.env` file
 - Free tier: 10 requests/day (6 beaches = 6 requests per run)
-- Fetches 7 days of tide predictions
+- Fetches 7 days of tide predictions (high/low times)
 - Data saved to `backend/data/tideData.json`
-- Recommended: Run 2-3 times per day (e.g., 6am, 2pm, 10pm)
+- Recommended: Run on **ODD DAYS** (alternating with sea level)
 
 **Automation with Cron:**
 
 ```bash
-# Run at 6am, 2pm, and 10pm daily
-0 6,14,22 * * * cd /path/to/tidyapp/backend && node src/scripts/fetchTideData.js
+# Run at 6am on odd days (Mon, Wed, Fri, Sun)
+0 6 * * 1,3,5,0 cd /path/to/tidyapp/backend && node src/scripts/fetchTideData.js
 ```
+
+## Fetch Sea Level Data (Hourly)
+
+Fetch hourly sea level data from Stormglass API for all beaches:
+
+```bash
+cd backend
+node src/scripts/fetchSeaLevelData.js
+```
+
+**Important:**
+
+- Requires `STORMGLASS_API_KEY` in `backend/.env` file
+- Free tier: 10 requests/day (6 beaches = 6 requests per run)
+- Fetches 7 days of hourly predictions (24 data points per day)
+- Data saved to `backend/data/seaLevelData.json`
+- Recommended: Run on **EVEN DAYS** (alternating with tide extremes)
+
+**Automation with Cron:**
+
+```bash
+# Run at 6am on even days (Tue, Thu, Sat)
+0 6 * * 2,4,6 cd /path/to/tidyapp/backend && node src/scripts/fetchSeaLevelData.js
+```
+
+**Alternating Strategy:**
+By running tide extremes on odd days and sea level on even days, you stay within the 10 requests/day limit while keeping both datasets fresh!
 
 ## Wipe All Forum Posts (MongoDB Console)
 
