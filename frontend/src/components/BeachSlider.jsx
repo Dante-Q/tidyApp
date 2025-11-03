@@ -48,24 +48,24 @@ function BeachCard({ beach }) {
     : "...";
 
   return (
-    <Link to={`/beach/${beach.id}`} className="beach-card-link">
-      <div className="beach-card">
+    <Link to={`/beach/${beach.id}`} className="conditions-card-link">
+      <div className="conditions-card">
         <div
-          className="beach-card-image"
+          className="conditions-card-image"
           style={{ backgroundImage: `url(${beach.imageUrl})` }}
         >
-          <div className="beach-card-condition">{getCondition()}</div>
+          <div className="conditions-card-badge">{getCondition()}</div>
         </div>
-        <div className="beach-card-content">
-          <h3 className="beach-card-title">{beach.name}</h3>
-          <div className="beach-card-stats">
-            <div className="beach-stat">
-              <span className="beach-stat-label">Wave Height</span>
-              <span className="beach-stat-value">{waveHeight}</span>
+        <div className="conditions-card-content">
+          <h3 className="conditions-card-title">{beach.name}</h3>
+          <div className="conditions-card-stats">
+            <div className="conditions-stat">
+              <span className="conditions-stat-label">Wave Height</span>
+              <span className="conditions-stat-value">{waveHeight}</span>
             </div>
-            <div className="beach-stat">
-              <span className="beach-stat-label">Wind Speed</span>
-              <span className="beach-stat-value">{windSpeed}</span>
+            <div className="conditions-stat">
+              <span className="conditions-stat-label">Wind Speed</span>
+              <span className="conditions-stat-value">{windSpeed}</span>
             </div>
           </div>
         </div>
