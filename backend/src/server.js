@@ -9,6 +9,7 @@ import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
 import tideRoutes from "./routes/tides.js";
 import seaLevelRoutes from "./routes/seaLevel.js";
+import friendRoutes from "./routes/friends.js";
 import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -69,6 +70,9 @@ app.use("/api/auth", authRoutes);
 // Forum routes
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+
+// Friends routes
+app.use("/api/friends", friendRoutes);
 
 // Tide data routes
 app.use("/api/tides", tideRoutes);

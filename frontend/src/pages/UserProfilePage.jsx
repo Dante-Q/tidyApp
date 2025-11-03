@@ -1,12 +1,21 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext.js";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
+import {
+  getFriendshipStatus,
+  sendFriendRequest,
+  removeFriend,
+} from "../services/friendService.js";
 import UserPostsList from "../components/UserPostsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
   const { userId } = useParams();
+  const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
   // Fetch posts for this user using React Query
   const {
@@ -21,6 +30,65 @@ export default function UserProfilePage() {
 
   const posts = postsData?.posts || [];
   const error = queryError?.message || "";
+
+  // Fetch friendship status (only if user is logged in and not viewing own profile)
+  const { data: friendshipData } = useQuery({
+    queryKey: ["friendshipStatus", userId],
+    queryFn: () => getFriendshipStatus(userId),
+    enabled: !!user && !!userId && user._id !== userId,
+  });
+
+  const friendshipStatus = friendshipData?.status || "none";
+
+  // Send friend request mutation
+  const sendRequestMutation = useMutation({
+    mutationFn: sendFriendRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["friendshipStatus", userId]);
+    },
+  });
+
+  // Remove friend mutation
+  const removeFriendMutation = useMutation({
+    mutationFn: removeFriend,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["friendshipStatus", userId]);
+    },
+  });
+
+  const handleFriendAction = () => {
+    if (friendshipStatus === "friends") {
+      if (window.confirm("Are you sure you want to remove this friend?")) {
+        removeFriendMutation.mutate(userId);
+      }
+    } else if (friendshipStatus === "none") {
+      sendRequestMutation.mutate(userId);
+    }
+  };
+
+  const getFriendButtonText = () => {
+    switch (friendshipStatus) {
+      case "friends":
+        return "Remove Friend";
+      case "pending_sent":
+        return "Request Pending";
+      case "pending_received":
+        return "Accept Request";
+      default:
+        return "Add Friend";
+    }
+  };
+
+  const getFriendButtonClass = () => {
+    switch (friendshipStatus) {
+      case "friends":
+        return "btn-remove-friend";
+      case "pending_sent":
+        return "btn-pending";
+      default:
+        return "btn-add-friend";
+    }
+  };
 
   // Extract user info from first post's author
   const userInfo = posts.length > 0 ? posts[0].author : null;
@@ -70,6 +138,23 @@ export default function UserProfilePage() {
           </div>
           <div className="profile-info">
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
+
+            {user && user._id !== userId && (
+              <button
+                className={`friend-button ${getFriendButtonClass()}`}
+                onClick={handleFriendAction}
+                disabled={
+                  friendshipStatus === "pending_sent" ||
+                  friendshipStatus === "pending_received" ||
+                  sendRequestMutation.isPending ||
+                  removeFriendMutation.isPending
+                }
+              >
+                {sendRequestMutation.isPending || removeFriendMutation.isPending
+                  ? "..."
+                  : getFriendButtonText()}
+              </button>
+            )}
 
             <div className="profile-stats">
               <div className="stat-item">

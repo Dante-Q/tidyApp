@@ -97,6 +97,51 @@
   background-clip: text;
 }
 
+/* Friend Button */
+.friend-button {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add-friend {
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  color: #ffffff;
+}
+
+.btn-add-friend:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(109, 213, 237, 0.4);
+}
+
+.btn-remove-friend {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-remove-friend:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.btn-pending {
+  background: rgba(109, 213, 237, 0.1);
+  color: rgba(109, 213, 237, 0.7);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  cursor: not-allowed;
+}
+
+.friend-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .profile-stats {
   display: flex;
   gap: 2rem;
