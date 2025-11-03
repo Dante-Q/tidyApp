@@ -13,11 +13,6 @@ export default function FriendsList() {
 
   const friends = data?.friends || [];
 
-  console.log("FriendsList - Data:", data);
-  console.log("FriendsList - Friends:", friends);
-  console.log("FriendsList - Loading:", isLoading);
-  console.log("FriendsList - Error:", error);
-
   if (isLoading) {
     return (
       <div className="friends-list-section">
@@ -65,7 +60,7 @@ export default function FriendsList() {
           {friends.map((friend) => (
             <Link
               key={friend._id}
-              to={`/user/${friend._id}`}
+              to={`/profile/${friend._id}`}
               className="friend-card"
             >
               <div className="friend-avatar">{getUserInitial(friend.name)}</div>

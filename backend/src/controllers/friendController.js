@@ -168,8 +168,6 @@ export const getFriends = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    console.log("Friends data:", user.friends); // Debug log
-
     res.json({ friends: user.friends });
   } catch (error) {
     console.error("Get friends error:", error);
