@@ -17,10 +17,12 @@ export default function AuthOverlayDrawer({
   const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode);
 
-  // Sync local mode when initialMode changes
+  // Sync local mode when initialMode changes or when drawer opens
   useEffect(() => {
-    setMode(initialMode);
-  }, [initialMode]);
+    if (opened) {
+      setMode(initialMode);
+    }
+  }, [initialMode, opened]);
 
   useEffect(() => {
     const root =
