@@ -6,6 +6,7 @@ import "@mantine/core/styles.css"; // Add Mantine CSS
 import { UserContext } from "../context/UserContext.js";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 
 export default function AuthOverlayDrawer({
   opened,
@@ -80,13 +81,20 @@ export default function AuthOverlayDrawer({
             // Keep user on current page after login
           }}
         />
-      ) : (
+      ) : mode === "register" ? (
         <RegisterPage
           onRegister={(userData) => {
             login(userData);
             onClose();
             // Navigate to dashboard only on successful registration
             navigate("/dashboard");
+          }}
+        />
+      ) : (
+        <ForgotPasswordPage
+          onSuccess={() => {
+            onClose();
+            // Navigate to OTP page
           }}
         />
       )}
@@ -96,26 +104,70 @@ export default function AuthOverlayDrawer({
           borderTop: "1px solid rgba(255, 255, 255, 0.1)",
           marginTop: "20px",
           paddingTop: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
         }}
       >
-        <Button
-          variant="subtle"
-          fullWidth
-          onClick={() => setMode(mode === "login" ? "register" : "login")}
-          styles={{
-            root: {
-              height: "42px",
-              color: "#6dd5ed",
-              "&:hover": {
-                background: "rgba(109, 213, 237, 0.1)",
+        {mode !== "forgot-password" && (
+          <Button
+            variant="subtle"
+            fullWidth
+            onClick={() => setMode(mode === "login" ? "register" : "login")}
+            styles={{
+              root: {
+                height: "42px",
+                color: "#6dd5ed",
+                "&:hover": {
+                  background: "rgba(109, 213, 237, 0.1)",
+                },
               },
-            },
-          }}
-        >
-          {mode === "login"
-            ? "Need an account? Create one"
-            : "Already have an account? Login"}
-        </Button>
+            }}
+          >
+            {mode === "login"
+              ? "Need an account? Create one"
+              : "Already have an account? Login"}
+          </Button>
+        )}
+
+        {mode === "login" && (
+          <Button
+            variant="subtle"
+            fullWidth
+            onClick={() => setMode("forgot-password")}
+            styles={{
+              root: {
+                height: "42px",
+                color: "rgba(255, 255, 255, 0.6)",
+                "&:hover": {
+                  background: "rgba(255, 255, 255, 0.05)",
+                  color: "rgba(255, 255, 255, 0.8)",
+                },
+              },
+            }}
+          >
+            Forgot your password?
+          </Button>
+        )}
+
+        {mode === "forgot-password" && (
+          <Button
+            variant="subtle"
+            fullWidth
+            onClick={() => setMode("login")}
+            styles={{
+              root: {
+                height: "42px",
+                color: "#6dd5ed",
+                "&:hover": {
+                  background: "rgba(109, 213, 237, 0.1)",
+                },
+              },
+            }}
+          >
+            Back to login
+          </Button>
+        )}
       </div>
     </Drawer>
   );

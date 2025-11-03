@@ -25,6 +25,8 @@ import TidesPage from "./pages/TidesPage.jsx";
 import WindPage from "./pages/WindPage.jsx";
 import MapPage from "./pages/MapPage.jsx";
 import CamsPage from "./pages/CamsPage.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -50,6 +52,11 @@ export default function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route
+                    path="/forgot-password"
+                    element={<ForgotPasswordPage />}
+                  />
+                  <Route path="/verify-otp" element={<VerifyOTPPage />} />
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
                   <Route path="/about" element={<AboutPage />} />
