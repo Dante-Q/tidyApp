@@ -77,7 +77,7 @@ export default function AuthOverlayDrawer({
           onLogin={(userData) => {
             login(userData);
             onClose();
-            navigate("/dashboard");
+            // Keep user on current page after login
           }}
         />
       ) : (
@@ -85,6 +85,7 @@ export default function AuthOverlayDrawer({
           onRegister={(userData) => {
             login(userData);
             onClose();
+            // Navigate to dashboard only on successful registration
             navigate("/dashboard");
           }}
         />

@@ -109,6 +109,7 @@
 .navbar-btn-forum.navbar-btn-forum,
 .navbar-btn-beaches.navbar-btn-beaches,
 .navbar-btn-info.navbar-btn-info,
+.navbar-btn-tools.navbar-btn-tools,
 .navbar-btn-about.navbar-btn-about {
   color: rgba(255, 255, 255, 0.8);
   background: transparent;
@@ -117,6 +118,7 @@
 .navbar-btn-forum.navbar-btn-forum:hover,
 .navbar-btn-beaches.navbar-btn-beaches:hover,
 .navbar-btn-info.navbar-btn-info:hover,
+.navbar-btn-tools.navbar-btn-tools:hover,
 .navbar-btn-about.navbar-btn-about:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
