@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import WindCompass from "../components/WindCompass";
+import TideChart from "../components/TideChart";
 import useMarineData from "../hooks/useMarineData";
 import useWeatherData from "../hooks/useWeatherData";
 import { beaches } from "../config/beachApiConfig.js";
@@ -79,6 +80,14 @@ export default function BeachPage() {
           weatherData={weatherData}
           loading={weatherLoading}
           error={weatherError}
+          selectedBeach={selectedBeach}
+          onBeachChange={setSelectedBeach}
+        />
+      </section>
+
+      {/* Tide Predictions */}
+      <section className="beach-forecast">
+        <TideChart
           selectedBeach={selectedBeach}
           onBeachChange={setSelectedBeach}
         />

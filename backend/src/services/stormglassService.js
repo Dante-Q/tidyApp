@@ -40,6 +40,21 @@ async function fetchTideData(lat, lng, start, end) {
 
     if (!response.ok) {
       const errorText = await response.text();
+
+      // Check for quota exceeded (429 Too Many Requests)
+      if (response.status === 429) {
+        throw new Error(
+          `API quota exceeded (${response.status}). Daily limit: 10 requests. Try again tomorrow.`
+        );
+      }
+
+      // Check for authentication errors
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(
+          `Authentication failed (${response.status}). Check STORMGLASS_API_KEY in .env`
+        );
+      }
+
       throw new Error(
         `Stormglass API error (${response.status}): ${errorText}`
       );
@@ -85,6 +100,21 @@ async function fetchSeaLevelData(lat, lng, start, end) {
 
     if (!response.ok) {
       const errorText = await response.text();
+
+      // Check for quota exceeded (429 Too Many Requests)
+      if (response.status === 429) {
+        throw new Error(
+          `API quota exceeded (${response.status}). Daily limit: 10 requests. Try again tomorrow.`
+        );
+      }
+
+      // Check for authentication errors
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(
+          `Authentication failed (${response.status}). Check STORMGLASS_API_KEY in .env`
+        );
+      }
+
       throw new Error(
         `Stormglass API error (${response.status}): ${errorText}`
       );
