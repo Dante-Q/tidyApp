@@ -15,7 +15,7 @@ import { useForm } from "@mantine/form";
 import { UserContext } from "../context/UserContext.js";
 import { API_ENDPOINTS } from "../config/api.js";
 
-export default function LoginPage({ onLogin }) {
+export default function LoginPage({ onLogin, onForgotPassword }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -128,14 +128,36 @@ export default function LoginPage({ onLogin }) {
           />
 
           <Group position="apart" mt="lg">
-            <Text
-              component={Link}
-              to="/forgot-password"
-              size="sm"
-              style={{ color: "#6dd5ed" }}
-            >
-              Forgot password?
-            </Text>
+            {onForgotPassword ? (
+              <Text
+                component="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onForgotPassword();
+                }}
+                size="sm"
+                style={{
+                  color: "#6dd5ed",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  textDecoration: "none",
+                  fontWeight: 500,
+                }}
+              >
+                Forgot password?
+              </Text>
+            ) : (
+              <Text
+                component={Link}
+                to="/forgot-password"
+                size="sm"
+                style={{ color: "#6dd5ed" }}
+              >
+                Forgot password?
+              </Text>
+            )}
           </Group>
 
           <Button

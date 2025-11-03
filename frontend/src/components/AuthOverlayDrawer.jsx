@@ -82,6 +82,7 @@ export default function AuthOverlayDrawer({
             onClose();
             // Keep user on current page after login
           }}
+          onForgotPassword={() => setMode("forgot-password")}
         />
       ) : mode === "register" ? (
         <RegisterPage
@@ -129,26 +130,6 @@ export default function AuthOverlayDrawer({
             {mode === "login"
               ? "Need an account? Create one"
               : "Already have an account? Login"}
-          </Button>
-        )}
-
-        {mode === "login" && (
-          <Button
-            variant="subtle"
-            fullWidth
-            onClick={() => setMode("forgot-password")}
-            styles={{
-              root: {
-                height: "42px",
-                color: "rgba(255, 255, 255, 0.6)",
-                "&:hover": {
-                  background: "rgba(255, 255, 255, 0.05)",
-                  color: "rgba(255, 255, 255, 0.8)",
-                },
-              },
-            }}
-          >
-            Forgot your password?
           </Button>
         )}
 
