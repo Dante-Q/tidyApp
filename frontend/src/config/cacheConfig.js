@@ -10,11 +10,11 @@ export const CACHE_CONFIG = {
     ttl: 15 * 60 * 1000, // 15 minutes - marine conditions change gradually
   },
 
-  // Future: Weather data
-  // weatherData: {
-  //   maxSize: 10,
-  //   ttl: 5 * 60 * 1000, // 5 minutes - weather changes faster
-  // },
+  // Weather data from Open-Meteo API
+  weatherData: {
+    maxSize: 10,
+    ttl: 5 * 60 * 1000, // 5 minutes - weather changes faster
+  },
 
   // Future: Tide data
   // tideData: {

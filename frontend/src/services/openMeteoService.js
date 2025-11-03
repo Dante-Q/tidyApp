@@ -1,13 +1,14 @@
 /**
- * Open-Meteo Marine API Service
- * Handles fetching marine/surf data from Open-Meteo API
+ * Open-Meteo API Service
+ * Handles fetching marine and weather data from Open-Meteo API
  */
 
 import { getBeach } from "../config/beachApiConfig.js";
 import { EXTERNAL_APIS } from "../config/api.js";
 
-// Get Marine API URL from config
+// Get API URLs from config
 const MARINE_API_URL = EXTERNAL_APIS.openMeteo.marine;
+const WEATHER_API_URL = EXTERNAL_APIS.openMeteo.weather;
 
 /**
  * Build API URL for a specific beach
@@ -67,6 +68,73 @@ export async function fetchMarineData(beachName, { signal } = {}) {
   // Validate API didn't return an error object
   if (data.error) {
     throw new Error(data.reason || "API returned an error");
+  }
+
+  return data;
+}
+
+/**
+ * Build API URL for weather data at a specific beach
+ * @param {string} beachName - Beach identifier
+ * @returns {string|null} API URL or null if beach not found
+ */
+function buildWeatherApiUrl(beachName) {
+  const beach = getBeach(beachName);
+  if (!beach) return null;
+
+  const { lat, lon } = beach.coordinates;
+
+  const params = new URLSearchParams({
+    latitude: lat,
+    longitude: lon,
+    current: [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "precipitation",
+      "wind_speed_10m",
+      "wind_direction_10m",
+      "wind_gusts_10m",
+    ].join(","),
+    hourly: [
+      "temperature_2m",
+      "wind_speed_10m",
+      "wind_direction_10m",
+      "wind_gusts_10m",
+    ].join(","),
+    timezone: "Africa/Johannesburg",
+    forecast_days: 1,
+  });
+
+  return `${WEATHER_API_URL}?${params.toString()}`;
+}
+
+/**
+ * Fetch weather data for a specific beach
+ * @param {string} beachName - Beach identifier
+ * @param {Object} options - Fetch options
+ * @param {AbortSignal} options.signal - Abort signal for request cancellation
+ * @returns {Promise<Object>} Weather data from API
+ * @throws {Error} If beach not found or API request fails
+ */
+export async function fetchWeatherData(beachName, { signal } = {}) {
+  const url = buildWeatherApiUrl(beachName);
+
+  if (!url) {
+    throw new Error(`Unknown beach: ${beachName}`);
+  }
+
+  const response = await fetch(url, { signal });
+
+  if (!response.ok) {
+    throw new Error(`Open-Meteo Weather API error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Validate API didn't return an error object
+  if (data.error) {
+    throw new Error(data.reason || "Weather API returned an error");
   }
 
   return data;
