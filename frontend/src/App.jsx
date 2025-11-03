@@ -20,6 +20,11 @@ import CreatePostPage from "./pages/CreatePostPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import EditPostPage from "./pages/EditPostPage.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
+import SurfReportPage from "./pages/SurfReportPage.jsx";
+import TidesPage from "./pages/TidesPage.jsx";
+import WindPage from "./pages/WindPage.jsx";
+import MapPage from "./pages/MapPage.jsx";
+import CamsPage from "./pages/CamsPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -48,6 +53,14 @@ export default function App() {
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
                   <Route path="/about" element={<AboutPage />} />
+                  <Route
+                    path="/tools/surf-report"
+                    element={<SurfReportPage />}
+                  />
+                  <Route path="/tools/tides" element={<TidesPage />} />
+                  <Route path="/tools/wind" element={<WindPage />} />
+                  <Route path="/tools/map" element={<MapPage />} />
+                  <Route path="/tools/cams" element={<CamsPage />} />
                   <Route path="/forum" element={<ForumHomePage />} />
                   <Route
                     path="/forum/category/:categorySlug"
