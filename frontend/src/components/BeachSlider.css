@@ -47,18 +47,26 @@
   transition: transform 0.4s ease-in-out;
 }
 
-.beach-card {
+.beach-slider .beach-card {
   min-width: 100%;
   background: rgba(15, 23, 42, 0.8);
   border: none;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  /* Disable all transitions to prevent Mantine AppShell interference */
+  transition: none !important;
+  transform: none !important;
 }
 
-.beach-card-image {
+.beach-slider .beach-card:hover {
+  transform: none !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.beach-slider .beach-card-image {
   width: 100%;
-  height: 250px;
+  height: 320px;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -68,7 +76,7 @@
   border: none;
 }
 
-.beach-card-condition {
+.beach-slider .beach-card-condition {
   background: rgba(109, 213, 237, 0.9);
   color: #0f172a;
   padding: 0.5rem 1rem;
@@ -79,11 +87,11 @@
   letter-spacing: 0.05em;
 }
 
-.beach-card-content {
+.beach-slider .beach-card-content {
   padding: 1.5rem;
 }
 
-.beach-card-title {
+.beach-slider .beach-card-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -165,12 +173,11 @@
 .beach-slider-dot.active {
   background: #6dd5ed;
   width: 32px;
-  border-radius: 6px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .beach-card-image {
+  .beach-slider .beach-card-image {
     height: 200px;
   }
 
@@ -180,7 +187,7 @@
     font-size: 1.5rem;
   }
 
-  .beach-card-title {
+  .beach-slider .beach-card-title {
     font-size: 1.25rem;
   }
 }

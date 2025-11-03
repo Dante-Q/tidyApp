@@ -1,6 +1,12 @@
 import { useState } from "react";
 import "./BeachSlider.css";
 
+// Import beach images
+import muizenbergImg from "../assets/images/hongbin-muizenberg.jpg";
+import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.jpg";
+import cliftonImg from "../assets/images/jean-baptiste-clifton.jpg";
+import kalkbayImg from "../assets/images/david-watkis-kalkbay.jpg";
+
 export default function BeachSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -12,35 +18,31 @@ export default function BeachSlider() {
       condition: "Good",
       waveHeight: "1.2m",
       windSpeed: "15 km/h",
-      imageUrl:
-        "https://via.placeholder.com/400x300/0f172a/6dd5ed?text=Muizenberg",
+      imageUrl: muizenbergImg,
     },
     {
       id: 2,
-      name: "Long Beach",
+      name: "Bloubergstrand",
       condition: "Excellent",
       waveHeight: "1.8m",
       windSpeed: "10 km/h",
-      imageUrl:
-        "https://via.placeholder.com/400x300/0f172a/6dd5ed?text=Long+Beach",
+      imageUrl: bloubergImg,
     },
     {
       id: 3,
-      name: "Big Bay",
+      name: "Clifton",
       condition: "Fair",
       waveHeight: "0.9m",
       windSpeed: "20 km/h",
-      imageUrl:
-        "https://via.placeholder.com/400x300/0f172a/6dd5ed?text=Big+Bay",
+      imageUrl: cliftonImg,
     },
     {
       id: 4,
-      name: "Clifton",
-      condition: "Poor",
-      waveHeight: "0.5m",
-      windSpeed: "25 km/h",
-      imageUrl:
-        "https://via.placeholder.com/400x300/0f172a/6dd5ed?text=Clifton",
+      name: "Kalk Bay",
+      condition: "Good",
+      waveHeight: "1.0m",
+      windSpeed: "18 km/h",
+      imageUrl: kalkbayImg,
     },
   ];
 
