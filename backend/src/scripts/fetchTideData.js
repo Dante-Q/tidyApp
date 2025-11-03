@@ -22,13 +22,16 @@
  * - Or manually when needed
  */
 
-require("dotenv").config();
-const fs = require("fs");
-const path = require("path");
-const {
-  fetchTideData,
-  fetchSeaLevelData,
-} = require("../services/stormglassService");
+import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { fetchTideData as fetchTideDataFromAPI } from "../services/stormglassService.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config();
 
 // Beach locations (same as frontend config)
 const BEACHES = {
@@ -109,7 +112,7 @@ async function fetchBeachTideData(beachKey, beach) {
 
   try {
     // Fetch tide extremes (high/low tides)
-    const extremes = await fetchTideData(lat, lng, start, end);
+    const extremes = await fetchTideDataFromAPI(lat, lng, start, end);
 
     console.log(
       `✓ Fetched ${extremes.data?.length || 0} tide extremes for ${beach.name}`

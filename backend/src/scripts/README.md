@@ -45,13 +45,13 @@ node src/scripts/fetchTideData.js
 - Free tier: 10 requests/day (6 beaches = 6 requests per run)
 - Fetches 7 days of tide predictions (high/low times)
 - Data saved to `backend/data/tideData.json`
-- Recommended: Run on **ODD DAYS** (alternating with sea level)
+- Recommended: Run on **ODD DATES** (1st, 3rd, 5th, etc.)
 
-**Automation with Cron:**
+**Automation with Cron (Odd Dates):**
 
 ```bash
-# Run at 6am on odd days (Mon, Wed, Fri, Sun)
-0 6 * * 1,3,5,0 cd /path/to/tidyapp/backend && node src/scripts/fetchTideData.js
+# Run at 6am on odd-numbered days of the month
+0 6 1-31/2 * * cd /path/to/tidyapp/backend && node src/scripts/fetchTideData.js
 ```
 
 ## Fetch Sea Level Data (Hourly)
@@ -69,17 +69,17 @@ node src/scripts/fetchSeaLevelData.js
 - Free tier: 10 requests/day (6 beaches = 6 requests per run)
 - Fetches 7 days of hourly predictions (24 data points per day)
 - Data saved to `backend/data/seaLevelData.json`
-- Recommended: Run on **EVEN DAYS** (alternating with tide extremes)
+- Recommended: Run on **EVEN DATES** (2nd, 4th, 6th, etc.)
 
-**Automation with Cron:**
+**Automation with Cron (Even Dates):**
 
 ```bash
-# Run at 6am on even days (Tue, Thu, Sat)
-0 6 * * 2,4,6 cd /path/to/tidyapp/backend && node src/scripts/fetchSeaLevelData.js
+# Run at 6am on even-numbered days of the month
+0 6 2-30/2 * * cd /path/to/tidyapp/backend && node src/scripts/fetchSeaLevelData.js
 ```
 
 **Alternating Strategy:**
-By running tide extremes on odd days and sea level on even days, you stay within the 10 requests/day limit while keeping both datasets fresh!
+By running tide extremes on odd dates (1,3,5...) and sea level on even dates (2,4,6...), you truly alternate daily and stay within the 10 requests/day limit while keeping both datasets fresh!
 
 ## Wipe All Forum Posts (MongoDB Console)
 

@@ -42,8 +42,8 @@ async function fetchTideData(lat, lng, start, end) {
     if (!response.ok) {
       const errorText = await response.text();
 
-      // Check for quota exceeded (429 Too Many Requests)
-      if (response.status === 429) {
+      // Check for quota exceeded (402 Payment Required or 429 Too Many Requests)
+      if (response.status === 402 || response.status === 429) {
         throw new Error(
           `API quota exceeded (${response.status}). Daily limit: 10 requests. Try again tomorrow.`
         );
@@ -104,8 +104,8 @@ async function fetchSeaLevelData(lat, lng, start, end) {
     if (!response.ok) {
       const errorText = await response.text();
 
-      // Check for quota exceeded (429 Too Many Requests)
-      if (response.status === 429) {
+      // Check for quota exceeded (402 Payment Required or 429 Too Many Requests)
+      if (response.status === 402 || response.status === 429) {
         throw new Error(
           `API quota exceeded (${response.status}). Daily limit: 10 requests. Try again tomorrow.`
         );
