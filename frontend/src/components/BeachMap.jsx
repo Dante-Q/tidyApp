@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Map, { Marker, Popup } from "react-map-gl/maplibre";
 import { useNavigate } from "react-router-dom";
 import { beaches } from "../config/beachApiConfig";
@@ -27,6 +27,33 @@ export default function BeachMap({ onBeachSelect }) {
     latitude: -33.95,
     zoom: 10,
   };
+
+  // Fix tile rendering issues
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (mapRef.current) {
+        const map = mapRef.current.getMap();
+
+        const handleLoad = () => {
+          // Wait a bit for tiles to start loading, then force re-render
+          setTimeout(() => {
+            map.resize();
+            // Invalidate tiles by triggering a small zoom change
+            const currentZoom = map.getZoom();
+            map.easeTo({ zoom: currentZoom - 1.7, duration: 0.2 });
+          }, 200);
+        };
+
+        if (map.loaded()) {
+          handleLoad();
+        } else {
+          map.once("load", handleLoad);
+        }
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleMarkerClick = (beachKey, beach) => {
     setPopupInfo({ beachKey, beach });
