@@ -29,6 +29,13 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.footer-logo:hover {
+  transform: scale(1.05);
 }
 
 .footer-logo-emoji {

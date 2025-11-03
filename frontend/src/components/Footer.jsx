@@ -1,8 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Footer.css";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname !== "/") navigate("/");
+    document.documentElement.scrollTo(0, 0);
+    document.body.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+  };
 
   const footerSections = [
     {
@@ -50,10 +60,10 @@ export default function Footer() {
       <div className="footer-container">
         {/* Logo and Description */}
         <div className="footer-brand">
-          <div className="footer-logo">
+          <a href="/" className="footer-logo" onClick={handleLogoClick}>
             <span className="footer-logo-emoji">🌊</span>
             <span className="footer-logo-text">TidyApp</span>
-          </div>
+          </a>
           <p className="footer-description">
             Your ultimate guide to Cape Town's beaches. Real-time surf reports,
             tide predictions, and community insights.
