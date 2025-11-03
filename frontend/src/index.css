@@ -20,6 +20,12 @@ body {
   overflow-x: hidden;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Custom scrollbar styling for dark theme */
 ::-webkit-scrollbar {
   width: 12px;
@@ -47,6 +53,15 @@ body {
 /* AppShell styling */
 .mantine-AppShell-root {
   background: transparent;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mantine-AppShell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .mantine-AppShell-main {

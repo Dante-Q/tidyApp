@@ -4,6 +4,7 @@ import { UserProvider } from "./context/UserContext.jsx";
 import { UIProvider } from "./context/UIProvider.jsx";
 
 import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 import GlobalDrawer from "./components/GlobalDrawer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage";
@@ -102,6 +103,8 @@ export default function App() {
                     }
                   />
                 </Routes>
+
+                <Footer />
               </AppShell.Main>
             </AppShell>
 
