@@ -21,6 +21,7 @@ import CreatePostPage from "./pages/CreatePostPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import EditPostPage from "./pages/EditPostPage.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
+import UserFriendsPage from "./pages/UserFriendsPage.jsx";
 import SurfReportPage from "./pages/SurfReportPage.jsx";
 import TidesPage from "./pages/TidesPage.jsx";
 import WindPage from "./pages/WindPage.jsx";
@@ -93,6 +94,10 @@ export default function App() {
                   <Route
                     path="/profile/:userId"
                     element={<UserProfilePage />}
+                  />
+                  <Route
+                    path="/profile/:userId/friends"
+                    element={<UserFriendsPage />}
                   />
                   <Route
                     path="/dashboard"

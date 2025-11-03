@@ -8,6 +8,7 @@ import {
   getFriendshipStatus,
   sendFriendRequest,
   removeFriend,
+  getFriends,
 } from "../services/friendService.js";
 import UserPostsList from "../components/UserPostsList.jsx";
 import "./UserProfilePage.css";
@@ -39,6 +40,15 @@ export default function UserProfilePage() {
   });
 
   const friendshipStatus = friendshipData?.status || "none";
+
+  // Fetch friends list to get count
+  const { data: friendsData } = useQuery({
+    queryKey: ["userFriends", userId],
+    queryFn: () => getFriends(userId),
+    enabled: !!userId,
+  });
+
+  const friendsCount = friendsData?.friends?.length || 0;
 
   // Send friend request mutation
   const sendRequestMutation = useMutation({
@@ -161,6 +171,13 @@ export default function UserProfilePage() {
                 <span className="stat-value">{posts.length}</span>
                 <span className="stat-label">Posts</span>
               </div>
+              <Link
+                to={`/profile/${userId}/friends`}
+                className="stat-item stat-item-link"
+              >
+                <span className="stat-value">{friendsCount}</span>
+                <span className="stat-label">Friends</span>
+              </Link>
               <div className="stat-item">
                 <span className="stat-value">{getTotalLikes()}</span>
                 <span className="stat-label">Likes</span>
