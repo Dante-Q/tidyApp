@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./BeachSlider.css";
 
 // Import beach images
@@ -6,6 +7,8 @@ import muizenbergImg from "../assets/images/hongbin-muizenberg.jpg";
 import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.jpg";
 import cliftonImg from "../assets/images/jean-baptiste-clifton.jpg";
 import kalkbayImg from "../assets/images/david-watkis-kalkbay.jpg";
+import milnertonImg from "../assets/images/sam-wermut-misc.jpg";
+import strandImg from "../assets/images/untitled-photo-misc.jpg";
 
 export default function BeachSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,23 +16,15 @@ export default function BeachSlider() {
   // Placeholder beach data - replace with real data later
   const beaches = [
     {
-      id: 1,
-      name: "Muizenberg",
+      id: "kalkbay",
+      name: "Kalk Bay",
       condition: "Good",
-      waveHeight: "1.2m",
-      windSpeed: "15 km/h",
-      imageUrl: muizenbergImg,
+      waveHeight: "1.0m",
+      windSpeed: "18 km/h",
+      imageUrl: kalkbayImg,
     },
     {
-      id: 2,
-      name: "Bloubergstrand",
-      condition: "Excellent",
-      waveHeight: "1.8m",
-      windSpeed: "10 km/h",
-      imageUrl: bloubergImg,
-    },
-    {
-      id: 3,
+      id: "clifton",
       name: "Clifton",
       condition: "Fair",
       waveHeight: "0.9m",
@@ -37,12 +32,36 @@ export default function BeachSlider() {
       imageUrl: cliftonImg,
     },
     {
-      id: 4,
-      name: "Kalk Bay",
+      id: "bloubergstrand",
+      name: "Bloubergstrand",
+      condition: "Excellent",
+      waveHeight: "1.8m",
+      windSpeed: "10 km/h",
+      imageUrl: bloubergImg,
+    },
+    {
+      id: "milnerton",
+      name: "Milnerton",
+      condition: "Excellent",
+      waveHeight: "1.5m",
+      windSpeed: "14 km/h",
+      imageUrl: milnertonImg,
+    },
+    {
+      id: "muizenberg",
+      name: "Muizenberg",
       condition: "Good",
-      waveHeight: "1.0m",
-      windSpeed: "18 km/h",
-      imageUrl: kalkbayImg,
+      waveHeight: "1.2m",
+      windSpeed: "15 km/h",
+      imageUrl: muizenbergImg,
+    },
+    {
+      id: "strand",
+      name: "Strand",
+      condition: "Good",
+      waveHeight: "1.1m",
+      windSpeed: "12 km/h",
+      imageUrl: strandImg,
     },
   ];
 
@@ -84,31 +103,39 @@ export default function BeachSlider() {
             }}
           >
             {beaches.map((beach) => (
-              <div key={beach.id} className="beach-card">
-                <div
-                  className="beach-card-image"
-                  style={{ backgroundImage: `url(${beach.imageUrl})` }}
-                >
-                  <div className="beach-card-condition">{beach.condition}</div>
-                </div>
-                <div className="beach-card-content">
-                  <h3 className="beach-card-title">{beach.name}</h3>
-                  <div className="beach-card-stats">
-                    <div className="beach-stat">
-                      <span className="beach-stat-label">Wave Height</span>
-                      <span className="beach-stat-value">
-                        {beach.waveHeight}
-                      </span>
+              <Link
+                key={beach.id}
+                to={`/beach/${beach.id}`}
+                className="beach-card-link"
+              >
+                <div className="beach-card">
+                  <div
+                    className="beach-card-image"
+                    style={{ backgroundImage: `url(${beach.imageUrl})` }}
+                  >
+                    <div className="beach-card-condition">
+                      {beach.condition}
                     </div>
-                    <div className="beach-stat">
-                      <span className="beach-stat-label">Wind Speed</span>
-                      <span className="beach-stat-value">
-                        {beach.windSpeed}
-                      </span>
+                  </div>
+                  <div className="beach-card-content">
+                    <h3 className="beach-card-title">{beach.name}</h3>
+                    <div className="beach-card-stats">
+                      <div className="beach-stat">
+                        <span className="beach-stat-label">Wave Height</span>
+                        <span className="beach-stat-value">
+                          {beach.waveHeight}
+                        </span>
+                      </div>
+                      <div className="beach-stat">
+                        <span className="beach-stat-label">Wind Speed</span>
+                        <span className="beach-stat-value">
+                          {beach.windSpeed}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
