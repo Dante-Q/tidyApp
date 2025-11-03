@@ -100,8 +100,14 @@ export default function UserProfilePage() {
     }
   };
 
-  // Extract user info from first post's author
-  const userInfo = posts.length > 0 ? posts[0].author : null;
+  // Extract user info from first post's author, or from friends API response
+  const userInfo =
+    posts.length > 0
+      ? posts[0].author
+      : friendsData?.user
+      ? friendsData.user
+      : null;
+
   const getTotalLikes = () => {
     return posts.reduce((total, post) => total + post.likes.length, 0);
   };

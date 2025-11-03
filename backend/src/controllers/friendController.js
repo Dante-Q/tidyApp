@@ -168,7 +168,10 @@ export const getFriends = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ friends: user.friends });
+    res.json({
+      friends: user.friends,
+      user: { name: user.name, _id: user._id },
+    });
   } catch (error) {
     console.error("Get friends error:", error);
     res.status(500).json({ error: "Failed to fetch friends" });
