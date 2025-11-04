@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
+import ColorPicker from "../components/ColorPicker";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api";
 import "./ProfileSettingsPage.css";
@@ -14,7 +15,7 @@ export default function ProfileSettingsPage() {
     user?.displayName?.replace("👑 ", "") || ""
   );
   const [avatarColor, setAvatarColor] = useState(
-    user?.avatarColor || "#6dd5ed"
+    user?.avatarColor || "#6DD5ED"
   );
   // For admins: default to true if showAdminBadge is true or undefined
   // For non-admins: this value doesn't matter (won't be sent to backend)
@@ -26,6 +27,13 @@ export default function ProfileSettingsPage() {
   const [error, setError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Check if any changes have been made
+  const hasChanges =
+    displayName !== (user?.displayName?.replace("👑 ", "") || "") ||
+    avatarColor.toUpperCase() !==
+      (user?.avatarColor?.toUpperCase() || "#6DD5ED") ||
+    (user?.isAdmin && showAdminBadge !== (user?.showAdminBadge !== false));
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -124,34 +132,11 @@ export default function ProfileSettingsPage() {
             {/* Avatar Color Picker */}
             <div className="form-group">
               <label htmlFor="avatarColor">Avatar Color</label>
-              <div className="color-picker-container">
-                <input
-                  type="color"
-                  id="avatarColor"
-                  value={avatarColor}
-                  onChange={(e) => setAvatarColor(e.target.value)}
-                  className="color-input"
-                />
-                <div
-                  className="color-preview"
-                  style={{ backgroundColor: avatarColor }}
-                >
-                  <span className="preview-initial">
-                    {user.displayName
-                      ?.replace("👑 ", "")
-                      .charAt(0)
-                      .toUpperCase()}
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  value={avatarColor}
-                  onChange={(e) => setAvatarColor(e.target.value)}
-                  placeholder="#6dd5ed"
-                  pattern="^#[0-9A-Fa-f]{6}$"
-                  className="color-text-input"
-                />
-              </div>
+              <ColorPicker
+                value={avatarColor}
+                onChange={setAvatarColor}
+                userName={user.displayName}
+              />
               <small className="form-hint">
                 Choose a color for your profile avatar
               </small>
@@ -177,7 +162,11 @@ export default function ProfileSettingsPage() {
             {message && <div className="success-message">{message}</div>}
             {error && <div className="error-message">{error}</div>}
 
-            <button type="submit" className="btn-save" disabled={loading}>
+            <button
+              type="submit"
+              className="btn-save"
+              disabled={loading || !hasChanges}
+            >
               {loading ? "Saving..." : "Save Changes"}
             </button>
           </form>
