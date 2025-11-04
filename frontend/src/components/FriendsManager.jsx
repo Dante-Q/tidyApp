@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext.js";
 import {
   getFriendRequests,
   getSentFriendRequests,
@@ -14,6 +15,7 @@ import { getUserInitial } from "../utils/forumHelpers";
 import "./FriendsManager.css";
 
 export default function FriendsManager() {
+  const { user } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState("friends"); // 'friends', 'received', 'sent'
   const queryClient = useQueryClient();
 
@@ -87,9 +89,14 @@ export default function FriendsManager() {
         <h2 className="section-title">
           <span className="hero-emoji">👥</span> Friends
         </h2>
-        <Link to="/settings" className="btn-settings">
-          <span className="settings-icon">⚙️</span> Settings
-        </Link>
+        <div className="header-buttons">
+          <Link to={`/profile/${user?.id}`} className="btn-profile">
+            <span className="profile-icon">👤</span> Profile
+          </Link>
+          <Link to="/settings" className="btn-settings">
+            <span className="settings-icon">⚙️</span> Settings
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -212,14 +219,18 @@ export default function FriendsManager() {
                       <div className="request-actions">
                         <button
                           className="btn-accept"
-                          onClick={() => acceptMutation.mutate(request._id)}
+                          onClick={() =>
+                            acceptMutation.mutate(request.from._id)
+                          }
                           disabled={acceptMutation.isPending}
                         >
                           {acceptMutation.isPending ? "..." : "Accept"}
                         </button>
                         <button
                           className="btn-reject"
-                          onClick={() => rejectMutation.mutate(request._id)}
+                          onClick={() =>
+                            rejectMutation.mutate(request.from._id)
+                          }
                           disabled={rejectMutation.isPending}
                         >
                           {rejectMutation.isPending ? "..." : "Reject"}

@@ -189,7 +189,16 @@
 }
 
 /* Buttons */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 .btn-save {
+  display: inline-block;
   padding: 0.75rem 2rem;
   background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
   border: none;
@@ -209,6 +218,26 @@
 .btn-save:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-back {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 8px;
+  color: #6dd5ed;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: rgba(109, 213, 237, 0.1);
+  border-color: #6dd5ed;
+  transform: translateY(-2px);
 }
 
 /* Danger Zone */

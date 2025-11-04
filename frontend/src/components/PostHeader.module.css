@@ -81,6 +81,14 @@
   margin-left: 2rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pinIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 4px rgba(109, 213, 237, 0.6));
 }
 
 .postBeachTags {

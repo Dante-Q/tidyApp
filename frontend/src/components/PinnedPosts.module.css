@@ -1,5 +1,5 @@
-/* Forum Recent Activity Styles */
-.forumRecent {
+/* Pinned Posts Styles */
+.pinnedPosts {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -58,7 +58,7 @@
   gap: 0.5rem;
 }
 
-.pinIcon {
+.titlePinIcon {
   font-size: 1rem;
   filter: drop-shadow(0 0 4px rgba(109, 213, 237, 0.6));
 }
@@ -90,6 +90,15 @@
   white-space: nowrap;
 }
 
+.postContentPreview {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 .postItemMeta {
   display: flex;
   justify-content: space-between;
@@ -107,56 +116,14 @@
   gap: 1rem;
 }
 
-/* Show More Button */
-.showMoreContainer {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(109, 213, 237, 0.2);
-}
-
-.showMoreBtn {
-  background: none;
-  border: none;
-  color: #6dd5ed;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  padding: 0;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  text-decoration: none;
-}
-
-.showMoreBtn:hover {
-  color: #2193b0;
-  text-decoration: underline;
-}
-
-.showMoreBtn:active {
-  color: #2193b0;
-}
-
-.postsRemaining {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.buttonSeparator {
-  color: rgba(255, 255, 255, 0.3);
-  margin: 0 0.5rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-  .postItemHeader {
-    flex-direction: column;
-    align-items: flex-start;
+  .sectionTitle {
+    font-size: 1.5rem;
   }
 
-  .postTags {
-    align-self: flex-start;
+  .postItemHeader {
+    flex-direction: column;
   }
 
   .postItemMeta {
@@ -164,20 +131,22 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
+
+  .postStats {
+    gap: 0.75rem;
+  }
 }
 
-/* Filter Results Message */
-.filterResultsMessage {
-  background: rgba(109, 213, 237, 0.1);
-  border: 1px solid rgba(109, 213, 237, 0.2);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  margin: 1.5rem 0;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.9375rem;
-}
+@media (max-width: 480px) {
+  .postItem {
+    padding: 1rem;
+  }
 
-.noResults {
-  color: #ef4444;
-  font-weight: 600;
+  .postItemTitle {
+    font-size: 1.125rem;
+  }
+
+  .postStats {
+    font-size: 0.8125rem;
+  }
 }

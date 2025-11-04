@@ -260,13 +260,22 @@ export default function ProfileSettingsPage() {
             {message && <div className="success-message">{message}</div>}
             {error && <div className="error-message">{error}</div>}
 
-            <button
-              type="submit"
-              className="btn-save"
-              disabled={loading || !hasChanges}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="btn-save"
+                disabled={loading || !hasChanges}
+              >
+                {loading ? "Saving..." : "Save Changes"}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="btn-back"
+              >
+                Back
+              </button>
+            </div>
           </form>
         </div>
 

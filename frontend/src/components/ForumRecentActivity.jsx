@@ -99,7 +99,14 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
                       className={styles.postItem}
                     >
                       <div className={styles.postItemHeader}>
-                        <h3 className={styles.postItemTitle}>{post.title}</h3>
+                        <h3 className={styles.postItemTitle}>
+                          {post.isPinned && (
+                            <span className={styles.pinIcon} title="Pinned">
+                              📌
+                            </span>
+                          )}
+                          {post.title}
+                        </h3>
                         <div className={styles.postTags}>
                           {/* Beach Tags */}
                           {post.tags &&

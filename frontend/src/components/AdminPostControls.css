@@ -61,6 +61,16 @@
   box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
 }
 
+.admin-btn-pin {
+  background: linear-gradient(135deg, #f6d365, #fda085);
+  color: #1a1a1a;
+}
+
+.admin-btn-pin:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(246, 211, 101, 0.4);
+}
+
 .admin-btn-move {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
