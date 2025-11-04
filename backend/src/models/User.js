@@ -114,12 +114,14 @@ userSchema.pre("save", function (next) {
     this.displayName = capitalizeWords(this.name);
   }
 
-  // Sanitize displayName if provided
+  // Sanitize and capitalize displayName if modified
   if (this.isModified("displayName") && this.displayName) {
     this.displayName = sanitizeHtml(this.displayName, {
       allowedTags: [],
       allowedAttributes: {},
     });
+    // Capitalize the displayName
+    this.displayName = capitalizeWords(this.displayName);
   }
 
   next();

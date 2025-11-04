@@ -87,6 +87,9 @@ export default function FriendsManager() {
         <h2 className="section-title">
           <span className="hero-emoji">👥</span> Friends
         </h2>
+        <Link to="/settings" className="btn-settings">
+          <span className="settings-icon">⚙️</span> Settings
+        </Link>
       </div>
 
       {/* Tabs */}

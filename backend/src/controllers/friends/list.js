@@ -57,7 +57,7 @@ export const getFriends = async (req, res) => {
     res.json({
       success: true,
       friends: user.friends,
-      user: { name: user.name, _id: user._id },
+      user: { name: user.name, displayName: user.displayName, _id: user._id },
     });
   } catch (error) {
     handleControllerError(res, "Failed to fetch friends", error);

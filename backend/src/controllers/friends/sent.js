@@ -13,7 +13,7 @@ export const getSentFriendRequests = async (req, res) => {
     const usersWithRequests = await User.find({
       "friendRequests.from": currentUserId,
     })
-      .select("name _id friendRequests")
+      .select("name displayName _id friendRequests")
       .lean();
 
     // Map to get the request details with recipient info
@@ -34,6 +34,7 @@ export const getSentFriendRequests = async (req, res) => {
           to: {
             _id: user._id,
             name: user.name,
+            displayName: user.displayName,
           },
           createdAt: request.createdAt,
         };
