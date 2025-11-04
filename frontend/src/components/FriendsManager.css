@@ -50,21 +50,21 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  background: rgba(102, 126, 234, 0.1);
-  color: #8b9bea;
+  background: rgba(109, 213, 237, 0.1);
+  color: #6dd5ed;
   text-decoration: none;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(109, 213, 237, 0.3);
 }
 
 .friends-manager .btn-settings:hover {
-  background: rgba(102, 126, 234, 0.15);
-  border-color: #8b9bea;
+  background: rgba(109, 213, 237, 0.15);
+  border-color: #6dd5ed;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(109, 213, 237, 0.3);
 }
 
 .friends-manager .settings-icon {
