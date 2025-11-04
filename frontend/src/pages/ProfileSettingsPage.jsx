@@ -6,7 +6,7 @@ import { API_ENDPOINTS } from "../config/api";
 import "./ProfileSettingsPage.css";
 
 export default function ProfileSettingsPage() {
-  const { user, logout } = useContext(UserContext);
+  const { user, logout, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [loading, setLoading] = useState(false);
@@ -23,15 +23,22 @@ export default function ProfileSettingsPage() {
 
     try {
       const response = await axios.patch(
-        `${API_ENDPOINTS.auth.base}/profile`,
+        API_ENDPOINTS.auth.profile,
         { displayName },
         { withCredentials: true }
       );
 
       setMessage(response.data.message);
-      // Update user context
+
+      // Update user context with new display name
+      setUser((prevUser) => ({
+        ...prevUser,
+        displayName: response.data.user.displayName,
+      }));
+
+      // Show success message for a moment before redirecting
       setTimeout(() => {
-        window.location.reload(); // Reload to update all components
+        navigate(`/profile/${user.id}`);
       }, 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
@@ -45,7 +52,7 @@ export default function ProfileSettingsPage() {
     setError("");
 
     try {
-      await axios.delete(`${API_ENDPOINTS.auth.base}/account`, {
+      await axios.delete(API_ENDPOINTS.auth.deleteAccount, {
         withCredentials: true,
       });
 

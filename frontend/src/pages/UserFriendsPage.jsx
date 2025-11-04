@@ -104,10 +104,12 @@ export default function UserFriendsPage() {
                 className="friend-card"
               >
                 <div className="friend-avatar">
-                  {getUserInitial(friend.name)}
+                  {getUserInitial(friend.displayName || friend.name)}
                 </div>
                 <div className="friend-info">
-                  <h3 className="friend-name">{friend.name}</h3>
+                  <h3 className="friend-name">
+                    {friend.displayName || friend.name}
+                  </h3>
                 </div>
               </Link>
             ))}

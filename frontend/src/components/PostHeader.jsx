@@ -88,10 +88,12 @@ export default function PostHeader() {
       <div className={styles.postMeta}>
         <Link to={`/profile/${post.author._id}`} className={styles.postAuthor}>
           <div className={styles.authorAvatar}>
-            {getUserInitial(post.author.name)}
+            {getUserInitial(post.author.displayName || post.author.name)}
           </div>
           <div className={styles.authorInfo}>
-            <span className={styles.authorName}>{post.author.name}</span>
+            <span className={styles.authorName}>
+              {post.author.displayName || post.author.name}
+            </span>
             <span className={styles.postDate}>
               {formatDate(post.createdAt)}
               {post.editedAt && (

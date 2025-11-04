@@ -155,10 +155,12 @@ export default function UserProfilePage() {
       <div className="profile-header">
         <div className="profile-container">
           <div className="profile-avatar-large">
-            {getUserInitial(userInfo?.name)}
+            {getUserInitial(userInfo?.displayName || userInfo?.name)}
           </div>
           <div className="profile-info">
-            <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
+            <h1 className="profile-name">
+              {userInfo?.displayName || userInfo?.name || "Unknown User"}
+            </h1>
 
             {/* Settings Button - Only shown on own profile */}
             {isOwnProfile && (
@@ -228,7 +230,10 @@ export default function UserProfilePage() {
       {/* User Posts */}
       <div className="profile-content">
         <div className="content-container">
-          <UserPostsList posts={posts} userName={userInfo?.name} />
+          <UserPostsList
+            posts={posts}
+            userName={userInfo?.displayName || userInfo?.name}
+          />
         </div>
       </div>
     </div>

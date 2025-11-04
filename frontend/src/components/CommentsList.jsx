@@ -147,13 +147,13 @@ function CommentItem({
       <div className="comment-header">
         <div className="comment-author">
           <div className="author-avatar-small">
-            {getUserInitial(comment.author.name)}
+            {getUserInitial(comment.author.displayName || comment.author.name)}
           </div>
           <Link
             to={`/profile/${comment.author._id}`}
             className="author-name-link"
           >
-            {comment.author.name}
+            {comment.author.displayName || comment.author.name}
           </Link>
           <span className="comment-date">
             {formatCommentDate(comment.createdAt)}
@@ -208,7 +208,7 @@ function CommentItem({
             setReplyTo({
               commentId: comment._id, // Where the form appears
               parentId: parentCommentId || comment._id, // Parent for the reply
-              username: comment.author.name,
+              username: comment.author.displayName || comment.author.name,
             })
           }
           className="btn-comment-action"

@@ -7,10 +7,13 @@ const API_BASE_URL = BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : BASE_URL;
 // Backend API endpoints
 export const API_ENDPOINTS = {
   auth: {
+    base: `${API_BASE_URL}/auth`,
     login: `${API_BASE_URL}/auth/login`,
     register: `${API_BASE_URL}/auth/register`,
     logout: `${API_BASE_URL}/auth/logout`,
     me: `${API_BASE_URL}/auth/me`,
+    profile: `${API_BASE_URL}/auth/profile`,
+    deleteAccount: `${API_BASE_URL}/auth/account`,
   },
 };
 

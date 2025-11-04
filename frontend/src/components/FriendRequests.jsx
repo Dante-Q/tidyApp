@@ -91,10 +91,12 @@ export default function FriendRequests() {
               className="request-user-info"
             >
               <div className="request-avatar">
-                {getUserInitial(request.from.name)}
+                {getUserInitial(request.from.displayName || request.from.name)}
               </div>
               <div className="request-details">
-                <h3 className="request-name">{request.from.name}</h3>
+                <h3 className="request-name">
+                  {request.from.displayName || request.from.name}
+                </h3>
                 <p className="request-time">
                   {new Date(request.createdAt).toLocaleDateString("en-US", {
                     month: "short",

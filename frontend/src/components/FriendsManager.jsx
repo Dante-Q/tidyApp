@@ -146,16 +146,21 @@ export default function FriendsManager() {
                         className="friend-info"
                       >
                         <div className="friend-avatar">
-                          {getUserInitial(friend.name)}
+                          {getUserInitial(friend.displayName || friend.name)}
                         </div>
                         <div className="friend-details">
-                          <h3 className="friend-name">{friend.name}</h3>
+                          <h3 className="friend-name">
+                            {friend.displayName || friend.name}
+                          </h3>
                         </div>
                       </Link>
                       <button
                         className="btn-remove"
                         onClick={() =>
-                          handleRemoveFriend(friend._id, friend.name)
+                          handleRemoveFriend(
+                            friend._id,
+                            friend.displayName || friend.name
+                          )
                         }
                         disabled={removeMutation.isPending}
                       >
@@ -182,10 +187,14 @@ export default function FriendsManager() {
                         className="request-info"
                       >
                         <div className="request-avatar received-avatar">
-                          {getUserInitial(request.from.name)}
+                          {getUserInitial(
+                            request.from.displayName || request.from.name
+                          )}
                         </div>
                         <div className="request-details">
-                          <h3 className="request-name">{request.from.name}</h3>
+                          <h3 className="request-name">
+                            {request.from.displayName || request.from.name}
+                          </h3>
                           <p className="request-time">
                             {new Date(request.createdAt).toLocaleDateString(
                               "en-US",
@@ -234,10 +243,14 @@ export default function FriendsManager() {
                         className="request-info"
                       >
                         <div className="request-avatar sent-avatar">
-                          {getUserInitial(request.to.name)}
+                          {getUserInitial(
+                            request.to.displayName || request.to.name
+                          )}
                         </div>
                         <div className="request-details">
-                          <h3 className="request-name">{request.to.name}</h3>
+                          <h3 className="request-name">
+                            {request.to.displayName || request.to.name}
+                          </h3>
                           <p className="request-time">
                             Sent{" "}
                             {new Date(request.createdAt).toLocaleDateString(

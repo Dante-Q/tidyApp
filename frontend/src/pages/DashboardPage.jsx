@@ -22,7 +22,7 @@ export default function DashboardPage() {
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="hero-emoji">👋</span>
-            Welcome back, {user.name}!
+            Welcome back, {user.displayName || user.name}!
           </h1>
           <p className="hero-subtitle">Your favorite beaches & conditions</p>
         </div>

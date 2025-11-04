@@ -83,10 +83,12 @@ export default function SentFriendRequests() {
               className="request-user-info"
             >
               <div className="request-avatar">
-                {getUserInitial(request.to.name)}
+                {getUserInitial(request.to.displayName || request.to.name)}
               </div>
               <div className="request-details">
-                <h3 className="request-name">{request.to.name}</h3>
+                <h3 className="request-name">
+                  {request.to.displayName || request.to.name}
+                </h3>
                 <p className="request-time">
                   Sent{" "}
                   {new Date(request.createdAt).toLocaleDateString("en-US", {
