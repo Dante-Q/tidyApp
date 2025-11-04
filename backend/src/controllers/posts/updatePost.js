@@ -82,7 +82,7 @@ export const updatePost = async (req, res) => {
 
     // Populate both fields in one chain instead of separate calls
     await post.populate([
-      { path: "author", select: "name" },
+      { path: "author", select: "name displayName" },
       { path: "commentCount" },
     ]);
 

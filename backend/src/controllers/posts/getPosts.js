@@ -38,7 +38,7 @@ export const getPosts = async (req, res) => {
     }
 
     const posts = await Post.find(query)
-      .populate("author", "name")
+      .populate("author", "name displayName")
       .populate("commentCount")
       .sort(sort)
       .skip(skip)

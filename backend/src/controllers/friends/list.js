@@ -15,7 +15,10 @@ export const getFriends = async (req, res) => {
       userId = req.user._id;
     }
 
-    const user = await User.findById(userId).populate("friends", "name _id");
+    const user = await User.findById(userId).populate(
+      "friends",
+      "name displayName _id"
+    );
 
     if (!user) {
       return res.status(404).json({

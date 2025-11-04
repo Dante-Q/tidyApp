@@ -11,7 +11,7 @@ export const getFriendRequests = async (req, res) => {
 
     const user = await User.findById(currentUserId).populate(
       "friendRequests.from",
-      "name _id"
+      "name displayName _id"
     );
 
     if (!user) {

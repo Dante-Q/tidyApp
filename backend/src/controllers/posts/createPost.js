@@ -48,8 +48,9 @@ export const createPost = async (req, res) => {
       author: req.user._id,
     });
 
-    // Populate author in one step instead of separate findById
-    await post.populate("author", "name");
+    // Populate author information before sending response
+    await post.populate("author", "name displayName");
+    await post.populate("commentCount");
 
     res.status(201).json({
       success: true,

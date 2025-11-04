@@ -160,6 +160,14 @@ export default function UserProfilePage() {
           <div className="profile-info">
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
 
+            {/* Settings Button - Only shown on own profile */}
+            {isOwnProfile && (
+              <Link to="/settings" className="settings-link-button">
+                ⚙️ Settings
+              </Link>
+            )}
+
+            {/* Friend Button - Only shown on other users' profiles */}
             {user &&
               user.id &&
               userId &&

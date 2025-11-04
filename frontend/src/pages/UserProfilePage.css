@@ -97,6 +97,28 @@
   background-clip: text;
 }
 
+/* Settings Link Button */
+.settings-link-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 8px;
+  color: #6dd5ed;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.settings-link-button:hover {
+  background: rgba(109, 213, 237, 0.2);
+  border-color: rgba(109, 213, 237, 0.5);
+  transform: translateY(-2px);
+}
+
 /* Friend Button */
 .friend-button {
   padding: 0.75rem 2rem;

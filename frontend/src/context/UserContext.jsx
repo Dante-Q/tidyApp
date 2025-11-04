@@ -19,6 +19,7 @@ export function UserProvider({ children }) {
         setUser({
           id: response.data._id,
           name: response.data.name,
+          displayName: response.data.displayName || response.data.name,
         });
       } catch {
         // User not logged in, that's ok
