@@ -226,12 +226,19 @@ router.post("/logout", (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
-// Update profile (displayName, avatarColor, and admin badge visibility) - Protected route
+// Update profile (displayName, avatarColor, bio, location, interests, and admin badge visibility) - Protected route
 router.patch(
   "/profile",
   protect,
   asyncHandler(async (req, res) => {
-    const { displayName, showAdminBadge, avatarColor } = req.body;
+    const {
+      displayName,
+      showAdminBadge,
+      avatarColor,
+      bio,
+      location,
+      interests,
+    } = req.body;
 
     if (!displayName || !displayName.trim()) {
       return res.status(400).json({ message: "Display name is required" });
@@ -272,6 +279,17 @@ router.patch(
     // Update avatar color if provided
     if (avatarColor) {
       user.avatarColor = avatarColor;
+    }
+
+    // Update bio, location, interests if provided
+    if (bio !== undefined) {
+      user.bio = bio.trim();
+    }
+    if (location !== undefined) {
+      user.location = location.trim();
+    }
+    if (interests !== undefined) {
+      user.interests = interests.trim();
     }
 
     // Only allow admins to change showAdminBadge setting

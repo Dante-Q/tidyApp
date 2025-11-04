@@ -65,7 +65,8 @@
 
 .form-group input[type="text"]:not(.color-text-input),
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group textarea {
   width: 100%;
   padding: 0.75rem 1rem;
   background: rgba(30, 41, 59, 0.6);
@@ -74,11 +75,18 @@
   color: #ffffff;
   font-size: 1rem;
   transition: all 0.3s ease;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .form-group input[type="text"]:not(.color-text-input):focus,
 .form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus {
+.form-group input[type="password"]:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: rgba(109, 213, 237, 0.6);
   background: rgba(30, 41, 59, 0.8);

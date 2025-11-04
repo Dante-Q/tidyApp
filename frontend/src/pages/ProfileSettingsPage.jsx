@@ -17,6 +17,9 @@ export default function ProfileSettingsPage() {
   const [avatarColor, setAvatarColor] = useState(
     user?.avatarColor || "#6DD5ED"
   );
+  const [bio, setBio] = useState(user?.bio || "");
+  const [location, setLocation] = useState(user?.location || "");
+  const [interests, setInterests] = useState(user?.interests || "");
   // For admins: default to true if showAdminBadge is true or undefined
   // For non-admins: this value doesn't matter (won't be sent to backend)
   const [showAdminBadge, setShowAdminBadge] = useState(
@@ -33,6 +36,9 @@ export default function ProfileSettingsPage() {
     displayName !== (user?.displayName?.replace("👑 ", "") || "") ||
     avatarColor.toUpperCase() !==
       (user?.avatarColor?.toUpperCase() || "#6DD5ED") ||
+    bio !== (user?.bio || "") ||
+    location !== (user?.location || "") ||
+    interests !== (user?.interests || "") ||
     (user?.isAdmin && showAdminBadge !== (user?.showAdminBadge !== false));
 
   const handleUpdateProfile = async (e) => {
@@ -44,7 +50,7 @@ export default function ProfileSettingsPage() {
     try {
       const response = await axios.patch(
         API_ENDPOINTS.auth.profile,
-        { displayName, showAdminBadge, avatarColor },
+        { displayName, showAdminBadge, avatarColor, bio, location, interests },
         { withCredentials: true }
       );
 
@@ -140,6 +146,53 @@ export default function ProfileSettingsPage() {
               <small className="form-hint">
                 Choose a color for your profile avatar
               </small>
+            </div>
+
+            {/* Location */}
+            <div className="form-group">
+              <label htmlFor="location">Location</label>
+              <input
+                type="text"
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g., San Diego, CA"
+                maxLength={100}
+              />
+              <small className="form-hint">
+                Your hometown or current location (optional)
+              </small>
+            </div>
+
+            {/* Interests */}
+            <div className="form-group">
+              <label htmlFor="interests">Favorite Spots & Interests</label>
+              <textarea
+                id="interests"
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+                placeholder="e.g., Surfing at Blacks Beach, longboarding, beach volleyball..."
+                maxLength={200}
+                rows={3}
+              />
+              <small className="form-hint">
+                {interests.length}/200 characters - Share your favorite surf
+                spots, gear, or interests
+              </small>
+            </div>
+
+            {/* Bio */}
+            <div className="form-group">
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="Tell us about yourself..."
+                maxLength={500}
+                rows={4}
+              />
+              <small className="form-hint">{bio.length}/500 characters</small>
             </div>
 
             {/* Admin Badge Toggle - Only for admins */}

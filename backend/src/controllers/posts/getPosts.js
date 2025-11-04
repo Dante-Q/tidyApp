@@ -38,7 +38,10 @@ export const getPosts = async (req, res) => {
     }
 
     const posts = await Post.find(query)
-      .populate("author", "name displayName isAdmin showAdminBadge avatarColor")
+      .populate(
+        "author",
+        "name displayName isAdmin showAdminBadge avatarColor bio location interests"
+      )
       .populate("commentCount")
       .sort(sort)
       .skip(skip)

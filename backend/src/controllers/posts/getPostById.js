@@ -12,7 +12,10 @@ export const getPostById = async (req, res) => {
       { $inc: { views: 1 } },
       { new: true }
     )
-      .populate("author", "name displayName isAdmin showAdminBadge avatarColor")
+      .populate(
+        "author",
+        "name displayName isAdmin showAdminBadge avatarColor bio location interests"
+      )
       .populate("commentCount")
       .lean(); // Use lean() for read-only queries to reduce memory
 

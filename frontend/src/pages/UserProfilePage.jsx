@@ -154,13 +154,39 @@ export default function UserProfilePage() {
       {/* Profile Header */}
       <div className="profile-header">
         <div className="profile-container">
-          <div className="profile-avatar-large">
+          <div
+            className="profile-avatar-large"
+            style={{ backgroundColor: userInfo?.avatarColor || "#6dd5ed" }}
+          >
             {getUserInitial(userInfo?.displayName || userInfo?.name)}
           </div>
           <div className="profile-info">
             <h1 className="profile-name">
               {userInfo?.displayName || userInfo?.name || "Unknown User"}
             </h1>
+
+            {/* Profile Details */}
+            {(userInfo?.location || userInfo?.interests || userInfo?.bio) && (
+              <div className="profile-details">
+                {userInfo?.location && (
+                  <div className="profile-detail-item">
+                    <span className="detail-icon">📍</span>
+                    <span className="detail-text">{userInfo.location}</span>
+                  </div>
+                )}
+                {userInfo?.interests && (
+                  <div className="profile-detail-item">
+                    <span className="detail-icon">🏄</span>
+                    <span className="detail-text">{userInfo.interests}</span>
+                  </div>
+                )}
+                {userInfo?.bio && (
+                  <div className="profile-bio">
+                    <p>{userInfo.bio}</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Settings Button - Only shown on own profile */}
             {isOwnProfile && (
@@ -192,10 +218,6 @@ export default function UserProfilePage() {
               )}
 
             <div className="profile-stats">
-              <div className="stat-item">
-                <span className="stat-value">{posts.length}</span>
-                <span className="stat-label">Posts</span>
-              </div>
               {canViewFriends ? (
                 <Link
                   to={`/profile/${userId}/friends`}
@@ -210,6 +232,10 @@ export default function UserProfilePage() {
                   <span className="stat-label">Friends</span>
                 </div>
               )}
+              <div className="stat-item">
+                <span className="stat-value">{posts.length}</span>
+                <span className="stat-label">Posts</span>
+              </div>
               <div className="stat-item">
                 <span className="stat-value">{getTotalLikes()}</span>
                 <span className="stat-label">Likes</span>

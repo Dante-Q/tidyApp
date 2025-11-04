@@ -101,6 +101,54 @@ const userSchema = new mongoose.Schema(
         message: "Avatar color must be a valid hex color (e.g., #6dd5ed)",
       },
     },
+    bio: {
+      type: String,
+      trim: true,
+      maxlength: [500, "Bio cannot exceed 500 characters"],
+      validate: {
+        validator: function (v) {
+          if (!v) return true; // Optional field
+          const sanitized = sanitizeHtml(v, {
+            allowedTags: [],
+            allowedAttributes: {},
+          });
+          return !filter.isProfane(sanitized);
+        },
+        message: "Bio contains inappropriate language",
+      },
+    },
+    location: {
+      type: String,
+      trim: true,
+      maxlength: [100, "Location cannot exceed 100 characters"],
+      validate: {
+        validator: function (v) {
+          if (!v) return true; // Optional field
+          const sanitized = sanitizeHtml(v, {
+            allowedTags: [],
+            allowedAttributes: {},
+          });
+          return !filter.isProfane(sanitized);
+        },
+        message: "Location contains inappropriate language",
+      },
+    },
+    interests: {
+      type: String,
+      trim: true,
+      maxlength: [200, "Interests cannot exceed 200 characters"],
+      validate: {
+        validator: function (v) {
+          if (!v) return true; // Optional field
+          const sanitized = sanitizeHtml(v, {
+            allowedTags: [],
+            allowedAttributes: {},
+          });
+          return !filter.isProfane(sanitized);
+        },
+        message: "Interests contains inappropriate language",
+      },
+    },
     createdAt: {
       type: Date,
       default: Date.now,

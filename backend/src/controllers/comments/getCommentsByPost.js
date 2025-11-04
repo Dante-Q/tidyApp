@@ -17,7 +17,10 @@ export const getCommentsByPost = async (req, res) => {
 
     // Get top-level comments (no parent)
     const comments = await Comment.find({ post: postId, parentComment: null })
-      .populate("author", "name displayName isAdmin showAdminBadge avatarColor")
+      .populate(
+        "author",
+        "name displayName isAdmin showAdminBadge avatarColor bio location interests"
+      )
       .sort("-createdAt")
       .skip(skip)
       .limit(limitNum);
@@ -25,7 +28,10 @@ export const getCommentsByPost = async (req, res) => {
     // Batch fetch all replies in a single query (eliminates N+1 problem)
     const commentIds = comments.map((c) => c._id);
     const replies = await Comment.find({ parentComment: { $in: commentIds } })
-      .populate("author", "name displayName isAdmin showAdminBadge avatarColor")
+      .populate(
+        "author",
+        "name displayName isAdmin showAdminBadge avatarColor bio location interests"
+      )
       .sort("createdAt");
 
     // Group replies by parent comment ID
