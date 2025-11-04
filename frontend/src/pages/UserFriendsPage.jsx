@@ -27,13 +27,52 @@ export default function UserFriendsPage() {
   }
 
   if (error) {
+    // Check if it's a 401 authentication error
+    const isAuthError =
+      error.response?.status === 401 || error.message.includes("401");
+
+    // Check if it's a 403 forbidden error (not friends)
+    const isForbidden = error.response?.status === 403;
+
     return (
       <div className="user-friends-page">
         <div className="error-container">
-          <p>⚠️ {error.message}</p>
-          <Link to={`/profile/${userId}`} className="btn-back">
-            ← Back to Profile
-          </Link>
+          {isAuthError ? (
+            <>
+              <div className="lock-icon">🔒</div>
+              <h2>Login Required</h2>
+              <p>You need to be logged in to view friends lists.</p>
+              <div className="error-actions">
+                <Link to="/login" className="btn-login">
+                  Login
+                </Link>
+                <Link to="/register" className="btn-register">
+                  Create Account
+                </Link>
+              </div>
+              <Link to={`/profile/${userId}`} className="btn-back-link">
+                ← Back to Profile
+              </Link>
+            </>
+          ) : isForbidden ? (
+            <>
+              <div className="lock-icon">👥</div>
+              <h2>Friends Only</h2>
+              <p>
+                You must be friends with this user to view their friends list.
+              </p>
+              <Link to={`/profile/${userId}`} className="btn-back">
+                ← Back to Profile
+              </Link>
+            </>
+          ) : (
+            <>
+              <p>⚠️ {error.message}</p>
+              <Link to={`/profile/${userId}`} className="btn-back">
+                ← Back to Profile
+              </Link>
+            </>
+          )}
         </div>
       </div>
     );

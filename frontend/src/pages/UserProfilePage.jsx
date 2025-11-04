@@ -41,11 +41,14 @@ export default function UserProfilePage() {
 
   const friendshipStatus = friendshipData?.status || "none";
 
-  // Fetch friends list to get count
+  // Fetch friends list to get count (only if viewing own profile or if friends)
+  const isOwnProfile = user && String(user._id) === String(userId);
+  const canViewFriends = isOwnProfile || friendshipStatus === "friends";
+
   const { data: friendsData } = useQuery({
     queryKey: ["userFriends", userId],
     queryFn: () => getFriends(userId),
-    enabled: !!userId,
+    enabled: !!userId && canViewFriends,
   });
 
   const friendsCount = friendsData?.friends?.length || 0;
@@ -155,35 +158,46 @@ export default function UserProfilePage() {
           <div className="profile-info">
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
 
-            {user && user._id !== userId && (
-              <button
-                className={`friend-button ${getFriendButtonClass()}`}
-                onClick={handleFriendAction}
-                disabled={
-                  friendshipStatus === "pending_sent" ||
-                  friendshipStatus === "pending_received" ||
-                  sendRequestMutation.isPending ||
+            {user &&
+              user._id &&
+              userId &&
+              String(user._id) !== String(userId) && (
+                <button
+                  className={`friend-button ${getFriendButtonClass()}`}
+                  onClick={handleFriendAction}
+                  disabled={
+                    friendshipStatus === "pending_sent" ||
+                    friendshipStatus === "pending_received" ||
+                    sendRequestMutation.isPending ||
+                    removeFriendMutation.isPending
+                  }
+                >
+                  {sendRequestMutation.isPending ||
                   removeFriendMutation.isPending
-                }
-              >
-                {sendRequestMutation.isPending || removeFriendMutation.isPending
-                  ? "..."
-                  : getFriendButtonText()}
-              </button>
-            )}
+                    ? "..."
+                    : getFriendButtonText()}
+                </button>
+              )}
 
             <div className="profile-stats">
               <div className="stat-item">
                 <span className="stat-value">{posts.length}</span>
                 <span className="stat-label">Posts</span>
               </div>
-              <Link
-                to={`/profile/${userId}/friends`}
-                className="stat-item stat-item-link"
-              >
-                <span className="stat-value">{friendsCount}</span>
-                <span className="stat-label">Friends</span>
-              </Link>
+              {canViewFriends ? (
+                <Link
+                  to={`/profile/${userId}/friends`}
+                  className="stat-item stat-item-link"
+                >
+                  <span className="stat-value">{friendsCount}</span>
+                  <span className="stat-label">Friends</span>
+                </Link>
+              ) : (
+                <div className="stat-item stat-item-locked">
+                  <span className="stat-value">🔒</span>
+                  <span className="stat-label">Friends</span>
+                </div>
+              )}
               <div className="stat-item">
                 <span className="stat-value">{getTotalLikes()}</span>
                 <span className="stat-label">Likes</span>
