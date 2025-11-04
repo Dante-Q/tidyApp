@@ -90,6 +90,29 @@
   border-radius: 12px;
 }
 
+.comments-disabled-message {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 154, 158, 0.1);
+  border: 1px solid rgba(255, 154, 158, 0.3);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.comments-disabled-message .disabled-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.comments-disabled-message p {
+  color: #ff9a9e;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
 .reply-indicator {
   display: flex;
   justify-content: space-between;

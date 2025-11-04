@@ -43,7 +43,7 @@ function CommentItem({
   queryClient,
   parentCommentId = null,
 }) {
-  const { setReplyTo, replyTo } = usePostDetail();
+  const { setReplyTo, replyTo, post } = usePostDetail();
   const [showReplies, setShowReplies] = useState(true);
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -208,32 +208,36 @@ function CommentItem({
         >
           {isLiked ? "❤️" : "🤍"} {likeCount}
         </button>
-        <button
-          onClick={() =>
-            setReplyTo({
-              commentId: comment._id, // Where the form appears
-              parentId: parentCommentId || comment._id, // Parent for the reply
-              username: getDisplayName(comment.author),
-            })
-          }
-          className="btn-comment-action"
-        >
-          💬 Reply
-        </button>
-        {isAuthor && !isEditing && (
+        {!post?.commentsDisabled && (
           <>
             <button
-              onClick={() => setIsEditing(true)}
+              onClick={() =>
+                setReplyTo({
+                  commentId: comment._id, // Where the form appears
+                  parentId: parentCommentId || comment._id, // Parent for the reply
+                  username: getDisplayName(comment.author),
+                })
+              }
               className="btn-comment-action"
             >
-              ✏️ Edit
+              💬 Reply
             </button>
-            <button
-              onClick={handleDeleteComment}
-              className="btn-comment-action"
-            >
-              🗑️ Delete
-            </button>
+            {isAuthor && !isEditing && (
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="btn-comment-action"
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  onClick={handleDeleteComment}
+                  className="btn-comment-action"
+                >
+                  🗑️ Delete
+                </button>
+              </>
+            )}
           </>
         )}
       </div>

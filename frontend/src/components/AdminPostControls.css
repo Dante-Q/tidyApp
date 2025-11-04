@@ -81,6 +81,16 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
+.admin-btn-comments {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: #1a1a1a;
+}
+
+.admin-btn-comments:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
+}
+
 .admin-btn-delete {
   background: linear-gradient(135deg, #f093fb, #f5576c);
   color: white;

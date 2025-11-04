@@ -14,6 +14,12 @@ router.post("/", protect, postsController.createPost);
 
 // Admin-only routes (must come before /:id routes)
 router.patch("/:id/pin", protect, requireAdmin, postsController.togglePinPost);
+router.patch(
+  "/:id/comments",
+  protect,
+  requireAdmin,
+  postsController.toggleComments
+);
 
 // Routes with :id parameter (must come after more specific routes)
 router.get("/:id", postsController.getPostById);

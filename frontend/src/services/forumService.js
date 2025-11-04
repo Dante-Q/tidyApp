@@ -145,3 +145,20 @@ export const togglePinPost = async (postId) => {
     throw error;
   }
 };
+
+// Toggle comments on a post (admin only)
+export const toggleCommentsOnPost = async (postId) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${postId}/comments`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error toggling comments status:", error);
+    throw error;
+  }
+};

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { adminDeletePost, adminMovePost } from "../services/adminService";
-import { togglePinPost } from "../services/forumService";
+import { togglePinPost, toggleCommentsOnPost } from "../services/forumService";
 import { FORUM_CATEGORIES } from "../config/forumCategories";
 import "./AdminPostControls.css";
 
@@ -59,6 +59,19 @@ export default function AdminPostControls({ post }) {
     },
   });
 
+  const commentsMutation = useMutation({
+    mutationFn: () => toggleCommentsOnPost(post._id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["post", post._id]);
+    },
+    onError: (error) => {
+      alert(
+        error.response?.data?.message || "Failed to toggle comments status"
+      );
+    },
+  });
+
   // Don't render if not admin
   if (!user?.isAdmin) return null;
 
@@ -91,6 +104,10 @@ export default function AdminPostControls({ post }) {
     pinMutation.mutate();
   };
 
+  const handleToggleComments = () => {
+    commentsMutation.mutate();
+  };
+
   const currentCategory = FORUM_CATEGORIES.find(
     (cat) => cat.slug === selectedCategory
   );
@@ -106,28 +123,35 @@ export default function AdminPostControls({ post }) {
           to={`/forum/edit/${post._id}`}
           className="admin-btn admin-btn-edit"
         >
-          ✏️ Edit Post
+          ✏️ Edit
         </Link>
-        <button
-          className="admin-btn admin-btn-pin"
-          onClick={handleTogglePin}
-          disabled={pinMutation.isPending}
-        >
-          {post.isPinned ? "📌 Unpin Post" : "📍 Pin Post"}
-        </button>
         <button
           className="admin-btn admin-btn-move"
           onClick={() => setShowMoveModal(true)}
           disabled={moveMutation.isPending}
         >
-          📁 Move Post
+          📁 Move
+        </button>
+        <button
+          className="admin-btn admin-btn-pin"
+          onClick={handleTogglePin}
+          disabled={pinMutation.isPending}
+        >
+          {post.isPinned ? "📌 Unpin" : "📍 Pin"}
+        </button>
+        <button
+          className="admin-btn admin-btn-comments"
+          onClick={handleToggleComments}
+          disabled={commentsMutation.isPending}
+        >
+          {post.commentsDisabled ? "� Enable" : "🚫 Disable"}
         </button>
         <button
           className="admin-btn admin-btn-delete"
           onClick={handleDelete}
           disabled={deleteMutation.isPending}
         >
-          🗑️ Delete Post
+          🗑️ Delete
         </button>
       </div>
 

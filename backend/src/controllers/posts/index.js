@@ -6,3 +6,4 @@ export { deletePost } from "./deletePost.js";
 export { toggleLikePost } from "./toggleLikePost.js";
 export { getPostsByCategory } from "./getPostsByCategory.js";
 export { togglePinPost } from "./togglePin.js";
+export { toggleComments } from "./toggleComments.js";

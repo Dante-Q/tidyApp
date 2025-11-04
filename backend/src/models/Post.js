@@ -69,6 +69,10 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    commentsDisabled: {
+      type: Boolean,
+      default: false,
+    },
     isLocked: {
       type: Boolean,
       default: false,
