@@ -12,6 +12,7 @@ import {
   createLikePostMutation,
   createDeletePostMutation,
 } from "../mutations/postMutations.js";
+import { getDisplayName } from "../utils/displayName.js";
 import AdminPostControls from "./AdminPostControls.jsx";
 
 import styles from "./PostHeader.module.css";
@@ -88,12 +89,15 @@ export default function PostHeader() {
 
       <div className={styles.postMeta}>
         <Link to={`/profile/${post.author._id}`} className={styles.postAuthor}>
-          <div className={styles.authorAvatar}>
-            {getUserInitial(post.author.displayName || post.author.name)}
+          <div
+            className={styles.authorAvatar}
+            style={{ backgroundColor: post.author.avatarColor || "#6dd5ed" }}
+          >
+            {getUserInitial(getDisplayName(post.author))}
           </div>
           <div className={styles.authorInfo}>
             <span className={styles.authorName}>
-              {post.author.displayName || post.author.name}
+              {getDisplayName(post.author)}
             </span>
             <span className={styles.postDate}>
               {formatDate(post.createdAt)}

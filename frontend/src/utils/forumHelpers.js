@@ -102,7 +102,15 @@ export const pluralize = (count, singular, plural = null) => {
  */
 export const getUserInitial = (name) => {
   if (!name) return "?";
-  return name.charAt(0).toUpperCase();
+  // Strip emojis and symbols (like the admin crown) before getting initial
+  const withoutEmojis = name
+    .replace(
+      /[\u{1F000}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F300}-\u{1F5FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}]/gu,
+      ""
+    )
+    .trim();
+  if (!withoutEmojis) return "?";
+  return withoutEmojis.charAt(0).toUpperCase();
 };
 
 /**

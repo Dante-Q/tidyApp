@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api";
@@ -8,7 +9,18 @@ import "./ProfileSettingsPage.css";
 export default function ProfileSettingsPage() {
   const { user, logout, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const queryClient = useQueryClient();
+  const [displayName, setDisplayName] = useState(
+    user?.displayName?.replace("👑 ", "") || ""
+  );
+  const [avatarColor, setAvatarColor] = useState(
+    user?.avatarColor || "#6dd5ed"
+  );
+  // For admins: default to true if showAdminBadge is true or undefined
+  // For non-admins: this value doesn't matter (won't be sent to backend)
+  const [showAdminBadge, setShowAdminBadge] = useState(
+    user?.isAdmin ? user?.showAdminBadge !== false : true
+  );
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -24,22 +36,29 @@ export default function ProfileSettingsPage() {
     try {
       const response = await axios.patch(
         API_ENDPOINTS.auth.profile,
-        { displayName },
+        { displayName, showAdminBadge, avatarColor },
         { withCredentials: true }
       );
 
       setMessage(response.data.message);
 
-      // Update user context with new display name
+      // Update user context with new data
+      const baseDisplayName = response.data.user.displayName;
+      const shouldShowCrown =
+        response.data.user.isAdmin && response.data.user.showAdminBadge;
+      const finalDisplayName = shouldShowCrown
+        ? `👑 ${baseDisplayName}`
+        : baseDisplayName;
+
       setUser((prevUser) => ({
         ...prevUser,
-        displayName: response.data.user.displayName,
+        displayName: finalDisplayName,
+        avatarColor: response.data.user.avatarColor,
+        showAdminBadge: response.data.user.showAdminBadge,
       }));
 
-      // Show success message for a moment before redirecting
-      setTimeout(() => {
-        navigate(`/profile/${user.id}`);
-      }, 1500);
+      // Invalidate all queries to refetch posts/comments with new avatar color
+      queryClient.invalidateQueries();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
@@ -102,14 +121,63 @@ export default function ProfileSettingsPage() {
               </small>
             </div>
 
+            {/* Avatar Color Picker */}
+            <div className="form-group">
+              <label htmlFor="avatarColor">Avatar Color</label>
+              <div className="color-picker-container">
+                <input
+                  type="color"
+                  id="avatarColor"
+                  value={avatarColor}
+                  onChange={(e) => setAvatarColor(e.target.value)}
+                  className="color-input"
+                />
+                <div
+                  className="color-preview"
+                  style={{ backgroundColor: avatarColor }}
+                >
+                  <span className="preview-initial">
+                    {user.displayName
+                      ?.replace("👑 ", "")
+                      .charAt(0)
+                      .toUpperCase()}
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={avatarColor}
+                  onChange={(e) => setAvatarColor(e.target.value)}
+                  placeholder="#6dd5ed"
+                  pattern="^#[0-9A-Fa-f]{6}$"
+                  className="color-text-input"
+                />
+              </div>
+              <small className="form-hint">
+                Choose a color for your profile avatar
+              </small>
+            </div>
+
+            {/* Admin Badge Toggle - Only for admins */}
+            {user.isAdmin && (
+              <div className="form-group checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={showAdminBadge}
+                    onChange={(e) => setShowAdminBadge(e.target.checked)}
+                  />
+                  <span>Show admin badge (👑) next to my name</span>
+                </label>
+                <small className="form-hint">
+                  When unchecked, you'll appear as a regular user
+                </small>
+              </div>
+            )}
+
             {message && <div className="success-message">{message}</div>}
             {error && <div className="error-message">{error}</div>}
 
-            <button
-              type="submit"
-              className="btn-save"
-              disabled={loading || displayName === user.displayName}
-            >
+            <button type="submit" className="btn-save" disabled={loading}>
               {loading ? "Saving..." : "Save Changes"}
             </button>
           </form>

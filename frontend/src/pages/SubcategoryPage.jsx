@@ -190,7 +190,13 @@ export default function SubcategoryPage() {
                           </div>
                           <div className="post-col-author">
                             <div className="author-info">
-                              <div className="author-avatar-small">
+                              <div
+                                className="author-avatar-small"
+                                style={{
+                                  backgroundColor:
+                                    post.author?.avatarColor || "#6dd5ed",
+                                }}
+                              >
                                 {(post.author?.displayName || post.author?.name)
                                   ?.charAt(0)
                                   .toUpperCase() || "?"}

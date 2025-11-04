@@ -90,12 +90,17 @@ router.post(
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Check if user should be admin
+    const shouldBeAdmin = isAdminEmail(email);
+
     // Create new user
     const user = await User.create({
       email,
       password,
       name: nameValidation.sanitized,
-      isAdmin: isAdminEmail(email), // Check if email is in admin list
+      isAdmin: shouldBeAdmin,
+      // Only set showAdminBadge for admins
+      ...(shouldBeAdmin && { showAdminBadge: true }),
     });
 
     // Generate JWT token
@@ -118,7 +123,12 @@ router.post(
         id: user._id,
         name: user.name,
         displayName: user.displayName,
-        isAdmin: user.isAdmin,
+        avatarColor: user.avatarColor,
+        // Only include admin fields if user is admin
+        ...(user.isAdmin && {
+          isAdmin: true,
+          showAdminBadge: user.showAdminBadge,
+        }),
       },
     });
   })
@@ -146,6 +156,10 @@ router.post(
     const shouldBeAdmin = isAdminEmail(user.email);
     if (user.isAdmin !== shouldBeAdmin) {
       user.isAdmin = shouldBeAdmin;
+      // If promoting to admin, set showAdminBadge to true
+      if (shouldBeAdmin) {
+        user.showAdminBadge = true;
+      }
       await user.save();
     }
 
@@ -169,7 +183,12 @@ router.post(
         id: user._id,
         name: user.name,
         displayName: user.displayName,
-        isAdmin: user.isAdmin,
+        avatarColor: user.avatarColor,
+        // Only include admin fields if user is admin
+        ...(user.isAdmin && {
+          isAdmin: true,
+          showAdminBadge: user.showAdminBadge,
+        }),
       },
     });
   })
@@ -207,12 +226,12 @@ router.post("/logout", (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
-// Update profile (displayName) - Protected route
+// Update profile (displayName, avatarColor, and admin badge visibility) - Protected route
 router.patch(
   "/profile",
   protect,
   asyncHandler(async (req, res) => {
-    const { displayName } = req.body;
+    const { displayName, showAdminBadge, avatarColor } = req.body;
 
     if (!displayName || !displayName.trim()) {
       return res.status(400).json({ message: "Display name is required" });
@@ -223,12 +242,43 @@ router.patch(
       return res.status(400).json({ message: validation.error });
     }
 
+    // Validate avatarColor if provided
+    if (avatarColor && !/^#[0-9A-F]{6}$/i.test(avatarColor)) {
+      return res.status(400).json({
+        message: "Avatar color must be a valid hex color (e.g., #6dd5ed)",
+      });
+    }
+
+    // Check if display name is already taken by another user (case-insensitive)
+    const existingUser = await User.findOne({
+      displayName: { $regex: new RegExp(`^${validation.sanitized}$`, "i") },
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message:
+          "This display name is already taken. Please choose a different one.",
+      });
+    }
+
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     user.displayName = validation.sanitized;
+
+    // Update avatar color if provided
+    if (avatarColor) {
+      user.avatarColor = avatarColor;
+    }
+
+    // Only allow admins to change showAdminBadge setting
+    if (user.isAdmin && typeof showAdminBadge === "boolean") {
+      user.showAdminBadge = showAdminBadge;
+    }
+
     await user.save();
 
     res.json({
@@ -237,6 +287,12 @@ router.patch(
         id: user._id,
         name: user.name,
         displayName: user.displayName,
+        avatarColor: user.avatarColor,
+        // Only include admin fields if user is admin
+        ...(user.isAdmin && {
+          isAdmin: true,
+          showAdminBadge: user.showAdminBadge,
+        }),
       },
     });
   })

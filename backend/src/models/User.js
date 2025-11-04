@@ -86,6 +86,21 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    showAdminBadge: {
+      type: Boolean,
+      // Only exists for admins - undefined for regular users
+    },
+    avatarColor: {
+      type: String,
+      default: "#6dd5ed", // Default ocean blue color
+      validate: {
+        validator: function (v) {
+          // Validate hex color format
+          return /^#[0-9A-F]{6}$/i.test(v);
+        },
+        message: "Avatar color must be a valid hex color (e.g., #6dd5ed)",
+      },
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -95,14 +110,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Helper function to capitalize words
-function capitalizeWords(str) {
-  return str
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
-}
 
 // Sanitize name and set displayName before saving
 userSchema.pre("save", function (next) {
@@ -115,17 +122,15 @@ userSchema.pre("save", function (next) {
 
   // Auto-generate displayName from name if not provided
   if (this.isModified("name") && !this.displayName) {
-    this.displayName = capitalizeWords(this.name);
+    this.displayName = this.name;
   }
 
-  // Sanitize and capitalize displayName if modified
+  // Sanitize displayName if modified
   if (this.isModified("displayName") && this.displayName) {
     this.displayName = sanitizeHtml(this.displayName, {
       allowedTags: [],
       allowedAttributes: {},
     });
-    // Capitalize the displayName
-    this.displayName = capitalizeWords(this.displayName);
   }
 
   next();
