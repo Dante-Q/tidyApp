@@ -110,52 +110,6 @@
   background-clip: text;
 }
 
-/* Profile Details Section */
-.profile-details {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(109, 213, 237, 0.15);
-  border-radius: 8px;
-}
-
-.profile-detail-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.95rem;
-}
-
-.profile-detail-item:last-of-type {
-  margin-bottom: 0;
-}
-
-.detail-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.detail-text {
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.5;
-}
-
-.profile-bio {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(109, 213, 237, 0.1);
-}
-
-.profile-bio p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  font-style: italic;
-}
-
 /* Settings Link Button */
 .settings-link-button {
   display: inline-block;
@@ -286,6 +240,126 @@
   margin: 0 auto;
 }
 
+/* Profile Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(109, 213, 237, 0.1);
+}
+
+.profile-tabs .tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-tabs .tab:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(109, 213, 237, 0.05);
+}
+
+.profile-tabs .tab.active {
+  color: #6dd5ed;
+  border-bottom-color: #6dd5ed;
+}
+
+.profile-tabs .tab-badge {
+  background: rgba(109, 213, 237, 0.2);
+  color: #6dd5ed;
+  padding: 0.125rem 0.5rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.profile-tabs .tab.active .tab-badge {
+  background: rgba(109, 213, 237, 0.9);
+  color: #0f172a;
+}
+
+/* Tab Content */
+.tab-content {
+  min-height: 400px;
+}
+
+/* Friends Tab Content */
+.friends-tab-content {
+  padding: 1rem 0;
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.friend-card:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(109, 213, 237, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.friend-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.friend-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.friend-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .profile-container {
@@ -304,6 +378,16 @@
 
   .stat-item {
     min-width: 80px;
+  }
+
+  .profile-tabs .tab {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .friends-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
   }
 }
 
@@ -326,5 +410,18 @@
 
   .stat-value {
     font-size: 1.5rem;
+  }
+
+  .profile-tabs {
+    gap: 0.25rem;
+  }
+
+  .profile-tabs .tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .friends-grid {
+    grid-template-columns: 1fr;
   }
 }

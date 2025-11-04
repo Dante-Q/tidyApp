@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.js";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
@@ -11,12 +11,15 @@ import {
   getFriends,
 } from "../services/friendService.js";
 import UserPostsList from "../components/UserPostsList.jsx";
+import ProfileDetails from "../components/ProfileDetails.jsx";
+import FriendsList from "../components/FriendsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("posts"); // 'posts', 'about', 'friends'
 
   // Fetch posts for this user using React Query
   const {
@@ -225,40 +228,88 @@ export default function UserProfilePage() {
                 <span className="stat-label">Views</span>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Profile Details */}
-            {(userInfo?.location || userInfo?.interests || userInfo?.bio) && (
-              <div className="profile-details">
-                {userInfo?.location && (
-                  <div className="profile-detail-item">
-                    <span className="detail-icon">📍</span>
-                    <span className="detail-text">{userInfo.location}</span>
-                  </div>
+      {/* Profile Content with Tabs */}
+      <div className="profile-content">
+        <div className="content-container">
+          {/* Tabs */}
+          <div className="profile-tabs">
+            <button
+              className={`tab ${activeTab === "posts" ? "active" : ""}`}
+              onClick={() => setActiveTab("posts")}
+            >
+              Posts
+              {posts.length > 0 && (
+                <span className="tab-badge">{posts.length}</span>
+              )}
+            </button>
+            <button
+              className={`tab ${activeTab === "about" ? "active" : ""}`}
+              onClick={() => setActiveTab("about")}
+            >
+              About
+            </button>
+            {canViewFriends && (
+              <button
+                className={`tab ${activeTab === "friends" ? "active" : ""}`}
+                onClick={() => setActiveTab("friends")}
+              >
+                Friends
+                {friendsCount > 0 && (
+                  <span className="tab-badge">{friendsCount}</span>
                 )}
-                {userInfo?.interests && (
-                  <div className="profile-detail-item">
-                    <span className="detail-icon">🏄</span>
-                    <span className="detail-text">{userInfo.interests}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Tab Content */}
+          <div className="tab-content">
+            {activeTab === "posts" && (
+              <UserPostsList
+                posts={posts}
+                userName={userInfo?.displayName || userInfo?.name}
+              />
+            )}
+
+            {activeTab === "about" && <ProfileDetails userInfo={userInfo} />}
+
+            {activeTab === "friends" && canViewFriends && (
+              <div className="friends-tab-content">
+                {friendsData?.friends && friendsData.friends.length > 0 ? (
+                  <div className="friends-grid">
+                    {friendsData.friends.map((friend) => (
+                      <Link
+                        key={friend._id}
+                        to={`/profile/${friend._id}`}
+                        className="friend-card"
+                      >
+                        <div
+                          className="friend-avatar"
+                          style={{
+                            backgroundColor: friend.avatarColor || "#6dd5ed",
+                          }}
+                        >
+                          {getUserInitial(friend.displayName || friend.name)}
+                        </div>
+                        <div className="friend-info">
+                          <h3 className="friend-name">
+                            {friend.displayName || friend.name}
+                          </h3>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                )}
-                {userInfo?.bio && (
-                  <div className="profile-bio">
-                    <p>{userInfo.bio}</p>
+                ) : (
+                  <div className="empty-state">
+                    <p>No friends yet.</p>
                   </div>
                 )}
               </div>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* User Posts */}
-      <div className="profile-content">
-        <div className="content-container">
-          <UserPostsList
-            posts={posts}
-            userName={userInfo?.displayName || userInfo?.name}
-          />
         </div>
       </div>
     </div>
