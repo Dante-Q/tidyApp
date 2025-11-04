@@ -2,6 +2,19 @@ import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
 import { isValidCategorySubcategory } from "../config/forumCategories.js";
 
+/**
+ * Helper function to handle controller errors consistently
+ * @param {Object} res - Express response object
+ * @param {String} message - User-friendly error message
+ * @param {Error} error - The error object
+ */
+const handleControllerError = (res, message, error) => {
+  console.error(message, error);
+  return res
+    .status(500)
+    .json({ success: false, message, error: error.message });
+};
+
 // Get all posts with pagination and filtering
 export const getPosts = async (req, res) => {
   try {
@@ -52,9 +65,7 @@ export const getPosts = async (req, res) => {
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching posts", error: error.message });
+    handleControllerError(res, "Error fetching posts", error);
   }
 };
 
@@ -75,9 +86,7 @@ export const getPostById = async (req, res) => {
 
     res.json(post);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching post", error: error.message });
+    handleControllerError(res, "Error fetching post", error);
   }
 };
 
@@ -109,9 +118,7 @@ export const createPost = async (req, res) => {
 
     res.status(201).json(populatedPost);
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error creating post", error: error.message });
+    handleControllerError(res, "Error creating post", error);
   }
 };
 
@@ -160,9 +167,7 @@ export const updatePost = async (req, res) => {
 
     res.json(updatedPost);
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error updating post", error: error.message });
+    handleControllerError(res, "Error updating post", error);
   }
 };
 
@@ -189,9 +194,7 @@ export const deletePost = async (req, res) => {
 
     res.json({ message: "Post and associated comments deleted successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error deleting post", error: error.message });
+    handleControllerError(res, "Error deleting post", error);
   }
 };
 
@@ -218,9 +221,7 @@ export const toggleLikePost = async (req, res) => {
 
     res.json({ likes: post.likes.length, isLiked: userIndex === -1 });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error toggling like", error: error.message });
+    handleControllerError(res, "Error toggling like", error);
   }
 };
 
@@ -257,8 +258,6 @@ export const getPostsByCategory = async (req, res) => {
 
     res.json(stats);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching category stats", error: error.message });
+    handleControllerError(res, "Error fetching category stats", error);
   }
 };
