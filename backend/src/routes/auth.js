@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import { protect } from "../middleware/auth.js";
 import sanitizeHtml from "sanitize-html";
 import { Filter } from "bad-words";
+import { isAdminEmail } from "../config/adminConfig.js";
 
 const router = express.Router();
 const filter = new Filter();
@@ -76,6 +77,7 @@ router.post(
       email,
       password,
       name: nameValidation.sanitized,
+      isAdmin: isAdminEmail(email), // Check if email is in admin list
     });
 
     // Generate JWT token
@@ -98,6 +100,7 @@ router.post(
         id: user._id,
         name: user.name,
         displayName: user.displayName,
+        isAdmin: user.isAdmin,
       },
     });
   })
@@ -121,6 +124,13 @@ router.post(
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Update admin status based on current config (in case admin list changed)
+    const shouldBeAdmin = isAdminEmail(user.email);
+    if (user.isAdmin !== shouldBeAdmin) {
+      user.isAdmin = shouldBeAdmin;
+      await user.save();
+    }
+
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
@@ -141,6 +151,7 @@ router.post(
         id: user._id,
         name: user.name,
         displayName: user.displayName,
+        isAdmin: user.isAdmin,
       },
     });
   })

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostDetail } from "../context/PostDetailContext.js";
 import InlineCommentForm from "./InlineCommentForm.jsx";
+import AdminCommentControls from "./AdminCommentControls.jsx";
 import {
   createLikeCommentMutation,
   createDeleteCommentMutation,
@@ -232,6 +233,9 @@ function CommentItem({
           </>
         )}
       </div>
+
+      {/* Admin Controls */}
+      <AdminCommentControls comment={comment} postId={postId} />
 
       {/* Inline Reply Form - appears when replying to this specific comment */}
       {replyTo && replyTo.commentId === comment._id && (

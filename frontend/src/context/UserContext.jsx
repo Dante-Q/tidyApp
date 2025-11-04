@@ -20,6 +20,7 @@ export function UserProvider({ children }) {
           id: response.data._id,
           name: response.data.name,
           displayName: response.data.displayName || response.data.name,
+          isAdmin: response.data.isAdmin || false,
         });
       } catch {
         // User not logged in, that's ok

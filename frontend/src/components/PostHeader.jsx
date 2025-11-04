@@ -12,6 +12,7 @@ import {
   createLikePostMutation,
   createDeletePostMutation,
 } from "../mutations/postMutations.js";
+import AdminPostControls from "./AdminPostControls.jsx";
 
 import styles from "./PostHeader.module.css";
 
@@ -132,6 +133,9 @@ export default function PostHeader() {
           </button>
         </div>
       )}
+
+      {/* Admin Controls */}
+      <AdminPostControls post={post} />
     </div>
   );
 }
