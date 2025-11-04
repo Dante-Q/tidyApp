@@ -1,6 +1,8 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 import { protect } from "../middleware/auth.js";
 import sanitizeHtml from "sanitize-html";
 import { Filter } from "bad-words";
@@ -246,6 +248,31 @@ router.delete(
   protect,
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
+
+    // Find or create a "Deleted User" system account
+    let deletedUserAccount = await User.findOne({
+      email: "deleted@system.local",
+    });
+    if (!deletedUserAccount) {
+      deletedUserAccount = await User.create({
+        email: "deleted@system.local",
+        password: Math.random().toString(36), // Random password (account is not usable)
+        name: "[Deleted User]",
+        displayName: "[Deleted User]",
+      });
+    }
+
+    // Reassign all posts to the deleted user account
+    await Post.updateMany(
+      { author: userId },
+      { $set: { author: deletedUserAccount._id } }
+    );
+
+    // Reassign all comments to the deleted user account
+    await Comment.updateMany(
+      { author: userId },
+      { $set: { author: deletedUserAccount._id } }
+    );
 
     // Remove user from all friends lists
     await User.updateMany({ friends: userId }, { $pull: { friends: userId } });
