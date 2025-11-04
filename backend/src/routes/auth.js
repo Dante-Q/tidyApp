@@ -38,15 +38,31 @@ const validateName = (name) => {
     allowedAttributes: {},
   });
 
+  // Remove emojis and other Unicode symbols to prevent spoofing admin crown
+  // This regex removes emojis, symbols, and other non-basic characters
+  const withoutEmojis = sanitized.replace(
+    /[\u{1F000}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F300}-\u{1F5FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2B55}\u{231A}\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}]/gu,
+    ""
+  );
+
+  const finalName = withoutEmojis.trim();
+
+  if (!finalName) {
+    return {
+      valid: false,
+      error: "Name cannot contain only emojis or symbols",
+    };
+  }
+
   // Check for profanity
-  if (filter.isProfane(sanitized)) {
+  if (filter.isProfane(finalName)) {
     return {
       valid: false,
       error: "Name contains inappropriate language",
     };
   }
 
-  return { valid: true, sanitized };
+  return { valid: true, sanitized: finalName };
 };
 
 // Middleware to handle async route handlers

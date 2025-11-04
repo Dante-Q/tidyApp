@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { adminDeletePost, adminMovePost } from "../services/adminService";
 import { FORUM_CATEGORIES } from "../config/forumCategories";
@@ -83,6 +84,12 @@ export default function AdminPostControls({ post }) {
         <span className="admin-icon">👑</span> Admin Controls
       </div>
       <div className="admin-actions">
+        <Link
+          to={`/forum/edit/${post._id}`}
+          className="admin-btn admin-btn-edit"
+        >
+          ✏️ Edit Post
+        </Link>
         <button
           className="admin-btn admin-btn-move"
           onClick={() => setShowMoveModal(true)}

@@ -42,11 +42,23 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .admin-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.admin-btn-edit {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}
+
+.admin-btn-edit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
 }
 
 .admin-btn-move {

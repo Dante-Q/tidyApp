@@ -48,8 +48,8 @@ export default function EditPostPage() {
       // data is now { success: true, post: {...} }
       const post = data.post;
 
-      // Check if user is the author
-      if (!user || post.author._id !== user.id) {
+      // Check if user is the author or an admin
+      if (!user || (post.author._id !== user.id && !user.isAdmin)) {
         setError("You don't have permission to edit this post");
         setTimeout(() => navigate(`/forum/post/${postId}`), 2000);
         return;

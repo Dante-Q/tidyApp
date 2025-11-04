@@ -16,10 +16,15 @@ export function UserProvider({ children }) {
         const response = await axios.get(API_ENDPOINTS.auth.me, {
           withCredentials: true,
         });
+        const baseDisplayName = response.data.displayName || response.data.name;
+        const displayName = response.data.isAdmin
+          ? `👑 ${baseDisplayName}`
+          : baseDisplayName;
+
         setUser({
           id: response.data._id,
           name: response.data.name,
-          displayName: response.data.displayName || response.data.name,
+          displayName: displayName,
           isAdmin: response.data.isAdmin || false,
         });
       } catch {
@@ -33,7 +38,17 @@ export function UserProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = (userData) => setUser(userData);
+  const login = (userData) => {
+    const baseDisplayName = userData.displayName || userData.name;
+    const displayName = userData.isAdmin
+      ? `👑 ${baseDisplayName}`
+      : baseDisplayName;
+
+    setUser({
+      ...userData,
+      displayName: displayName,
+    });
+  };
 
   const logout = async () => {
     try {
