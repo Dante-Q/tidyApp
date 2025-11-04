@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./ColorPicker.css";
 
 /**
@@ -10,33 +10,48 @@ import "./ColorPicker.css";
  */
 export default function ColorPicker({ value, onChange, userName }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const colorPickerRef = useRef(null);
 
   // Predefined color palette - diverse range of distinct colors
   const colorPalette = [
+    // Primary Colors
     "#EF4444",
-    "#F97316",
-    "#FBBF24",
-    "#FDE047",
-    "#84CC16",
-    "#22C55E",
-    "#14B8A6",
-    "#06B6D4",
-    "#0EA5E9",
-    "#3B82F6",
-    "#6366F1",
-    "#8B5CF6",
-    "#A855F7",
-    "#D946EF",
-    "#EC4899",
-    "#F43F5E",
-    "#64748B",
-    "#94A3B8",
-    "#E2E8F0",
-    "#CBD5E1",
-    "#78716C",
-    "#A8A29E",
+    "#F87171",
     "#FCA5A5",
-    "#FCD34D",
+    "#FB923C",
+    "#FDBA74",
+    "#FACC15",
+    "#FDE047",
+    // Secondary Colors (Green-Cyan spectrum)
+    "#16A34A",
+    "#22C55E",
+    "#4ADE80",
+    "#86EFAC",
+    "#0D9488",
+    "#14B8A6",
+    "#2DD4BF",
+    "#5EEAD4",
+    "#0284C7",
+    "#0EA5E9",
+    "#38BDF8",
+    "#7DD3FC",
+    // Secondary Colors (Blue-Purple-Pink spectrum)
+    "#2563EB",
+    "#3B82F6",
+    "#60A5FA",
+    "#93C5FD",
+    "#7C3AED",
+    "#8B5CF6",
+    "#A78BFA",
+    "#C4B5FD",
+    "#C026D3",
+    "#D946EF",
+    "#E879F9",
+    "#F0ABFC",
+    "#DB2777",
+    "#EC4899",
+    "#F472B6",
+    "#F9A8D4",
   ];
 
   const handleColorSelect = (color) => {
@@ -44,8 +59,28 @@ export default function ColorPicker({ value, onChange, userName }) {
     setShowColorPicker(false);
   };
 
+  // Close color picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        colorPickerRef.current &&
+        !colorPickerRef.current.contains(event.target)
+      ) {
+        setShowColorPicker(false);
+      }
+    };
+
+    if (showColorPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showColorPicker]);
+
   return (
-    <div className="color-picker-wrapper">
+    <div className="color-picker-wrapper" ref={colorPickerRef}>
       <div className="color-picker-controls">
         <div
           className="color-input-button"
