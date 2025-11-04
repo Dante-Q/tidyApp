@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
 import ColorPicker from "../components/ColorPicker";
@@ -106,9 +106,14 @@ export default function ProfileSettingsPage() {
   return (
     <div className="profile-settings-page">
       <div className="settings-container">
-        <h1 className="settings-title">
-          <span className="hero-emoji">⚙️</span> Profile Settings
-        </h1>
+        <div className="settings-header">
+          <h1 className="settings-title">
+            <span className="hero-emoji">⚙️</span> Profile Settings
+          </h1>
+          <Link to={`/profile/${user.id}`} className="btn-view-profile">
+            👤 View Profile
+          </Link>
+        </div>
 
         {/* Update Display Name Section */}
         <div className="settings-section">
@@ -172,11 +177,11 @@ export default function ProfileSettingsPage() {
                 value={interests}
                 onChange={(e) => setInterests(e.target.value)}
                 placeholder="e.g., Surfing at Blacks Beach, longboarding, beach volleyball..."
-                maxLength={200}
-                rows={3}
+                maxLength={100}
+                rows={2}
               />
               <small className="form-hint">
-                {interests.length}/200 characters - Share your favorite surf
+                {interests.length}/100 characters - Share your favorite surf
                 spots, gear, or interests
               </small>
             </div>

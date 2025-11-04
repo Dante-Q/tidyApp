@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema(
     content: {
       type: String,
       required: [true, "Post content is required"],
-      trim: true,
+      // Don't trim - preserve spaces, newlines, and emojis
     },
     category: {
       type: String,

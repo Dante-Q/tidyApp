@@ -41,17 +41,17 @@ export default function UserProfilePage() {
 
   const friendshipStatus = friendshipData?.status || "none";
 
-  // Fetch friends list to get count (only if viewing own profile or if friends)
+  // Always fetch friends data to get user profile info (bio, location, interests)
   const isOwnProfile = user && String(user.id) === String(userId);
-  const canViewFriends = isOwnProfile || friendshipStatus === "friends";
 
   const { data: friendsData } = useQuery({
     queryKey: ["userFriends", userId],
     queryFn: () => getFriends(userId),
-    enabled: !!userId && canViewFriends,
+    enabled: !!userId,
   });
 
   const friendsCount = friendsData?.friends?.length || 0;
+  const canViewFriends = friendsData?.canViewFriends || isOwnProfile;
 
   // Send friend request mutation
   const sendRequestMutation = useMutation({
@@ -105,13 +105,12 @@ export default function UserProfilePage() {
     }
   };
 
-  // Extract user info from first post's author, or from friends API response
-  const userInfo =
-    posts.length > 0
-      ? posts[0].author
-      : friendsData?.user
-      ? friendsData.user
-      : null;
+  // Extract user info - prioritize friends data (has full profile) over posts data
+  const userInfo = friendsData?.user
+    ? friendsData.user
+    : posts.length > 0
+    ? posts[0].author
+    : null;
 
   const getTotalLikes = () => {
     return posts.reduce((total, post) => total + post.likes.length, 0);
@@ -164,29 +163,6 @@ export default function UserProfilePage() {
             <h1 className="profile-name">
               {userInfo?.displayName || userInfo?.name || "Unknown User"}
             </h1>
-
-            {/* Profile Details */}
-            {(userInfo?.location || userInfo?.interests || userInfo?.bio) && (
-              <div className="profile-details">
-                {userInfo?.location && (
-                  <div className="profile-detail-item">
-                    <span className="detail-icon">📍</span>
-                    <span className="detail-text">{userInfo.location}</span>
-                  </div>
-                )}
-                {userInfo?.interests && (
-                  <div className="profile-detail-item">
-                    <span className="detail-icon">🏄</span>
-                    <span className="detail-text">{userInfo.interests}</span>
-                  </div>
-                )}
-                {userInfo?.bio && (
-                  <div className="profile-bio">
-                    <p>{userInfo.bio}</p>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Settings Button - Only shown on own profile */}
             {isOwnProfile && (
@@ -249,6 +225,29 @@ export default function UserProfilePage() {
                 <span className="stat-label">Views</span>
               </div>
             </div>
+
+            {/* Profile Details */}
+            {(userInfo?.location || userInfo?.interests || userInfo?.bio) && (
+              <div className="profile-details">
+                {userInfo?.location && (
+                  <div className="profile-detail-item">
+                    <span className="detail-icon">📍</span>
+                    <span className="detail-text">{userInfo.location}</span>
+                  </div>
+                )}
+                {userInfo?.interests && (
+                  <div className="profile-detail-item">
+                    <span className="detail-icon">🏄</span>
+                    <span className="detail-text">{userInfo.interests}</span>
+                  </div>
+                )}
+                {userInfo?.bio && (
+                  <div className="profile-bio">
+                    <p>{userInfo.bio}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

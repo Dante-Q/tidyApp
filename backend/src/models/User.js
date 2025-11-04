@@ -103,11 +103,11 @@ const userSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
-      trim: true,
       maxlength: [500, "Bio cannot exceed 500 characters"],
       validate: {
         validator: function (v) {
           if (!v) return true; // Optional field
+          // Only strip HTML tags, preserve spaces, newlines, and emojis
           const sanitized = sanitizeHtml(v, {
             allowedTags: [],
             allowedAttributes: {},
@@ -136,7 +136,7 @@ const userSchema = new mongoose.Schema(
     interests: {
       type: String,
       trim: true,
-      maxlength: [200, "Interests cannot exceed 200 characters"],
+      maxlength: [100, "Interests cannot exceed 100 characters"],
       validate: {
         validator: function (v) {
           if (!v) return true; // Optional field

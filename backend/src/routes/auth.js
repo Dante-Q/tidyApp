@@ -283,7 +283,7 @@ router.patch(
 
     // Update bio, location, interests if provided
     if (bio !== undefined) {
-      user.bio = bio.trim();
+      user.bio = bio; // Don't trim - preserve spaces, newlines, and emojis
     }
     if (location !== undefined) {
       user.location = location.trim();

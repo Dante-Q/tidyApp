@@ -31,6 +31,8 @@ export const getFriends = async (req, res) => {
     const isOwnProfile = userId.toString() === currentUserId.toString();
 
     // If not viewing own profile, check bidirectional friendship
+    let canViewFriends = isOwnProfile;
+
     if (!isOwnProfile) {
       // Check if current user is in target user's friends list (they friended you)
       const isInTargetFriendsList = user.friends.some(
@@ -38,26 +40,29 @@ export const getFriends = async (req, res) => {
       );
 
       // Also check if target user is in current user's friends list (you friended them)
-      // This ensures bidirectional friendship for extra security
       const currentUser = await User.findById(currentUserId);
       const isInCurrentFriendsList = currentUser.friends.some(
         (id) => id.toString() === userId.toString()
       );
 
       // Both must be true for a valid friendship
-      if (!isInTargetFriendsList || !isInCurrentFriendsList) {
-        return res.status(403).json({
-          success: false,
-          message:
-            "You must be friends with this user to view their friends list",
-        });
-      }
+      canViewFriends = isInTargetFriendsList && isInCurrentFriendsList;
     }
 
+    // Always return user profile info, but friends list only if authorized
     res.json({
       success: true,
-      friends: user.friends,
-      user: { name: user.name, displayName: user.displayName, _id: user._id },
+      friends: canViewFriends ? user.friends : [],
+      canViewFriends: canViewFriends,
+      user: {
+        name: user.name,
+        displayName: user.displayName,
+        _id: user._id,
+        avatarColor: user.avatarColor,
+        bio: user.bio,
+        location: user.location,
+        interests: user.interests,
+      },
     });
   } catch (error) {
     handleControllerError(res, "Failed to fetch friends", error);
