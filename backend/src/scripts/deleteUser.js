@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
-import { cleanupFriendDataOnUserDelete } from "../controllers/friendController.js";
+import { cleanupFriendDataOnUserDelete } from "../controllers/friends/cleanup.js";
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/tidyapp";

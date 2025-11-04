@@ -1,6 +1,17 @@
 import User from "../models/User.js";
 
 /**
+ * Helper function to handle controller errors consistently
+ * @param {Object} res - Express response object
+ * @param {String} message - User-friendly error message
+ * @param {Error} error - The error object
+ */
+export const handleControllerError = (res, message, error) => {
+  console.error(message, error);
+  return res.status(500).json({ success: false, message });
+};
+
+/**
  * Helper function to find a friend request by sender ID
  * @param {Object} user - User document with friendRequests array
  * @param {String} fromId - ID of the user who sent the request
@@ -95,11 +106,7 @@ export const sendFriendRequest = async (req, res) => {
       message: "Friend request sent successfully",
     });
   } catch (error) {
-    console.error("Send friend request error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to send friend request",
-    });
+    handleControllerError(res, "Failed to send friend request", error);
   }
 };
 
@@ -175,11 +182,7 @@ export const acceptFriendRequest = async (req, res) => {
       message: "Friend request accepted",
     });
   } catch (error) {
-    console.error("Accept friend request error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to accept friend request",
-    });
+    handleControllerError(res, "Failed to accept friend request", error);
   }
 };
 
@@ -221,11 +224,7 @@ export const rejectFriendRequest = async (req, res) => {
       message: "Friend request rejected",
     });
   } catch (error) {
-    console.error("Reject friend request error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to reject friend request",
-    });
+    handleControllerError(res, "Failed to reject friend request", error);
   }
 };
 
@@ -254,11 +253,7 @@ export const getFriendRequests = async (req, res) => {
       requests: user.friendRequests,
     });
   } catch (error) {
-    console.error("Get friend requests error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch friend requests",
-    });
+    handleControllerError(res, "Failed to fetch friend requests", error);
   }
 };
 
@@ -318,11 +313,7 @@ export const getFriends = async (req, res) => {
       user: { name: user.name, _id: user._id },
     });
   } catch (error) {
-    console.error("Get friends error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch friends",
-    });
+    handleControllerError(res, "Failed to fetch friends", error);
   }
 };
 
@@ -367,11 +358,7 @@ export const removeFriend = async (req, res) => {
       message: "Friend removed successfully",
     });
   } catch (error) {
-    console.error("Remove friend error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to remove friend",
-    });
+    handleControllerError(res, "Failed to remove friend", error);
   }
 };
 
@@ -437,11 +424,7 @@ export const getFriendshipStatus = async (req, res) => {
       status: "none",
     });
   } catch (error) {
-    console.error("Get friendship status error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to check friendship status",
-    });
+    handleControllerError(res, "Failed to check friendship status", error);
   }
 };
 
