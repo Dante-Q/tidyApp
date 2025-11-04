@@ -10,6 +10,7 @@ export const getCommentsByPost = async (postId) => {
     const response = await axios.get(`${API_URL}/post/${postId}`, {
       withCredentials: true,
     });
+    // Backend returns { success: true, comments, pagination }
     return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
@@ -23,6 +24,8 @@ export const createComment = async (commentData) => {
     const response = await axios.post(API_URL, commentData, {
       withCredentials: true,
     });
+    // Backend returns { success: true, comment }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error creating comment:", error);
@@ -40,6 +43,8 @@ export const updateComment = async (commentId, content) => {
         withCredentials: true,
       }
     );
+    // Backend returns { success: true, comment }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error updating comment:", error);
@@ -53,6 +58,7 @@ export const deleteComment = async (commentId) => {
     const response = await axios.delete(`${API_URL}/${commentId}`, {
       withCredentials: true,
     });
+    // Backend returns { success: true, message }
     return response.data;
   } catch (error) {
     console.error("Error deleting comment:", error);
@@ -70,6 +76,7 @@ export const toggleLikeComment = async (commentId) => {
         withCredentials: true,
       }
     );
+    // Backend returns { success: true, likes, isLiked }
     return response.data;
   } catch (error) {
     console.error("Error toggling like:", error);

@@ -1,0 +1,564 @@
+import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
+import { isValidCategorySubcategory } from "../config/forumCategories.js";
+import sanitizeHtml from "sanitize-html";
+import Filter from "bad-words";
+
+// Initialize profanity filter
+const filter = new Filter();
+
+/**
+ * Helper function to handle controller errors consistently
+ * @param {Object} res - Express response object
+ * @param {String} message - User-friendly error message
+ * @param {Error} error - The error object
+ */
+const handleControllerError = (res, message, error) => {
+  console.error(message, error);
+  return res
+    .status(500)
+    .json({ success: false, message, error: error.message });
+};
+
+/**
+ * Check if user can modify a post (author or admin)
+ * @param {Object} post - The post document
+ * @param {Object} user - The authenticated user
+ * @returns {Boolean} True if user can modify the post
+ */
+const canModifyPost = (post, user) => {
+  return (
+    post.author.toString() === user._id.toString() || user.role === "admin"
+  );
+};
+
+/**
+ * Helper to assign only defined fields from source to target
+ * @param {Object} target - Object to update
+ * @param {Object} source - Object with new values
+ * @param {Array<String>} fields - List of allowed field names
+ */
+const assignFields = (target, source, fields) => {
+  fields.forEach((f) => {
+    if (source[f] !== undefined) target[f] = source[f];
+  });
+};
+
+/**
+ * Validate and sanitize post title
+ * @param {String} title - Raw title from request
+ * @returns {Object} { valid: boolean, sanitized: string, error: string }
+ */
+const validatePostTitle = (title) => {
+  const trimmed = title?.trim();
+
+  if (!trimmed) {
+    return { valid: false, error: "Title cannot be empty" };
+  }
+
+  if (trimmed.length < 5) {
+    return { valid: false, error: "Title must be at least 5 characters long" };
+  }
+
+  if (trimmed.length > 200) {
+    return {
+      valid: false,
+      error: "Title exceeds maximum length of 200 characters",
+    };
+  }
+
+  // Sanitize HTML and filter profanity
+  const sanitized = sanitizeHtml(trimmed, {
+    allowedTags: [], // No HTML tags allowed in titles
+    allowedAttributes: {},
+  });
+
+  const filtered = filter.clean(sanitized);
+
+  return { valid: true, sanitized: filtered };
+};
+
+/**
+ * Validate and sanitize post content
+ * @param {String} content - Raw content from request
+ * @returns {Object} { valid: boolean, sanitized: string, error: string }
+ */
+const validatePostContent = (content) => {
+  const trimmed = content?.trim();
+
+  if (!trimmed) {
+    return { valid: false, error: "Content cannot be empty" };
+  }
+
+  if (trimmed.length < 10) {
+    return {
+      valid: false,
+      error: "Content must be at least 10 characters long",
+    };
+  }
+
+  if (trimmed.length > 10000) {
+    return {
+      valid: false,
+      error: "Content exceeds maximum length of 10000 characters",
+    };
+  }
+
+  // Sanitize HTML - allow safe formatting tags
+  const sanitized = sanitizeHtml(trimmed, {
+    allowedTags: [
+      "b",
+      "i",
+      "em",
+      "strong",
+      "u",
+      "p",
+      "br",
+      "ul",
+      "ol",
+      "li",
+      "blockquote",
+      "code",
+      "pre",
+      "a",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+    ],
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    // Enforce noopener noreferrer on links
+    transformTags: {
+      a: (tagName, attribs) => {
+        return {
+          tagName: "a",
+          attribs: {
+            ...attribs,
+            target: "_blank",
+            rel: "noopener noreferrer",
+          },
+        };
+      },
+    },
+  });
+
+  // Filter profanity
+  const filtered = filter.clean(sanitized);
+
+  return { valid: true, sanitized: filtered };
+};
+
+// Get all posts with pagination and filtering
+export const getPosts = async (req, res) => {
+  try {
+    const {
+      category,
+      subcategory,
+      author,
+      tags,
+      page = 1,
+      limit = 20,
+      sort = "-createdAt",
+    } = req.query;
+
+    // Parse pagination values explicitly to prevent string math bugs
+    const pageNum = parseInt(page, 10) || 1;
+    const limitNum = parseInt(limit, 10) || 20;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = {};
+    if (category) {
+      query.category = category;
+    }
+    if (subcategory) {
+      query.subcategory = subcategory;
+    }
+    if (author) {
+      query.author = author;
+    }
+    if (tags) {
+      // tags can be a comma-separated string or an array
+      const tagArray = Array.isArray(tags) ? tags : tags.split(",");
+      query.tags = { $in: tagArray };
+    }
+
+    const posts = await Post.find(query)
+      .populate("author", "name")
+      .populate("commentCount")
+      .sort(sort)
+      .skip(skip)
+      .limit(limitNum)
+      .lean(); // Use lean() for read-only queries to reduce memory
+
+    const total = await Post.countDocuments(query);
+
+    res.json({
+      success: true,
+      posts,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum),
+      },
+    });
+  } catch (error) {
+    handleControllerError(res, "Error fetching posts", error);
+  }
+};
+
+// Get single post by ID
+export const getPostById = async (req, res) => {
+  try {
+    // First, increment view count atomically
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { views: 1 } },
+      { new: true }
+    )
+      .populate("author", "name")
+      .populate("commentCount")
+      .lean(); // Use lean() for read-only queries to reduce memory
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      post,
+    });
+  } catch (error) {
+    handleControllerError(res, "Error fetching post", error);
+  }
+};
+
+// Create new post
+export const createPost = async (req, res) => {
+  try {
+    const { category, subcategory, tags } = req.body;
+
+    // Validate and sanitize title
+    const titleValidation = validatePostTitle(req.body.title);
+    if (!titleValidation.valid) {
+      return res.status(400).json({
+        success: false,
+        message: titleValidation.error,
+      });
+    }
+
+    // Validate and sanitize content
+    const contentValidation = validatePostContent(req.body.content);
+    if (!contentValidation.valid) {
+      return res.status(400).json({
+        success: false,
+        message: contentValidation.error,
+      });
+    }
+
+    // Validate category and subcategory combination
+    if (subcategory && !isValidCategorySubcategory(category, subcategory)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid category and subcategory combination",
+      });
+    }
+
+    const post = await Post.create({
+      title: titleValidation.sanitized,
+      content: contentValidation.sanitized,
+      category,
+      subcategory: subcategory || null,
+      tags: tags || [],
+      author: req.user._id,
+    });
+
+    // Populate author in one step instead of separate findById
+    await post.populate("author", "name");
+
+    res.status(201).json({
+      success: true,
+      post,
+    });
+  } catch (error) {
+    handleControllerError(res, "Error creating post", error);
+  }
+};
+
+// Update post
+export const updatePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Check if user is authorized to update this post
+    if (!canModifyPost(post, req.user)) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this post",
+      });
+    }
+
+    const { category, subcategory, tags } = req.body;
+
+    // Validate and sanitize title if provided
+    if (req.body.title !== undefined) {
+      const titleValidation = validatePostTitle(req.body.title);
+      if (!titleValidation.valid) {
+        return res.status(400).json({
+          success: false,
+          message: titleValidation.error,
+        });
+      }
+      post.title = titleValidation.sanitized;
+    }
+
+    // Validate and sanitize content if provided
+    if (req.body.content !== undefined) {
+      const contentValidation = validatePostContent(req.body.content);
+      if (!contentValidation.valid) {
+        return res.status(400).json({
+          success: false,
+          message: contentValidation.error,
+        });
+      }
+      post.content = contentValidation.sanitized;
+    }
+
+    // Validate category and subcategory combination if both are being updated
+    if ((category || post.category) && subcategory) {
+      const categoryToValidate = category || post.category;
+      if (!isValidCategorySubcategory(categoryToValidate, subcategory)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid category and subcategory combination",
+        });
+      }
+    }
+
+    // Update remaining allowed fields (title and content already handled with validation)
+    assignFields(post, req.body, ["category", "tags"]);
+
+    // Handle subcategory separately (can be null)
+    if (subcategory !== undefined) {
+      post.subcategory = subcategory || null;
+    }
+
+    // Set editedAt timestamp to mark this as an intentional edit
+    post.editedAt = new Date();
+
+    await post.save();
+
+    // Populate both fields in one chain instead of separate calls
+    await post.populate([
+      { path: "author", select: "name" },
+      { path: "commentCount" },
+    ]);
+
+    res.json({
+      success: true,
+      post,
+    });
+  } catch (error) {
+    handleControllerError(res, "Error updating post", error);
+  }
+};
+
+// Delete post
+export const deletePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Check if user is authorized to delete this post
+    if (!canModifyPost(post, req.user)) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to delete this post",
+      });
+    }
+
+    // Delete all comments associated with the post
+    await Comment.deleteMany({ post: post._id });
+
+    await post.deleteOne();
+
+    res.json({
+      success: true,
+      message: "Post and associated comments deleted successfully",
+    });
+  } catch (error) {
+    handleControllerError(res, "Error deleting post", error);
+  }
+};
+
+// Like/Unlike post
+export const toggleLikePost = async (req, res) => {
+  try {
+    // First check if post exists
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Check if user has already liked
+    const hasLiked = post.likes.some((id) => id.equals(req.user._id));
+
+    // Use atomic operation to prevent race conditions
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      hasLiked
+        ? { $pull: { likes: req.user._id } }
+        : { $addToSet: { likes: req.user._id } },
+      { new: true } // Return updated document
+    );
+
+    res.json({
+      success: true,
+      likes: updatedPost.likes.length,
+      isLiked: !hasLiked,
+    });
+  } catch (error) {
+    handleControllerError(res, "Error toggling like", error);
+  }
+};
+
+// Get posts by category with stats
+export const getPostsByCategory = async (req, res) => {
+  try {
+    const categories = [
+      "surf-reports",
+      "beach-safety",
+      "general-discussion",
+      "events-meetups",
+    ];
+
+    // Use aggregation to get stats efficiently in fewer queries
+    const stats = await Promise.all(
+      categories.map(async (category) => {
+        // Single aggregation query to get all stats including total comments
+        const [categoryStats] = await Post.aggregate([
+          { $match: { category } },
+          {
+            $facet: {
+              // Get total post count
+              totalCount: [{ $count: "count" }],
+              // Get total comments count for all posts in this category
+              totalComments: [
+                {
+                  $lookup: {
+                    from: "comments",
+                    localField: "_id",
+                    foreignField: "post",
+                    as: "comments",
+                    pipeline: [{ $project: { _id: 1 } }], // Only fetch comment IDs for counting
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$comments",
+                    preserveNullAndEmptyArrays: true, // Include posts with no comments
+                  },
+                },
+                {
+                  $group: {
+                    _id: null,
+                    count: {
+                      $sum: {
+                        $cond: [{ $ifNull: ["$comments", false] }, 1, 0],
+                      },
+                    },
+                  },
+                },
+              ],
+              // Get recent posts with their details
+              recentPosts: [
+                { $sort: { createdAt: -1 } },
+                { $limit: 5 },
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author",
+                  },
+                },
+                { $unwind: "$author" },
+                {
+                  $lookup: {
+                    from: "comments",
+                    localField: "_id",
+                    foreignField: "post",
+                    as: "comments",
+                    pipeline: [{ $project: { _id: 1 } }], // Only fetch IDs for counting
+                  },
+                },
+                {
+                  $addFields: {
+                    commentCount: { $size: "$comments" },
+                  },
+                },
+                {
+                  $project: {
+                    _id: 1,
+                    title: 1,
+                    content: 1,
+                    category: 1,
+                    subcategory: 1,
+                    tags: 1,
+                    views: 1,
+                    likes: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    editedAt: 1,
+                    "author._id": 1,
+                    "author.name": 1,
+                    commentCount: 1,
+                  },
+                },
+              ],
+            },
+          },
+        ]);
+
+        return {
+          category,
+          totalPosts: categoryStats.totalCount[0]?.count || 0,
+          totalComments: categoryStats.totalComments[0]?.count || 0,
+          recentPosts: categoryStats.recentPosts,
+        };
+      })
+    );
+
+    res.json({
+      success: true,
+      stats,
+    });
+  } catch (error) {
+    handleControllerError(res, "Error fetching category stats", error);
+  }
+};

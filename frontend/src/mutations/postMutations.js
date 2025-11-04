@@ -90,10 +90,11 @@ export function createCreatePostMutation(
     mutationFn: (formData) => createPost(formData),
 
     onSuccess: (data) => {
+      // data is now { success: true, post: {...} }
       // Invalidate posts list to show new post
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       // Navigate to the new post
-      navigate(`/forum/post/${data._id}`);
+      navigate(`/forum/post/${data.post._id}`);
     },
 
     onError: (error) => {

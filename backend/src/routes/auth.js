@@ -1,8 +1,51 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import sanitizeHtml from "sanitize-html";
+import { Filter } from "bad-words";
 
 const router = express.Router();
+const filter = new Filter();
+
+/**
+ * Validate and sanitize username/name
+ * @param {String} name - Raw name from request
+ * @returns {Object} { valid: boolean, sanitized: string, error: string }
+ */
+const validateName = (name) => {
+  const trimmed = name?.trim();
+
+  if (!trimmed) {
+    return { valid: false, error: "Name cannot be empty" };
+  }
+
+  if (trimmed.length < 2) {
+    return { valid: false, error: "Name must be at least 2 characters long" };
+  }
+
+  if (trimmed.length > 50) {
+    return {
+      valid: false,
+      error: "Name exceeds maximum length of 50 characters",
+    };
+  }
+
+  // Remove all HTML tags (names should be plain text)
+  const sanitized = sanitizeHtml(trimmed, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
+  // Check for profanity
+  if (filter.isProfane(sanitized)) {
+    return {
+      valid: false,
+      error: "Name contains inappropriate language",
+    };
+  }
+
+  return { valid: true, sanitized };
+};
 
 // Middleware to handle async route handlers
 const asyncHandler = (fn) => (req, res, next) => {
@@ -15,6 +58,12 @@ router.post(
   asyncHandler(async (req, res) => {
     const { email, password, name } = req.body;
 
+    // Validate and sanitize name
+    const nameValidation = validateName(name);
+    if (!nameValidation.valid) {
+      return res.status(400).json({ message: nameValidation.error });
+    }
+
     // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -25,7 +74,7 @@ router.post(
     const user = await User.create({
       email,
       password,
-      name,
+      name: nameValidation.sanitized,
     });
 
     // Generate JWT token

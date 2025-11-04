@@ -1,3 +1,9 @@
+import sanitizeHtml from "sanitize-html";
+import { Filter } from "bad-words";
+
+// Initialize profanity filter
+const filter = new Filter();
+
 /**
  * Helper function to handle controller errors consistently
  * @param {Object} res - Express response object
@@ -43,12 +49,30 @@ export const validateCommentContent = (content) => {
     };
   }
 
-  // Basic XSS prevention: remove script tags and dangerous attributes
-  // For production, consider using a library like DOMPurify or sanitize-html
-  const sanitized = trimmed
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .replace(/on\w+="[^"]*"/gi, "")
-    .replace(/on\w+='[^']*'/gi, "");
+  // Sanitize HTML - allow basic formatting for comments
+  const sanitized = sanitizeHtml(trimmed, {
+    allowedTags: ["b", "i", "em", "strong", "u", "p", "br", "code", "a"],
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    // Enforce noopener noreferrer on links
+    transformTags: {
+      a: (tagName, attribs) => {
+        return {
+          tagName: "a",
+          attribs: {
+            ...attribs,
+            target: "_blank",
+            rel: "noopener noreferrer",
+          },
+        };
+      },
+    },
+  });
 
-  return { valid: true, sanitized };
+  // Filter profanity
+  const filtered = filter.clean(sanitized);
+
+  return { valid: true, sanitized: filtered };
 };

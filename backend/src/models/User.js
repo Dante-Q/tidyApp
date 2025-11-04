@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import sanitizeHtml from "sanitize-html";
+import { Filter } from "bad-words";
+
+const filter = new Filter();
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,6 +29,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
+      minlength: [2, "Name must be at least 2 characters long"],
+      maxlength: [50, "Name cannot exceed 50 characters"],
+      validate: {
+        validator: function (v) {
+          // Remove HTML tags
+          const sanitized = sanitizeHtml(v, {
+            allowedTags: [],
+            allowedAttributes: {},
+          });
+          // Check for profanity
+          return !filter.isProfane(sanitized);
+        },
+        message: "Name contains inappropriate language or invalid characters",
+      },
     },
     friends: [
       {
@@ -53,6 +71,17 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Sanitize name before saving
+userSchema.pre("save", function (next) {
+  if (this.isModified("name")) {
+    this.name = sanitizeHtml(this.name, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+  }
+  next();
+});
 
 // Hash password before saving
 userSchema.pre("save", async function (next) {
