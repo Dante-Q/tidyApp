@@ -4,13 +4,14 @@
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// Don't add /api prefix - it's already in VITE_API_URL
 
 /**
  * Fetch tide data for all beaches
  * @returns {Promise<Object>} All beaches tide data
  */
 export async function fetchAllTideData() {
-  const response = await fetch(`${API_BASE_URL}/api/tides`);
+  const response = await fetch(`${API_BASE_URL}/tides`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch tide data: ${response.status}`);
@@ -26,7 +27,7 @@ export async function fetchAllTideData() {
  * @returns {Promise<Object>} Beach-specific tide data
  */
 export async function fetchBeachTideData(beachName) {
-  const response = await fetch(`${API_BASE_URL}/api/tides/${beachName}`);
+  const response = await fetch(`${API_BASE_URL}/tides/${beachName}`);
 
   if (!response.ok) {
     if (response.status === 404) {
