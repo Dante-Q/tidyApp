@@ -224,6 +224,18 @@ select:focus {
   color: inherit;
 }
 
+.hero-emoji-crown {
+  display: inline-block;
+  font-size: 1em;
+  margin-right: 0.2em;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  color: inherit;
+  filter: none;
+}
+
 @keyframes wave {
   0%,
   100% {

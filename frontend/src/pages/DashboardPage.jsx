@@ -5,7 +5,6 @@ import FavoritesWatchlist from "../components/FavoritesWatchlist";
 import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
-import MyForumPosts from "../components/MyForumPosts";
 import FriendsManager from "../components/FriendsManager";
 import useMarineData from "../hooks/useMarineData";
 
@@ -16,13 +15,23 @@ export default function DashboardPage() {
   // Fetch marine data for selected beach
   const { data: surfData, loading, error } = useMarineData(selectedBeach);
 
+  // Separate crown emoji from displayName if present
+  const displayName = user.displayName || user.name;
+  const hasCrown = displayName.startsWith("👑");
+  const nameWithoutCrown = hasCrown
+    ? displayName.substring(2).trim()
+    : displayName;
+
   return (
     <div className="homepage-wrapper">
       <HeroContainer>
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="hero-emoji">👋</span>
-            Welcome back, {user.displayName || user.name}!
+            <span className="hero-greeting">Welcome back,</span>
+            <br />
+            {hasCrown && <span className="hero-emoji-crown">👑 </span>}
+            <span className="hero-username">{nameWithoutCrown}!</span>
           </h1>
           <p className="hero-subtitle">Your favorite beaches & conditions</p>
         </div>
@@ -32,9 +41,6 @@ export default function DashboardPage() {
       <section className="homepage-content">
         {/* Friends Manager - Unified Component */}
         <FriendsManager />
-
-        {/* My Forum Posts */}
-        <MyForumPosts />
 
         <FavoritesWatchlist />
 
