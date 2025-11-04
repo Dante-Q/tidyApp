@@ -1,45 +1,70 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
 import ColorPicker from "../components/ColorPicker";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api";
+import { getCurrentUserProfile } from "../services/authService";
 import "./ProfileSettingsPage.css";
 
 export default function ProfileSettingsPage() {
   const { user, logout, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [displayName, setDisplayName] = useState(
-    user?.displayName?.replace("👑 ", "") || ""
-  );
-  const [avatarColor, setAvatarColor] = useState(
-    user?.avatarColor || "#6DD5ED"
-  );
-  const [bio, setBio] = useState(user?.bio || "");
-  const [location, setLocation] = useState(user?.location || "");
-  const [interests, setInterests] = useState(user?.interests || "");
-  // For admins: default to true if showAdminBadge is true or undefined
-  // For non-admins: this value doesn't matter (won't be sent to backend)
-  const [showAdminBadge, setShowAdminBadge] = useState(
-    user?.isAdmin ? user?.showAdminBadge !== false : true
-  );
+
+  // Fetch full profile data including bio, location, interests
+  const { data: profileData, isLoading: profileLoading } = useQuery({
+    queryKey: ["currentUserProfile"],
+    queryFn: getCurrentUserProfile,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const [displayName, setDisplayName] = useState("");
+  const [avatarColor, setAvatarColor] = useState("#6DD5ED");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [interests, setInterests] = useState("");
+  const [showAdminBadge, setShowAdminBadge] = useState(true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Update form fields when profile data is loaded
+  useEffect(() => {
+    if (profileData) {
+      setDisplayName(profileData.displayName?.replace("👑 ", "") || "");
+      setAvatarColor(profileData.avatarColor || "#6DD5ED");
+      setBio(profileData.bio || "");
+      setLocation(profileData.location || "");
+      setInterests(profileData.interests || "");
+      if (profileData.isAdmin) {
+        setShowAdminBadge(profileData.showAdminBadge !== false);
+      }
+    }
+  }, [profileData]);
+
+  // Helper function to capitalize first letter of each word
+  const capitalizeWords = (str) => {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   // Check if any changes have been made
   const hasChanges =
-    displayName !== (user?.displayName?.replace("👑 ", "") || "") ||
+    displayName !== (profileData?.displayName?.replace("👑 ", "") || "") ||
     avatarColor.toUpperCase() !==
-      (user?.avatarColor?.toUpperCase() || "#6DD5ED") ||
-    bio !== (user?.bio || "") ||
-    location !== (user?.location || "") ||
-    interests !== (user?.interests || "") ||
-    (user?.isAdmin && showAdminBadge !== (user?.showAdminBadge !== false));
+      (profileData?.avatarColor?.toUpperCase() || "#6DD5ED") ||
+    bio !== (profileData?.bio || "") ||
+    location !== (profileData?.location || "") ||
+    interests !== (profileData?.interests || "") ||
+    (profileData?.isAdmin &&
+      showAdminBadge !== (profileData?.showAdminBadge !== false));
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -73,6 +98,8 @@ export default function ProfileSettingsPage() {
 
       // Invalidate all queries to refetch posts/comments with new avatar color
       queryClient.invalidateQueries();
+      // Specifically invalidate the profile query
+      queryClient.invalidateQueries(["currentUserProfile"]);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
@@ -101,6 +128,20 @@ export default function ProfileSettingsPage() {
   if (!user) {
     navigate("/login");
     return null;
+  }
+
+  // Show loading state while fetching profile data
+  if (profileLoading) {
+    return (
+      <div className="profile-settings-page">
+        <div className="settings-container">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -160,8 +201,8 @@ export default function ProfileSettingsPage() {
                 type="text"
                 id="location"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g., San Diego, CA"
+                onChange={(e) => setLocation(capitalizeWords(e.target.value))}
+                placeholder="e.g. Cape Town, WP"
                 maxLength={100}
               />
               <small className="form-hint">
@@ -171,18 +212,17 @@ export default function ProfileSettingsPage() {
 
             {/* Interests */}
             <div className="form-group">
-              <label htmlFor="interests">Favorite Spots & Interests</label>
+              <label htmlFor="interests">Interests</label>
               <textarea
                 id="interests"
                 value={interests}
                 onChange={(e) => setInterests(e.target.value)}
-                placeholder="e.g., Surfing at Blacks Beach, longboarding, beach volleyball..."
+                placeholder="e.g. Surfing, Climbing, Yoga"
                 maxLength={100}
                 rows={2}
               />
               <small className="form-hint">
-                {interests.length}/100 characters - Share your favorite surf
-                spots, gear, or interests
+                {interests.length}/100 characters
               </small>
             </div>
 
