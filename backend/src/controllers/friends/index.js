@@ -9,5 +9,7 @@ export { rejectFriendRequest } from "./reject.js";
 export { removeFriend } from "./remove.js";
 export { getFriends } from "./list.js";
 export { getFriendRequests } from "./requests.js";
+export { getSentFriendRequests } from "./sent.js";
+export { cancelFriendRequest } from "./cancel.js";
 export { getFriendshipStatus } from "./status.js";
 export { cleanupFriendDataOnUserDelete } from "./cleanup.js";

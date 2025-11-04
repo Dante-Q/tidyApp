@@ -36,13 +36,13 @@ export default function UserProfilePage() {
   const { data: friendshipData } = useQuery({
     queryKey: ["friendshipStatus", userId],
     queryFn: () => getFriendshipStatus(userId),
-    enabled: !!user && !!userId && user._id !== userId,
+    enabled: !!user && !!userId && user.id !== userId,
   });
 
   const friendshipStatus = friendshipData?.status || "none";
 
   // Fetch friends list to get count (only if viewing own profile or if friends)
-  const isOwnProfile = user && String(user._id) === String(userId);
+  const isOwnProfile = user && String(user.id) === String(userId);
   const canViewFriends = isOwnProfile || friendshipStatus === "friends";
 
   const { data: friendsData } = useQuery({
@@ -58,6 +58,8 @@ export default function UserProfilePage() {
     mutationFn: sendFriendRequest,
     onSuccess: () => {
       queryClient.invalidateQueries(["friendshipStatus", userId]);
+      queryClient.invalidateQueries(["friendRequests"]); // Refresh dashboard requests
+      queryClient.invalidateQueries(["sentFriendRequests"]); // Refresh sent requests
     },
   });
 
@@ -159,9 +161,9 @@ export default function UserProfilePage() {
             <h1 className="profile-name">{userInfo?.name || "Unknown User"}</h1>
 
             {user &&
-              user._id &&
+              user.id &&
               userId &&
-              String(user._id) !== String(userId) && (
+              String(user.id) !== String(userId) && (
                 <button
                   className={`friend-button ${getFriendButtonClass()}`}
                   onClick={handleFriendAction}

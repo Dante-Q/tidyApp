@@ -59,6 +59,27 @@ export const getFriendRequests = async () => {
 };
 
 /**
+ * Get sent friend requests (outgoing requests from current user)
+ */
+export const getSentFriendRequests = async () => {
+  const response = await axios.get(`${API_URL}/sent`, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+/**
+ * Cancel a sent friend request
+ * @param {string} userId - The ID of the user to whom the request was sent
+ */
+export const cancelFriendRequest = async (userId) => {
+  const response = await axios.delete(`${API_URL}/request/${userId}`, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+/**
  * Get friendship status with another user
  * @param {string} userId - The ID of the user to check status with
  * @returns {Promise<{status: 'none'|'friends'|'pending_sent'|'pending_received'|'self'}>}

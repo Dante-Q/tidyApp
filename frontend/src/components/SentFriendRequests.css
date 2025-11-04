@@ -1,0 +1,163 @@
+/* Sent Friend Requests Section */
+.sent-requests-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(109, 213, 237, 0.15);
+  border-radius: 12px;
+}
+
+.sent-requests-section .section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sent-requests-section .requests-badge {
+  background: rgba(245, 158, 11, 0.9);
+  color: #0f172a;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  -webkit-text-fill-color: #0f172a;
+}
+
+.sent-requests-section .requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sent-requests-section .request-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(245, 158, 11, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sent-requests-section .request-card:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(30, 41, 59, 0.8);
+  transform: translateY(-2px);
+}
+
+.sent-requests-section .request-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+}
+
+.sent-requests-section .request-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.sent-requests-section .request-details {
+  flex: 1;
+}
+
+.sent-requests-section .request-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: #ffffff;
+}
+
+.sent-requests-section .request-time {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.sent-requests-section .request-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sent-requests-section .btn-cancel {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.sent-requests-section .btn-cancel:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.sent-requests-section .btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sent-requests-section .loading-container,
+.sent-requests-section .error-container,
+.sent-requests-section .empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sent-requests-section .loading-spinner {
+  border: 3px solid rgba(109, 213, 237, 0.1);
+  border-top: 3px solid rgba(109, 213, 237, 0.8);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.sent-requests-section .empty-message {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sent-requests-section .error-container p {
+  margin: 0;
+  color: #ef4444;
+}

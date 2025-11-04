@@ -6,8 +6,7 @@ import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import MyForumPosts from "../components/MyForumPosts";
-import FriendRequests from "../components/FriendRequests";
-import FriendsList from "../components/FriendsList";
+import FriendsManager from "../components/FriendsManager";
 import useMarineData from "../hooks/useMarineData";
 
 export default function DashboardPage() {
@@ -31,11 +30,8 @@ export default function DashboardPage() {
 
       {/* Dashboard content section */}
       <section className="homepage-content">
-        {/* Friend Requests */}
-        <FriendRequests />
-
-        {/* Friends List */}
-        <FriendsList />
+        {/* Friends Manager - Unified Component */}
+        <FriendsManager />
 
         {/* My Forum Posts */}
         <MyForumPosts />
