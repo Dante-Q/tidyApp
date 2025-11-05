@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-03T07:04:29.559Z",
+  "lastUpdated": "2025-11-03T07:09:10.081Z",
   "beaches": {
     "muizenberg": {
       "beach": "muizenberg",
@@ -10,7 +10,7 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:30.869Z"
+      "lastUpdated": "2025-11-03T07:09:10.758Z"
     },
     "bloubergstrand": {
       "beach": "bloubergstrand",
@@ -21,7 +21,7 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:32.087Z"
+      "lastUpdated": "2025-11-03T07:09:11.974Z"
     },
     "strand": {
       "beach": "strand",
@@ -32,7 +32,7 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:33.307Z"
+      "lastUpdated": "2025-11-03T07:09:13.187Z"
     },
     "clifton": {
       "beach": "clifton",
@@ -43,7 +43,7 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:34.532Z"
+      "lastUpdated": "2025-11-03T07:09:14.397Z"
     },
     "kalkbay": {
       "beach": "kalkbay",
@@ -54,7 +54,9 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:35.762Z"
+      "lastUpdated": "2025-11-03T07:04:35.762Z",
+      "cachedData": true,
+      "cacheReason": "Stormglass API error (402): {\"errors\":{\"key\":\"API quota exceeded\"},\"meta\":{\"dailyQuota\":10,\"requestCount\":11}}\n"
     },
     "milnerton": {
       "beach": "milnerton",
@@ -65,7 +67,9 @@
       },
       "seaLevel": [],
       "hourlyDataPoints": 0,
-      "lastUpdated": "2025-11-03T07:04:36.974Z"
+      "lastUpdated": "2025-11-03T07:04:36.974Z",
+      "cachedData": true,
+      "cacheReason": "Stormglass API error (402): {\"errors\":{\"key\":\"API quota exceeded\"},\"meta\":{\"dailyQuota\":10,\"requestCount\":12}}\n"
     }
   },
   "meta": {
@@ -73,7 +77,10 @@
     "daysOfPredictions": 7,
     "dataPoints": "hourly",
     "apiProvider": "Stormglass.io",
-    "fetchStatus": "complete",
-    "failedBeaches": []
+    "fetchStatus": "partial",
+    "failedBeaches": [
+      "kalkbay",
+      "milnerton"
+    ]
   }
 }
