@@ -168,12 +168,17 @@
   background: rgba(109, 213, 237, 0.2);
   border: 1px solid rgba(109, 213, 237, 0.4);
   color: #6dd5ed;
-  font-size: 2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.beach-slider-arrow svg {
+  display: block;
   flex-shrink: 0;
 }
 
@@ -265,7 +270,11 @@
   .beach-slider-arrow {
     width: 36px;
     height: 36px;
-    font-size: 1.5rem;
+  }
+
+  .beach-slider-arrow svg {
+    width: 18px;
+    height: 18px;
   }
 
   .beach-slider-dots {
@@ -308,6 +317,10 @@
   .beach-slider-arrow {
     width: 32px;
     height: 32px;
-    font-size: 1.25rem;
+  }
+
+  .beach-slider-arrow svg {
+    width: 16px;
+    height: 16px;
   }
 }
