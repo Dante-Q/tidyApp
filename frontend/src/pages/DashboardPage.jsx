@@ -19,13 +19,14 @@ export default function DashboardPage() {
     <div className="homepage-wrapper">
       <HeroContainer>
         <div className="hero-content">
-          <h1 className="hero-title">
+          <h1 className="hero-title-dashboard dashboard-hero-title">
             <span className="hero-emoji">👋</span>
-            <span className="hero-greeting">Welcome back,</span>
-            <br />
-            {hasCrown && <span className="hero-emoji-crown">👑 </span>}
-            <span className="hero-username">{nameWithoutCrown}!</span>
+            <span className="hero-title-text">Welcome back,</span>
           </h1>
+          <div className="dashboard-username">
+            {hasCrown && <span className="hero-emoji-crown">👑 </span>}
+            <span className="username-text">{nameWithoutCrown}!</span>
+          </div>
           <p className="hero-subtitle">Your favorite beaches & conditions</p>
         </div>
       </HeroContainer>

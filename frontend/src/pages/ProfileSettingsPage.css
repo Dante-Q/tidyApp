@@ -31,6 +31,25 @@
   background-clip: text;
 }
 
+.settings-emoji {
+  font-size: 1.5em;
+  display: inline-block;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  animation: spin-slow 4s linear infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .btn-view-profile {
   padding: 0.75rem 1.5rem;
   background: rgba(109, 213, 237, 0.1);

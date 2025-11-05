@@ -149,7 +149,7 @@ export default function ProfileSettingsPage() {
       <div className="settings-container">
         <div className="settings-header">
           <h1 className="settings-title">
-            <span className="hero-emoji">⚙️</span> Profile Settings
+            <span className="settings-emoji">⚙️</span> Profile Settings
           </h1>
           <Link to={`/profile/${user.id}`} className="btn-view-profile">
             👤 View Profile

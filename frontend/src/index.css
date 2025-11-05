@@ -230,7 +230,18 @@ select:focus {
 .hero-title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-title-dashboard {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0rem;
   line-height: 1.1;
   display: flex;
   align-items: center;
@@ -262,6 +273,25 @@ select:focus {
   background-clip: initial !important;
   color: inherit;
   filter: none;
+}
+
+/* Dashboard-specific hero styling */
+.dashboard-username {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.username-text {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @keyframes wave {
