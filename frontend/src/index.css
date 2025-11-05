@@ -610,7 +610,7 @@ footer {
 
   /* Homepage content - minimal padding */
   .homepage-content {
-    padding: 1.5rem 0.75rem;
+    padding: 0rem;
     border-radius: 8px;
   }
 
