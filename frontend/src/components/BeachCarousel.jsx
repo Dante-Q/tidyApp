@@ -4,6 +4,8 @@ import "./BeachCarousel.css";
 
 export default function BeachCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const beaches = [
     {
@@ -78,6 +80,34 @@ export default function BeachCarousel() {
     return beaches.slice(start, start + itemsPerPage);
   };
 
+  // Touch handlers for swipe gestures on mobile
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleNext();
+    }
+    if (isRightSwipe) {
+      handlePrevious();
+    }
+
+    // Reset
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
   return (
     <div className="beach-carousel">
       <div className="beach-carousel-header">
@@ -85,7 +115,12 @@ export default function BeachCarousel() {
         <p>Discover the best surf spots along the coast</p>
       </div>
 
-      <div className="beach-carousel-container">
+      <div
+        className="beach-carousel-container"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* Previous Button */}
         <button
           className="carousel-nav carousel-nav-prev"

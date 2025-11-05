@@ -252,14 +252,103 @@
 
   .beach-carousel-header {
     margin-bottom: 2rem;
+    padding: 0 1rem;
   }
 
   .beach-carousel-header h2 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 
   .beach-carousel-header p {
-    font-size: 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .beach-carousel-container {
+    padding: 0 3rem;
+  }
+
+  .beach-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .beach-card {
+    min-height: auto;
+  }
+
+  .beach-card-image {
+    height: 200px;
+  }
+
+  .beach-card-content {
+    padding: 1.25rem;
+  }
+
+  .beach-card-description {
+    font-size: 0.875rem;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    min-height: 3.2em;
+    max-height: 3.2em;
+  }
+
+  .beach-card-features {
+    min-height: auto;
+    margin-bottom: 0.75rem;
+  }
+
+  .beach-feature-tag {
+    font-size: 0.6875rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .beach-card-action {
+    font-size: 0.875rem;
+  }
+
+  .carousel-nav {
+    width: 44px;
+    height: 44px;
+    background: rgba(30, 41, 59, 0.95);
+  }
+
+  .carousel-nav-prev {
+    left: 0.5rem;
+  }
+
+  .carousel-nav-next {
+    right: 0.5rem;
+  }
+
+  .carousel-nav svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .carousel-pagination {
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .beach-carousel {
+    padding: 1.5rem 0;
+  }
+
+  .beach-carousel-header {
+    margin-bottom: 1.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .beach-carousel-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .beach-carousel-header p {
+    font-size: 0.875rem;
   }
 
   .beach-carousel-container {
@@ -267,13 +356,24 @@
   }
 
   .beach-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 1rem;
+    gap: 1rem;
   }
 
   .beach-card-image {
-    height: 180px;
+    height: 160px;
+  }
+
+  .beach-card-content {
+    padding: 1rem;
+  }
+
+  .beach-card-title {
+    font-size: 1.25rem;
+  }
+
+  .beach-card-description {
+    font-size: 0.8125rem;
+    margin-bottom: 0.75rem;
   }
 
   .carousel-nav {
@@ -282,31 +382,24 @@
   }
 
   .carousel-nav-prev {
-    left: -5px;
+    left: 0.25rem;
   }
 
   .carousel-nav-next {
-    right: -5px;
+    right: 0.25rem;
   }
 
   .carousel-nav svg {
     width: 20px;
     height: 20px;
   }
-}
 
-/* Small Mobile */
-@media (max-width: 480px) {
-  .beach-carousel-container {
-    padding: 0 2rem;
+  .pagination-dot {
+    width: 8px;
+    height: 8px;
   }
 
-  .beach-grid {
-    padding: 0 0.5rem;
-  }
-
-  .carousel-nav {
-    width: 36px;
-    height: 36px;
+  .pagination-dot.active {
+    width: 20px;
   }
 }
