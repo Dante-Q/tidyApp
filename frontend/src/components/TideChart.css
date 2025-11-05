@@ -358,3 +358,51 @@
     gap: 0.75rem;
   }
 }
+
+/* Smooth tide curve (for sea level data) */
+.tide-curve-svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2rem 0 4rem 0;
+}
+
+.tide-curve-time-labels {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.tide-curve-time-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tide-curve-time-label .tide-time-hour {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.tide-curve-time-label .tide-time-date {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .tide-curve-time-label .tide-time-hour {
+    font-size: 0.65rem;
+  }
+
+  .tide-curve-time-label .tide-time-date {
+    font-size: 0.6rem;
+  }
+}
