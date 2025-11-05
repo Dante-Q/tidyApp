@@ -85,7 +85,11 @@ export default function Navbar() {
         <Container size="lg" className="navbar-container">
           <Link to="/" className="navbar-link" onClick={closeMobileMenu}>
             <div className="navbar-logo">
-              <span className="navbar-logo-emoji">🌊</span>
+              <img
+                src="/tidy.svg"
+                alt="Tidy Logo"
+                className="navbar-logo-emoji"
+              />
               <Text className="navbar-logo-text" fw={700} size="xl">
                 Tidy
               </Text>
