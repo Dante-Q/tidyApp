@@ -1,38 +1,60 @@
 /**
- * Beach configuration for TidyApp
- * Central source of truth for all beach data
+ * Beach Configuration
+ * Central source of truth for all beach data across the backend.
+ * Keep this in sync with frontend beach configuration.
+ *
+ * IMPORTANT: Coordinates are set ~100-200m offshore in the water
+ * for accurate tide and wave data from APIs (Stormglass, Open-Meteo).
  */
 
 export const BEACHES = {
   muizenberg: {
     slug: "muizenberg",
     name: "Muizenberg",
-    coordinates: { lat: -34.1183, lng: 18.4717 },
+    coordinates: {
+      lat: -34.108979,
+      lng: 18.473497,
+    },
   },
   bloubergstrand: {
     slug: "bloubergstrand",
     name: "Bloubergstrand",
-    coordinates: { lat: -33.8116, lng: 18.4364 },
+    coordinates: {
+      lat: -33.818903,
+      lng: 18.469919,
+    },
   },
   strand: {
     slug: "strand",
     name: "Strand",
-    coordinates: { lat: -34.1236, lng: 18.8258 },
+    coordinates: {
+      lat: -34.128956,
+      lng: 18.828002,
+    },
   },
   clifton: {
     slug: "clifton",
     name: "Clifton",
-    coordinates: { lat: -33.9394, lng: 18.3772 },
+    coordinates: {
+      lat: -33.922131,
+      lng: 18.374834,
+    },
   },
   "kalk-bay": {
     slug: "kalk-bay",
     name: "Kalk Bay",
-    coordinates: { lat: -34.1281, lng: 18.4506 },
+    coordinates: {
+      lat: -34.126241,
+      lng: 18.452563,
+    },
   },
   milnerton: {
     slug: "milnerton",
     name: "Milnerton",
-    coordinates: { lat: -33.8615, lng: 18.4959 },
+    coordinates: {
+      lat: -33.859574,
+      lng: 18.486802,
+    },
   },
 };
 
