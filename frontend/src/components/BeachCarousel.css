@@ -312,11 +312,12 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 4rem;
+    width: 6rem;
     background: linear-gradient(
       to right,
-      rgba(28, 38, 56, 1) 0%,
-      rgba(28, 38, 56, 0.6) 50%,
+      rgba(28, 38, 56, 0.8) 0%,
+      rgba(28, 38, 56, 0.4) 30%,
+      rgba(28, 38, 56, 0.15) 60%,
       rgba(28, 38, 56, 0) 100%
     );
     pointer-events: none;
@@ -330,11 +331,12 @@
     right: 0;
     top: 0;
     bottom: 0;
-    width: 4rem;
+    width: 6rem;
     background: linear-gradient(
       to left,
-      rgba(28, 38, 56, 1) 0%,
-      rgba(28, 38, 56, 0.6) 50%,
+      rgba(28, 38, 56, 0.8) 0%,
+      rgba(28, 38, 56, 0.4) 30%,
+      rgba(28, 38, 56, 0.15) 60%,
       rgba(28, 38, 56, 0) 100%
     );
     pointer-events: none;
