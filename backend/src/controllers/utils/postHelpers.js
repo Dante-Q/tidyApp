@@ -59,10 +59,10 @@ export const validatePostTitle = (title) => {
     return { valid: false, error: "Title must be at least 5 characters long" };
   }
 
-  if (trimmed.length > 200) {
+  if (trimmed.length > 100) {
     return {
       valid: false,
-      error: "Title exceeds maximum length of 200 characters",
+      error: "Title exceeds maximum length of 100 characters",
     };
   }
 

@@ -292,13 +292,31 @@ router.patch(
 
     // Update bio, location, interests if provided
     if (bio !== undefined) {
+      // Bio validation
+      if (bio && bio.length > 500) {
+        return res.status(400).json({
+          message: "Bio cannot exceed 500 characters",
+        });
+      }
       user.bio = bio; // Don't trim - preserve spaces, newlines, and emojis
     }
     if (location !== undefined) {
-      user.location = location.trim();
+      const trimmedLocation = location.trim();
+      if (trimmedLocation.length > 100) {
+        return res.status(400).json({
+          message: "Location cannot exceed 100 characters",
+        });
+      }
+      user.location = trimmedLocation;
     }
     if (interests !== undefined) {
-      user.interests = interests.trim();
+      const trimmedInterests = interests.trim();
+      if (trimmedInterests.length > 100) {
+        return res.status(400).json({
+          message: "Interests cannot exceed 100 characters",
+        });
+      }
+      user.interests = trimmedInterests;
     }
 
     // Only allow admins to change showAdminBadge setting
