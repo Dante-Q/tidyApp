@@ -10,6 +10,7 @@ import commentRoutes from "./routes/comments.js";
 import tideRoutes from "./routes/tides.js";
 import seaLevelRoutes from "./routes/seaLevel.js";
 import friendRoutes from "./routes/friends.js";
+import adminRoutes from "./routes/admin.js";
 import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -73,6 +74,9 @@ app.use("/api/comments", commentRoutes);
 
 // Friends routes
 app.use("/api/friends", friendRoutes);
+
+// Admin routes
+app.use("/api/admin", adminRoutes);
 
 // Tide data routes
 app.use("/api/tides", tideRoutes);

@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema(
     content: {
       type: String,
       required: [true, "Post content is required"],
-      trim: true,
+      // Don't trim - preserve spaces, newlines, and emojis
     },
     category: {
       type: String,
@@ -66,6 +66,10 @@ const postSchema = new mongoose.Schema(
       },
     ],
     isPinned: {
+      type: Boolean,
+      default: false,
+    },
+    commentsDisabled: {
       type: Boolean,
       default: false,
     },

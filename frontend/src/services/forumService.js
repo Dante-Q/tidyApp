@@ -128,3 +128,37 @@ export const getPostsByUser = async (userId) => {
     throw error;
   }
 };
+
+// Toggle pin status on a post (admin only)
+export const togglePinPost = async (postId) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${postId}/pin`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error toggling pin status:", error);
+    throw error;
+  }
+};
+
+// Toggle comments on a post (admin only)
+export const toggleCommentsOnPost = async (postId) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${postId}/comments`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error toggling comments status:", error);
+    throw error;
+  }
+};

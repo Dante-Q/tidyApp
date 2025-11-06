@@ -38,9 +38,9 @@ export const getPosts = async (req, res) => {
     }
 
     const posts = await Post.find(query)
-      .populate("author", "name displayName")
+      .populate("author", "name displayName isAdmin showAdminBadge avatarColor")
       .populate("commentCount")
-      .sort(sort)
+      .sort({ isPinned: -1, createdAt: -1 }) // Pinned posts first, then by date
       .skip(skip)
       .limit(limitNum)
       .lean(); // Use lean() for read-only queries to reduce memory

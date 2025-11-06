@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
 import ForumHeroSection from "../components/ForumHeroSection.jsx";
 import ForumCategories from "../components/ForumCategories.jsx";
+import PinnedPosts from "../components/PinnedPosts.jsx";
 import ForumRecentActivity from "../components/ForumRecentActivity.jsx";
 import "./ForumHomePage.css";
 
@@ -22,6 +23,9 @@ export default function ForumHomePage() {
   const allPosts = allPostsData?.posts || [];
   const recentPosts = recentPostsData?.posts || [];
 
+  // Filter out pinned posts from recent activity
+  const nonPinnedPosts = recentPosts.filter((post) => !post.isPinned);
+
   return (
     <div className="forum-page">
       <ForumHeroSection />
@@ -30,8 +34,10 @@ export default function ForumHomePage() {
         <div className="forum-container">
           <ForumCategories posts={allPosts} loading={loadingAllPosts} />
 
+          <PinnedPosts posts={allPosts} loading={loadingAllPosts} />
+
           <ForumRecentActivity
-            recentPosts={recentPosts}
+            recentPosts={nonPinnedPosts}
             loading={loadingRecentPosts}
           />
 

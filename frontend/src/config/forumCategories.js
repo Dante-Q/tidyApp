@@ -173,7 +173,7 @@ export const FORUM_CATEGORIES = [
       {
         slug: "parking-access",
         name: "Parking & Access",
-        icon: "�️",
+        icon: "🅿️",
         description: "Parking info and beach access details",
       },
       {

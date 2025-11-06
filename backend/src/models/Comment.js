@@ -5,7 +5,7 @@ const commentSchema = new mongoose.Schema(
     content: {
       type: String,
       required: [true, "Comment content is required"],
-      trim: true,
+      // Don't trim - preserve spaces, newlines, and emojis
     },
     post: {
       type: mongoose.Schema.Types.ObjectId,

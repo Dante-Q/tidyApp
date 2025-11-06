@@ -53,6 +53,14 @@
   color: #ffffff;
   margin: 0;
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pinIcon {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 4px rgba(109, 213, 237, 0.6));
 }
 
 .postTags {

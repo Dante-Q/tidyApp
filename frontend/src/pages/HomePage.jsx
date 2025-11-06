@@ -20,8 +20,8 @@ export default function HomePage() {
       <HeroContainer>
         <div className="hero-content">
           <h1 className="hero-title">
-            <span className="hero-emoji">🌊</span>
-            Welcome to Tidy
+            <img src="/tidy.svg" alt="Tidy Logo" className="hero-emoji" />
+            <span className="hero-title-text">Welcome to Tidy</span>
           </h1>
           <p className="hero-subtitle">
             Stay in sync with tides, surf reports, and weather in Cape Town.

@@ -81,6 +81,14 @@
   margin-left: 2rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pinIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 4px rgba(109, 213, 237, 0.6));
 }
 
 .postBeachTags {
@@ -137,13 +145,14 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  /* Background color set via inline style based on user preference */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
   font-weight: 700;
   color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .authorInfo {

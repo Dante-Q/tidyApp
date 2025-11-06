@@ -127,16 +127,31 @@ async function fetchBeachSeaLevel(beachKey, beach) {
       end
     );
 
+    // Log the raw response structure for debugging (first entry only)
+    if (seaLevelResponse?.data && seaLevelResponse.data.length > 0) {
+      console.log(
+        `  Sample data structure:`,
+        JSON.stringify(seaLevelResponse.data[0], null, 2)
+      );
+      console.log(
+        `  First 3 heights:`,
+        seaLevelResponse.data.slice(0, 3).map((h) => h.sg)
+      );
+    }
+
     // Extract and format hourly data
     // Stormglass returns { data: [...], meta: {...} }
-    // Each data point: { time: "2025-11-03T00:00:00+00:00", waterLevel: { sg: 1.23 } }
+    // Each data point: { time: "...", sg: 1.23 }
+    // The 'sg' field is the Stormglass prediction for sea level
     const seaLevel = (seaLevelResponse.data || []).map((hour) => ({
       time: hour.time,
-      height: hour.waterLevel?.sg || 0, // Stormglass prediction (not an array)
+      height: hour.sg || 0, // Direct sg property, not nested in waterLevel
     }));
 
+    // Verify we got actual data
+    const nonZeroCount = seaLevel.filter((h) => h.height !== 0).length;
     console.log(
-      `✓ Fetched ${seaLevel.length} hourly sea level readings for ${beach.name}`
+      `✓ Fetched ${seaLevel.length} hourly sea level readings for ${beach.name} (${nonZeroCount} non-zero)`
     );
 
     return {

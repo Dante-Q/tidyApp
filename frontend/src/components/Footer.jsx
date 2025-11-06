@@ -61,7 +61,11 @@ export default function Footer() {
         {/* Logo and Description */}
         <div className="footer-brand">
           <a href="/" className="footer-logo" onClick={handleLogoClick}>
-            <span className="footer-logo-emoji">🌊</span>
+            <img
+              src="/tidy.svg"
+              alt="Tidy Logo"
+              className="footer-logo-emoji"
+            />
             <span className="footer-logo-text">TidyApp</span>
           </a>
           <p className="footer-description">

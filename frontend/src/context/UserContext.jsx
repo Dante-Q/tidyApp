@@ -16,10 +16,25 @@ export function UserProvider({ children }) {
         const response = await axios.get(API_ENDPOINTS.auth.me, {
           withCredentials: true,
         });
+        const baseDisplayName = response.data.displayName || response.data.name;
+        const isAdmin = response.data.isAdmin === true;
+        // Show crown only if user is admin AND showAdminBadge is explicitly true
+        const shouldShowCrown =
+          isAdmin && response.data.showAdminBadge === true;
+        const displayName = shouldShowCrown
+          ? `👑 ${baseDisplayName}`
+          : baseDisplayName;
+
         setUser({
           id: response.data._id,
           name: response.data.name,
-          displayName: response.data.displayName || response.data.name,
+          displayName: displayName,
+          avatarColor: response.data.avatarColor || "#6dd5ed",
+          // Only include admin fields if user is admin
+          ...(isAdmin && {
+            isAdmin: true,
+            showAdminBadge: response.data.showAdminBadge === true,
+          }),
         });
       } catch {
         // User not logged in, that's ok
@@ -32,7 +47,27 @@ export function UserProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = (userData) => setUser(userData);
+  const login = (userData) => {
+    const baseDisplayName = userData.displayName || userData.name;
+    const isAdmin = userData.isAdmin === true;
+    // Show crown only if user is admin AND showAdminBadge is explicitly true
+    const shouldShowCrown = isAdmin && userData.showAdminBadge === true;
+    const displayName = shouldShowCrown
+      ? `👑 ${baseDisplayName}`
+      : baseDisplayName;
+
+    setUser({
+      id: userData.id,
+      name: userData.name,
+      displayName: displayName,
+      avatarColor: userData.avatarColor || "#6dd5ed",
+      // Only include admin fields if user is admin
+      ...(isAdmin && {
+        isAdmin: true,
+        showAdminBadge: userData.showAdminBadge === true,
+      }),
+    });
+  };
 
   const logout = async () => {
     try {

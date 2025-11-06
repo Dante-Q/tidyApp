@@ -54,10 +54,23 @@ export default function CreatePostPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!user) {
       setError("You must be logged in to create a post");
       navigate("/login");
+      return;
+    }
+
+    // Validate title length
+    if (formData.title.trim().length < 3) {
+      setError("Title must be at least 3 characters long");
+      return;
+    }
+
+    // Validate content length
+    if (formData.content.trim().length < 10) {
+      setError("Post content must be at least 10 characters long");
       return;
     }
 
@@ -283,6 +296,10 @@ export default function CreatePostPage() {
               />
               <span className="form-hint">
                 {formData.title.length}/100 characters
+                {formData.title.trim().length > 0 &&
+                  formData.title.trim().length < 3 && (
+                    <span> (minimum 3 characters)</span>
+                  )}
               </span>
             </div>
 
@@ -299,8 +316,16 @@ export default function CreatePostPage() {
                 className="form-textarea"
                 placeholder="Share your thoughts, ask questions, or start a discussion..."
                 rows={12}
+                maxLength={2000}
                 required
               />
+              <span className="form-hint">
+                {formData.content.length}/2,000 characters
+                {formData.content.trim().length > 0 &&
+                  formData.content.trim().length < 10 && (
+                    <span> (minimum 10 characters)</span>
+                  )}
+              </span>
             </div>
 
             {/* Form Actions */}

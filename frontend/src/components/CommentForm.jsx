@@ -6,7 +6,7 @@ import { UIContext } from "../context/UIContext.js";
 import { createCreateCommentMutation } from "../mutations/commentMutations.js";
 
 export default function CommentForm() {
-  const { user, postId } = usePostDetail();
+  const { user, postId, post } = usePostDetail();
   const { openAuth } = useContext(UIContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -46,6 +46,17 @@ export default function CommentForm() {
       parentCommentId: null,
     });
   };
+
+  // Check if comments are disabled
+  if (post?.commentsDisabled) {
+    return (
+      <div className="comments-disabled-message">
+        <span className="disabled-icon">🔒</span>
+        <p>Comments have been disabled for this post</p>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="login-prompt">

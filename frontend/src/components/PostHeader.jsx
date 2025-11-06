@@ -12,6 +12,8 @@ import {
   createLikePostMutation,
   createDeletePostMutation,
 } from "../mutations/postMutations.js";
+import { getDisplayName } from "../utils/displayName.js";
+import AdminPostControls from "./AdminPostControls.jsx";
 
 import styles from "./PostHeader.module.css";
 
@@ -80,19 +82,29 @@ export default function PostHeader() {
           {post.isLiked ? "❤️" : "🤍"} {post.likes || 0}
         </button>
       </div>
-      <h1 className={styles.postTitle}>{post.title}</h1>
+      <h1 className={styles.postTitle}>
+        {post.isPinned && (
+          <span className={styles.pinIcon} title="Pinned">
+            📌{" "}
+          </span>
+        )}
+        {post.title}
+      </h1>
 
       {/* Post Content */}
       <div className={styles.postBody}>{post.content}</div>
 
       <div className={styles.postMeta}>
         <Link to={`/profile/${post.author._id}`} className={styles.postAuthor}>
-          <div className={styles.authorAvatar}>
-            {getUserInitial(post.author.displayName || post.author.name)}
+          <div
+            className={styles.authorAvatar}
+            style={{ backgroundColor: post.author.avatarColor || "#6dd5ed" }}
+          >
+            {getUserInitial(getDisplayName(post.author))}
           </div>
           <div className={styles.authorInfo}>
             <span className={styles.authorName}>
-              {post.author.displayName || post.author.name}
+              {getDisplayName(post.author)}
             </span>
             <span className={styles.postDate}>
               {formatDate(post.createdAt)}
@@ -132,6 +144,9 @@ export default function PostHeader() {
           </button>
         </div>
       )}
+
+      {/* Admin Controls */}
+      <AdminPostControls post={post} />
     </div>
   );
 }

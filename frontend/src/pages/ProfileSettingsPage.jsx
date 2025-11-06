@@ -1,19 +1,70 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
+import ColorPicker from "../components/ColorPicker";
 import axios from "axios";
 import { API_ENDPOINTS } from "../config/api";
+import { getCurrentUserProfile } from "../services/authService";
 import "./ProfileSettingsPage.css";
 
 export default function ProfileSettingsPage() {
   const { user, logout, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const queryClient = useQueryClient();
+
+  // Fetch full profile data including bio, location, interests
+  const { data: profileData, isLoading: profileLoading } = useQuery({
+    queryKey: ["currentUserProfile"],
+    queryFn: getCurrentUserProfile,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const [displayName, setDisplayName] = useState("");
+  const [avatarColor, setAvatarColor] = useState("#6DD5ED");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [interests, setInterests] = useState("");
+  const [showAdminBadge, setShowAdminBadge] = useState(true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Update form fields when profile data is loaded
+  useEffect(() => {
+    if (profileData) {
+      setDisplayName(profileData.displayName?.replace("👑 ", "") || "");
+      setAvatarColor(profileData.avatarColor || "#6DD5ED");
+      setBio(profileData.bio || "");
+      setLocation(profileData.location || "");
+      setInterests(profileData.interests || "");
+      if (profileData.isAdmin) {
+        setShowAdminBadge(profileData.showAdminBadge !== false);
+      }
+    }
+  }, [profileData]);
+
+  // Helper function to capitalize first letter of each word
+  const capitalizeWords = (str) => {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  // Check if any changes have been made
+  const hasChanges =
+    displayName !== (profileData?.displayName?.replace("👑 ", "") || "") ||
+    avatarColor.toUpperCase() !==
+      (profileData?.avatarColor?.toUpperCase() || "#6DD5ED") ||
+    bio !== (profileData?.bio || "") ||
+    location !== (profileData?.location || "") ||
+    interests !== (profileData?.interests || "") ||
+    (profileData?.isAdmin &&
+      showAdminBadge !== (profileData?.showAdminBadge !== false));
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -24,22 +75,31 @@ export default function ProfileSettingsPage() {
     try {
       const response = await axios.patch(
         API_ENDPOINTS.auth.profile,
-        { displayName },
+        { displayName, showAdminBadge, avatarColor, bio, location, interests },
         { withCredentials: true }
       );
 
       setMessage(response.data.message);
 
-      // Update user context with new display name
+      // Update user context with new data
+      const baseDisplayName = response.data.user.displayName;
+      const shouldShowCrown =
+        response.data.user.isAdmin && response.data.user.showAdminBadge;
+      const finalDisplayName = shouldShowCrown
+        ? `👑 ${baseDisplayName}`
+        : baseDisplayName;
+
       setUser((prevUser) => ({
         ...prevUser,
-        displayName: response.data.user.displayName,
+        displayName: finalDisplayName,
+        avatarColor: response.data.user.avatarColor,
+        showAdminBadge: response.data.user.showAdminBadge,
       }));
 
-      // Show success message for a moment before redirecting
-      setTimeout(() => {
-        navigate(`/profile/${user.id}`);
-      }, 1500);
+      // Invalidate all queries to refetch posts/comments with new avatar color
+      queryClient.invalidateQueries();
+      // Specifically invalidate the profile query
+      queryClient.invalidateQueries(["currentUserProfile"]);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
@@ -70,12 +130,31 @@ export default function ProfileSettingsPage() {
     return null;
   }
 
+  // Show loading state while fetching profile data
+  if (profileLoading) {
+    return (
+      <div className="profile-settings-page">
+        <div className="settings-container">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-settings-page">
       <div className="settings-container">
-        <h1 className="settings-title">
-          <span className="hero-emoji">⚙️</span> Profile Settings
-        </h1>
+        <div className="settings-header">
+          <h1 className="settings-title">
+            <span className="settings-emoji">⚙️</span> Profile Settings
+          </h1>
+          <Link to={`/profile/${user.id}`} className="btn-view-profile">
+            👤 View Profile
+          </Link>
+        </div>
 
         {/* Update Display Name Section */}
         <div className="settings-section">
@@ -102,16 +181,101 @@ export default function ProfileSettingsPage() {
               </small>
             </div>
 
+            {/* Avatar Color Picker */}
+            <div className="form-group">
+              <label htmlFor="avatarColor">Avatar Color</label>
+              <ColorPicker
+                value={avatarColor}
+                onChange={setAvatarColor}
+                userName={user.displayName}
+              />
+              <small className="form-hint">
+                Choose a color for your profile avatar
+              </small>
+            </div>
+
+            {/* Location */}
+            <div className="form-group">
+              <label htmlFor="location">Location</label>
+              <input
+                type="text"
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(capitalizeWords(e.target.value))}
+                placeholder="e.g. Cape Town, WP"
+                maxLength={100}
+              />
+              <small className="form-hint">
+                Your hometown or current location (optional)
+              </small>
+            </div>
+
+            {/* Interests */}
+            <div className="form-group">
+              <label htmlFor="interests">Interests</label>
+              <textarea
+                id="interests"
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+                placeholder="e.g. Surfing, Climbing, Yoga"
+                maxLength={100}
+                rows={2}
+              />
+              <small className="form-hint">
+                {interests.length}/100 characters
+              </small>
+            </div>
+
+            {/* Bio */}
+            <div className="form-group">
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="Tell us about yourself..."
+                maxLength={500}
+                rows={4}
+              />
+              <small className="form-hint">{bio.length}/500 characters</small>
+            </div>
+
+            {/* Admin Badge Toggle - Only for admins */}
+            {user.isAdmin && (
+              <div className="form-group checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={showAdminBadge}
+                    onChange={(e) => setShowAdminBadge(e.target.checked)}
+                  />
+                  <span>Show admin badge (👑) next to my name</span>
+                </label>
+                <small className="form-hint">
+                  When unchecked, you'll appear as a regular user
+                </small>
+              </div>
+            )}
+
             {message && <div className="success-message">{message}</div>}
             {error && <div className="error-message">{error}</div>}
 
-            <button
-              type="submit"
-              className="btn-save"
-              disabled={loading || displayName === user.displayName}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="btn-save"
+                disabled={loading || !hasChanges}
+              >
+                {loading ? "Saving..." : "Save Changes"}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="btn-back"
+              >
+                Back
+              </button>
+            </div>
           </form>
         </div>
 

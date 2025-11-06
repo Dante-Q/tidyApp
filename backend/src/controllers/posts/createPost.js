@@ -49,7 +49,10 @@ export const createPost = async (req, res) => {
     });
 
     // Populate author information before sending response
-    await post.populate("author", "name displayName");
+    await post.populate(
+      "author",
+      "name displayName isAdmin showAdminBadge avatarColor"
+    );
     await post.populate("commentCount");
 
     res.status(201).json({

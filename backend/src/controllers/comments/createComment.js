@@ -59,7 +59,7 @@ export const createComment = async (req, res) => {
 
     const populatedComment = await Comment.findById(comment._id).populate(
       "author",
-      "name"
+      "name displayName isAdmin showAdminBadge avatarColor"
     );
 
     res.status(201).json({

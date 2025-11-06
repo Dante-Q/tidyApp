@@ -1,6 +1,8 @@
 /* Base typography and colors */
 :root {
   --font-sans: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-emoji: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Twemoji Mozilla", "EmojiOne Color", "Android Emoji";
   --color-text: #1e293b;
   --color-bg: #f0f9ff;
   --color-primary: #2193b0;
@@ -14,16 +16,44 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), var(--font-emoji);
   background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0f172a 100%);
   color: var(--color-text);
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Ensure all elements have emoji font support */
+* {
+  font-family: inherit;
+}
+
+/* Global emoji font support for common emoji containers */
+.hero-emoji,
+.navbar-logo-emoji,
+.category-emoji,
+.tag-emoji,
+.beach-emoji,
+.stat-icon,
+.empty-icon,
+.profile-icon,
+.settings-icon,
+.disabled-icon,
+.admin-icon,
+.admin-label,
+span[class*="emoji"],
+span[class*="icon"] {
+  font-family: var(--font-emoji);
 }
 
 /* Custom scrollbar styling for dark theme */
@@ -79,8 +109,9 @@ body {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
-  z-index: 100 !important;
+  z-index: 1100 !important;
   position: relative !important;
+  overflow: visible !important;
 }
 
 h1,
@@ -204,8 +235,26 @@ select:focus {
 .hero-title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-title-dashboard {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0rem;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-title-text {
   background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -213,15 +262,41 @@ select:focus {
 }
 
 .hero-emoji {
-  display: inline-block;
-  font-size: 1.2em;
-  margin-right: 0.2em;
+  width: clamp(2rem, 4vw, 5rem);
+  height: clamp(2rem, 4vw, 5rem);
+  flex-shrink: 0;
   animation: wave 2.5s ease-in-out infinite;
+}
+
+.hero-emoji-crown {
+  display: inline-block;
+  font-size: 1em;
+  margin-right: 0.2em;
   background: none !important;
   -webkit-background-clip: initial !important;
   -webkit-text-fill-color: initial !important;
   background-clip: initial !important;
   color: inherit;
+  filter: none;
+}
+
+/* Dashboard-specific hero styling */
+.dashboard-username {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.username-text {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #6dd5ed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @keyframes wave {
@@ -364,7 +439,8 @@ select:focus {
   justify-content: flex-start;
   padding: 1rem;
   padding-top: 2rem;
-  gap: 3rem;
+  margin-top: 1rem;
+  gap: 2rem;
 }
 
 /* Secondary content section */
@@ -464,4 +540,131 @@ footer {
   overflow: hidden !important;
   margin: 0 !important;
   height: 100% !important;
+}
+
+/* ========================================
+   RESPONSIVE MOBILE OPTIMIZATIONS
+   ======================================== */
+
+/* Tablet (Portrait) - 768px and below */
+@media (max-width: 768px) {
+  /* Homepage wrapper - reduce padding */
+  .homepage-wrapper {
+    padding-top: 1rem;
+    margin-top: 1.5rem;
+    gap: 0rem;
+  }
+
+  /* Homepage content section - reduce padding */
+  .homepage-content {
+    padding: 2rem 1rem;
+    border-radius: 12px;
+  }
+
+  /* Hero container - adjust padding */
+  .hero-container {
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+  }
+
+  /* Hero title - reduce size */
+  .hero-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    gap: 0.4rem;
+  }
+
+  /* Hero emoji/logo - adjust size */
+  .hero-emoji {
+    width: clamp(1.75rem, 5vw, 2.5rem);
+    height: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  /* Hero subtitle - reduce size */
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* CTA button - full width on mobile */
+  .hero-cta-button {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Dashboard username */
+  .dashboard-username {
+    margin-top: 0.5rem;
+  }
+
+  .username-text {
+    font-size: clamp(1.25rem, 4vw, 2rem);
+  }
+}
+
+/* Mobile (Small) - 480px and below */
+@media (max-width: 480px) {
+  /* Homepage wrapper - minimal padding */
+  .homepage-wrapper {
+    padding: 0.6rem;
+    padding-top: 0.5rem;
+    margin-top: 1.5rem;
+    gap: 0.8rem;
+  }
+
+  /* Homepage content - minimal padding */
+  .homepage-content {
+    padding: 0rem;
+    border-radius: 8px;
+  }
+
+  /* Hero container - minimal padding */
+  .hero-container {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+  }
+
+  /* Hero title - smaller size */
+  .hero-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hero emoji/logo - smaller */
+  .hero-emoji {
+    width: clamp(1.5rem, 6vw, 2rem);
+    height: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  /* Hero subtitle - smaller text */
+  .hero-subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  /* CTA button - full width */
+  .hero-cta-button {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  /* Dashboard username - smaller */
+  .dashboard-username {
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .username-text {
+    font-size: clamp(1.125rem, 5vw, 1.75rem);
+  }
+
+  /* Hero emoji crown - smaller */
+  .hero-emoji-crown {
+    font-size: 0.9em;
+  }
 }

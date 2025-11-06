@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostDetail } from "../context/PostDetailContext.js";
 import InlineCommentForm from "./InlineCommentForm.jsx";
+import AdminCommentControls from "./AdminCommentControls.jsx";
 import {
   createLikeCommentMutation,
   createDeleteCommentMutation,
@@ -14,6 +15,7 @@ import {
   pluralize,
   getUserInitial,
 } from "../utils/forumHelpers.js";
+import { getDisplayName } from "../utils/displayName.js";
 
 export default function CommentsList() {
   const { comments, user, postId } = usePostDetail();
@@ -41,7 +43,7 @@ function CommentItem({
   queryClient,
   parentCommentId = null,
 }) {
-  const { setReplyTo, replyTo } = usePostDetail();
+  const { setReplyTo, replyTo, post } = usePostDetail();
   const [showReplies, setShowReplies] = useState(true);
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -146,14 +148,17 @@ function CommentItem({
     <div className="comment-item">
       <div className="comment-header">
         <div className="comment-author">
-          <div className="author-avatar-small">
-            {getUserInitial(comment.author.displayName || comment.author.name)}
+          <div
+            className="author-avatar-small"
+            style={{ backgroundColor: comment.author.avatarColor || "#6dd5ed" }}
+          >
+            {getUserInitial(getDisplayName(comment.author))}
           </div>
           <Link
             to={`/profile/${comment.author._id}`}
             className="author-name-link"
           >
-            {comment.author.displayName || comment.author.name}
+            {getDisplayName(comment.author)}
           </Link>
           <span className="comment-date">
             {formatCommentDate(comment.createdAt)}
@@ -203,35 +208,42 @@ function CommentItem({
         >
           {isLiked ? "❤️" : "🤍"} {likeCount}
         </button>
-        <button
-          onClick={() =>
-            setReplyTo({
-              commentId: comment._id, // Where the form appears
-              parentId: parentCommentId || comment._id, // Parent for the reply
-              username: comment.author.displayName || comment.author.name,
-            })
-          }
-          className="btn-comment-action"
-        >
-          💬 Reply
-        </button>
-        {isAuthor && !isEditing && (
+        {!post?.commentsDisabled && (
           <>
             <button
-              onClick={() => setIsEditing(true)}
+              onClick={() =>
+                setReplyTo({
+                  commentId: comment._id, // Where the form appears
+                  parentId: parentCommentId || comment._id, // Parent for the reply
+                  username: getDisplayName(comment.author),
+                })
+              }
               className="btn-comment-action"
             >
-              ✏️ Edit
+              💬 Reply
             </button>
-            <button
-              onClick={handleDeleteComment}
-              className="btn-comment-action"
-            >
-              🗑️ Delete
-            </button>
+            {isAuthor && !isEditing && (
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="btn-comment-action"
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  onClick={handleDeleteComment}
+                  className="btn-comment-action"
+                >
+                  🗑️ Delete
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
+
+      {/* Admin Controls */}
+      <AdminCommentControls comment={comment} postId={postId} />
 
       {/* Inline Reply Form - appears when replying to this specific comment */}
       {replyTo && replyTo.commentId === comment._id && (

@@ -17,6 +17,15 @@ const router = express.Router();
 // All routes require authentication
 router.use(protect);
 
+// Get pending friend requests for current user
+router.get("/requests", getFriendRequests);
+
+// Get sent friend requests (outgoing)
+router.get("/sent", getSentFriendRequests);
+
+// Get friendship status with another user
+router.get("/status/:userId", getFriendshipStatus);
+
 // Send friend request
 router.post("/request/:userId", sendFriendRequest);
 
@@ -29,19 +38,10 @@ router.post("/accept/:requestId", acceptFriendRequest);
 // Reject friend request
 router.post("/reject/:requestId", rejectFriendRequest);
 
-// Get pending friend requests for current user
-router.get("/requests", getFriendRequests);
-
-// Get sent friend requests (outgoing)
-router.get("/sent", getSentFriendRequests);
-
-// Get friendship status with another user
-router.get("/status/:userId", getFriendshipStatus);
-
-// Get friends list for a user
-router.get("/:userId", getFriends);
-
 // Remove a friend
 router.delete("/:friendId", removeFriend);
+
+// Get friends list for a user (must come last - generic :userId route)
+router.get("/:userId", getFriends);
 
 export default router;

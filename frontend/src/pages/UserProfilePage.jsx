@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.js";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
@@ -11,12 +11,15 @@ import {
   getFriends,
 } from "../services/friendService.js";
 import UserPostsList from "../components/UserPostsList.jsx";
+import ProfileDetails from "../components/ProfileDetails.jsx";
+import FriendsList from "../components/FriendsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
   const { userId } = useParams();
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("posts"); // 'posts', 'about', 'friends'
 
   // Fetch posts for this user using React Query
   const {
@@ -41,17 +44,17 @@ export default function UserProfilePage() {
 
   const friendshipStatus = friendshipData?.status || "none";
 
-  // Fetch friends list to get count (only if viewing own profile or if friends)
+  // Always fetch friends data to get user profile info (bio, location, interests)
   const isOwnProfile = user && String(user.id) === String(userId);
-  const canViewFriends = isOwnProfile || friendshipStatus === "friends";
 
   const { data: friendsData } = useQuery({
     queryKey: ["userFriends", userId],
     queryFn: () => getFriends(userId),
-    enabled: !!userId && canViewFriends,
+    enabled: !!userId,
   });
 
   const friendsCount = friendsData?.friends?.length || 0;
+  const canViewFriends = friendsData?.canViewFriends || isOwnProfile;
 
   // Send friend request mutation
   const sendRequestMutation = useMutation({
@@ -105,13 +108,12 @@ export default function UserProfilePage() {
     }
   };
 
-  // Extract user info from first post's author, or from friends API response
-  const userInfo =
-    posts.length > 0
-      ? posts[0].author
-      : friendsData?.user
-      ? friendsData.user
-      : null;
+  // Extract user info - prioritize friends data (has full profile) over posts data
+  const userInfo = friendsData?.user
+    ? friendsData.user
+    : posts.length > 0
+    ? posts[0].author
+    : null;
 
   const getTotalLikes = () => {
     return posts.reduce((total, post) => total + post.likes.length, 0);
@@ -154,7 +156,10 @@ export default function UserProfilePage() {
       {/* Profile Header */}
       <div className="profile-header">
         <div className="profile-container">
-          <div className="profile-avatar-large">
+          <div
+            className="profile-avatar-large"
+            style={{ backgroundColor: userInfo?.avatarColor || "#6dd5ed" }}
+          >
             {getUserInitial(userInfo?.displayName || userInfo?.name)}
           </div>
           <div className="profile-info">
@@ -192,10 +197,6 @@ export default function UserProfilePage() {
               )}
 
             <div className="profile-stats">
-              <div className="stat-item">
-                <span className="stat-value">{posts.length}</span>
-                <span className="stat-label">Posts</span>
-              </div>
               {canViewFriends ? (
                 <Link
                   to={`/profile/${userId}/friends`}
@@ -210,6 +211,10 @@ export default function UserProfilePage() {
                   <span className="stat-label">Friends</span>
                 </div>
               )}
+              <div className="stat-item">
+                <span className="stat-value">{posts.length}</span>
+                <span className="stat-label">Posts</span>
+              </div>
               <div className="stat-item">
                 <span className="stat-value">{getTotalLikes()}</span>
                 <span className="stat-label">Likes</span>
@@ -227,13 +232,84 @@ export default function UserProfilePage() {
         </div>
       </div>
 
-      {/* User Posts */}
+      {/* Profile Content with Tabs */}
       <div className="profile-content">
         <div className="content-container">
-          <UserPostsList
-            posts={posts}
-            userName={userInfo?.displayName || userInfo?.name}
-          />
+          {/* Tabs */}
+          <div className="profile-tabs">
+            <button
+              className={`tab ${activeTab === "posts" ? "active" : ""}`}
+              onClick={() => setActiveTab("posts")}
+            >
+              Posts
+              {posts.length > 0 && (
+                <span className="tab-badge">{posts.length}</span>
+              )}
+            </button>
+            <button
+              className={`tab ${activeTab === "about" ? "active" : ""}`}
+              onClick={() => setActiveTab("about")}
+            >
+              About
+            </button>
+            {canViewFriends && (
+              <button
+                className={`tab ${activeTab === "friends" ? "active" : ""}`}
+                onClick={() => setActiveTab("friends")}
+              >
+                Friends
+                {friendsCount > 0 && (
+                  <span className="tab-badge">{friendsCount}</span>
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* Tab Content */}
+          <div className="tab-content">
+            {activeTab === "posts" && (
+              <UserPostsList
+                posts={posts}
+                userName={userInfo?.displayName || userInfo?.name}
+              />
+            )}
+
+            {activeTab === "about" && <ProfileDetails userInfo={userInfo} />}
+
+            {activeTab === "friends" && canViewFriends && (
+              <div className="friends-tab-content">
+                {friendsData?.friends && friendsData.friends.length > 0 ? (
+                  <div className="friends-grid">
+                    {friendsData.friends.map((friend) => (
+                      <Link
+                        key={friend._id}
+                        to={`/profile/${friend._id}`}
+                        className="friend-card"
+                      >
+                        <div
+                          className="friend-avatar"
+                          style={{
+                            backgroundColor: friend.avatarColor || "#6dd5ed",
+                          }}
+                        >
+                          {getUserInitial(friend.displayName || friend.name)}
+                        </div>
+                        <div className="friend-info">
+                          <h3 className="friend-name">
+                            {friend.displayName || friend.name}
+                          </h3>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <p>No friends yet.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
