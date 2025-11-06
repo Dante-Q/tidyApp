@@ -234,7 +234,16 @@ router.get(
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user);
+      // Create response object
+      const response = user.toObject();
+
+      // Hide admin fields from non-admins (security best practice)
+      if (!user.isAdmin) {
+        delete response.isAdmin;
+        delete response.showAdminBadge;
+      }
+
+      res.json(response);
     } catch (err) {
       res.status(401).json({ message: "Token is not valid" });
     }
