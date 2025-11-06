@@ -92,6 +92,17 @@ router.post(
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Check if display name (which will be auto-generated from name) is already taken
+    // Display names are auto-generated from name in the pre-save hook
+    const displayNameExists = await User.findOne({
+      displayName: { $regex: new RegExp(`^${nameValidation.sanitized}$`, "i") },
+    });
+    if (displayNameExists) {
+      return res.status(400).json({
+        message: "This name is already taken. Please choose a different name.",
+      });
+    }
+
     // Check if user should be admin
     const shouldBeAdmin = isAdminEmail(email);
 
