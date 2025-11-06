@@ -90,6 +90,11 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       // Only exists for admins - undefined for regular users
     },
+    isSystem: {
+      type: Boolean,
+      default: false,
+      // System accounts (like [Deleted User]) cannot be logged into
+    },
     avatarColor: {
       type: String,
       default: "#6dd5ed", // Default ocean blue color

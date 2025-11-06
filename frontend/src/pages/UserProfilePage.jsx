@@ -7,6 +7,7 @@ import { getUserInitial } from "../utils/forumHelpers.js";
 import {
   getFriendshipStatus,
   sendFriendRequest,
+  acceptFriendRequest,
   removeFriend,
   getFriends,
 } from "../services/friendService.js";
@@ -66,6 +67,17 @@ export default function UserProfilePage() {
     },
   });
 
+  // Accept friend request mutation
+  const acceptRequestMutation = useMutation({
+    mutationFn: acceptFriendRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["friendshipStatus", userId]);
+      queryClient.invalidateQueries(["friendRequests"]); // Refresh dashboard requests
+      queryClient.invalidateQueries(["myFriends"]); // Update friends list
+      queryClient.invalidateQueries(["userFriends"]); // Update all user friends queries
+    },
+  });
+
   // Remove friend mutation
   const removeFriendMutation = useMutation({
     mutationFn: removeFriend,
@@ -79,6 +91,9 @@ export default function UserProfilePage() {
       if (window.confirm("Are you sure you want to remove this friend?")) {
         removeFriendMutation.mutate(userId);
       }
+    } else if (friendshipStatus === "pending_received") {
+      // Accept the friend request
+      acceptRequestMutation.mutate(userId);
     } else if (friendshipStatus === "none") {
       sendRequestMutation.mutate(userId);
     }
@@ -143,6 +158,26 @@ export default function UserProfilePage() {
       <div className="user-profile-page">
         <div className="error-container">
           <h2>⚠️ {error}</h2>
+          <Link to="/forum" className="btn-back">
+            ← Back to Forum
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if this is a deleted user account
+  if (
+    userInfo &&
+    (userInfo.displayName === "[Deleted User]" ||
+      userInfo.name === "[Deleted User]" ||
+      userInfo.email === "deleted@system.local")
+  ) {
+    return (
+      <div className="user-profile-page">
+        <div className="error-container">
+          <h2>⚠️ This account has been deleted</h2>
+          <p>This user's profile is no longer available.</p>
           <Link to="/forum" className="btn-back">
             ← Back to Forum
           </Link>
