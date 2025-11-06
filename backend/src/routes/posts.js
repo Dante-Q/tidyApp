@@ -1,6 +1,6 @@
 import express from "express";
 import * as postsController from "../controllers/posts/index.js";
-import { protect } from "../middleware/auth.js";
+import { protect, optionalAuth } from "../middleware/auth.js";
 import { requireAdmin } from "../middleware/admin.js";
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.patch(
 );
 
 // Routes with :id parameter (must come after more specific routes)
-router.get("/:id", postsController.getPostById);
+router.get("/:id", optionalAuth, postsController.getPostById);
 router.put("/:id", protect, postsController.updatePost);
 router.delete("/:id", protect, postsController.deletePost);
 router.post("/:id/like", protect, postsController.toggleLikePost);

@@ -1,5 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { Filter } from "bad-words";
+import { getRefId } from "./refHelpers.js";
 
 // Initialize profanity filter
 const filter = new Filter();
@@ -24,9 +25,10 @@ export const handleControllerError = (res, message, error) => {
  * @returns {Boolean} True if user can modify the post
  */
 export const canModifyPost = (post, user) => {
-  return (
-    post.author.toString() === user._id.toString() || user.role === "admin"
-  );
+  const postAuthorId = getRefId(post.author);
+  const userId = getRefId(user._id);
+
+  return postAuthorId === userId || user.role === "admin";
 };
 
 /**
