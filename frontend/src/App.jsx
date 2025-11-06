@@ -1,36 +1,50 @@
+// External Libraries
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider, AppShell } from "@mantine/core";
+
+// Context Providers
 import { UserProvider } from "./context/UserContext.jsx";
 import { UIProvider } from "./context/UIProvider.jsx";
 
+// Layout Components
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import GlobalDrawer from "./components/GlobalDrawer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+
+// Pages - General
 import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage.jsx";
+import InfoPage from "./pages/InfoPage.jsx";
+
+// Pages - Authentication
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
+
+// Pages - User
 import DashboardPage from "./pages/DashboardPage";
-import BeachPage from "./pages/BeachPage";
-import InfoPage from "./pages/InfoPage.jsx";
-import AboutPage from "./pages/AboutPage.jsx";
+import UserProfilePage from "./pages/UserProfilePage.jsx";
+import UserFriendsPage from "./pages/UserFriendsPage.jsx";
+import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
+
+// Pages - Forum
 import ForumHomePage from "./pages/ForumHomePage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SubcategoryPage from "./pages/SubcategoryPage.jsx";
 import CreatePostPage from "./pages/CreatePostPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import EditPostPage from "./pages/EditPostPage.jsx";
-import UserProfilePage from "./pages/UserProfilePage.jsx";
-import UserFriendsPage from "./pages/UserFriendsPage.jsx";
-import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
+
+// Pages - Beach Features
+import BeachPage from "./pages/BeachPage";
 import SurfReportPage from "./pages/SurfReportPage.jsx";
 import TidesPage from "./pages/TidesPage.jsx";
 import WindPage from "./pages/WindPage.jsx";
 import MapPage from "./pages/MapPage.jsx";
 import CamsPage from "./pages/CamsPage.jsx";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
-import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (

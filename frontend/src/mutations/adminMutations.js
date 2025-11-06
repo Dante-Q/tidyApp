@@ -1,9 +1,9 @@
 import {
   deletePost,
-  movePost,
   togglePinPost,
   toggleCommentsOnPost,
 } from "../services/forumService.js";
+import { adminMovePost } from "../services/adminService.js";
 import { deleteComment, updateComment } from "../services/commentService.js";
 import { showErrorAlert } from "../utils/errorHandlers.js";
 
@@ -45,7 +45,7 @@ export function createAdminDeletePostMutation(
 export function createMovePostMutation(queryClient, postId) {
   return {
     mutationFn: ({ newCategory, newSubcategory }) =>
-      movePost(postId, newCategory, newSubcategory),
+      adminMovePost(postId, newCategory, newSubcategory),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });

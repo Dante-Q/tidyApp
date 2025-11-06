@@ -1,11 +1,11 @@
 import { useState, useContext } from "react";
-import { useMutation, useQueryClient } from "@tantml:react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import {
   createAdminDeletePostMutation,
   createMovePostMutation,
-  createPinPostMutation,
+  createTogglePinPostMutation,
   createToggleCommentsPostMutation,
 } from "../mutations/adminMutations.js";
 import { FORUM_CATEGORIES } from "../config/forumCategories";
@@ -36,7 +36,9 @@ export default function AdminPostControls({ post }) {
     },
   });
 
-  const pinMutation = useMutation(createPinPostMutation(queryClient, post._id));
+  const pinMutation = useMutation(
+    createTogglePinPostMutation(queryClient, post._id)
+  );
 
   const commentsMutation = useMutation(
     createToggleCommentsPostMutation(queryClient, post._id)
