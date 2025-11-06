@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WaveHeightGraph from "../components/WaveHeightGraph";
+import WindCompass from "../components/WindCompass";
+import TideChart from "../components/TideChart";
 import useMarineData from "../hooks/useMarineData";
+import useWeatherData from "../hooks/useWeatherData";
 import { beaches } from "../config/beachApiConfig.js";
 import { beachInfo } from "../data/beachInfo.js";
 import "./BeachPage.css";
@@ -19,6 +22,13 @@ export default function BeachPage() {
 
   // Fetch marine data for selected beach
   const { data: surfData, loading, error } = useMarineData(selectedBeach);
+
+  // Fetch weather data for selected beach
+  const {
+    data: weatherData,
+    loading: weatherLoading,
+    error: weatherError,
+  } = useWeatherData(selectedBeach);
 
   const beach = beachInfo[selectedBeach] || beachInfo.muizenberg;
   const beachConfig = beaches[selectedBeach] || beaches.muizenberg;
@@ -59,6 +69,25 @@ export default function BeachPage() {
           surfData={surfData}
           loading={loading}
           error={error}
+          selectedBeach={selectedBeach}
+          onBeachChange={setSelectedBeach}
+        />
+      </section>
+
+      {/* Wind & Weather */}
+      <section className="beach-forecast">
+        <WindCompass
+          weatherData={weatherData}
+          loading={weatherLoading}
+          error={weatherError}
+          selectedBeach={selectedBeach}
+          onBeachChange={setSelectedBeach}
+        />
+      </section>
+
+      {/* Tide Predictions */}
+      <section className="beach-forecast">
+        <TideChart
           selectedBeach={selectedBeach}
           onBeachChange={setSelectedBeach}
         />

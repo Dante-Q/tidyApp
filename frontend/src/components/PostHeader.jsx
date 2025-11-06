@@ -7,6 +7,7 @@ import {
   getCategoryEmoji,
   getCategoryLabel,
 } from "../utils/forumHelpers.js";
+import { getBeachTagBySlug } from "../config/beachTags.js";
 import {
   createLikePostMutation,
   createDeletePostMutation,
@@ -47,13 +48,28 @@ export default function PostHeader() {
   return (
     <div className={styles.postHeader}>
       <div className={styles.postCategory}>
-        <div className={styles.categoryInfo}>
-          <span className={styles.categoryEmoji}>
-            {getCategoryEmoji(post.subcategory || post.category)}
-          </span>
-          <span className={styles.categoryName}>
-            {getCategoryLabel(post.subcategory || post.category)}
-          </span>
+        <div className={styles.leftSection}>
+          <div className={styles.categoryInfo}>
+            <span className={styles.categoryEmoji}>
+              {getCategoryEmoji(post.subcategory || post.category)}
+            </span>
+            <span className={styles.categoryName}>
+              {getCategoryLabel(post.subcategory || post.category)}
+            </span>
+          </div>
+          {/* Beach Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <>
+              {post.tags.map((tagSlug) => {
+                const tag = getBeachTagBySlug(tagSlug);
+                return tag ? (
+                  <span key={tagSlug} className={styles.postBeachTag}>
+                    {tag.icon} {tag.name}
+                  </span>
+                ) : null;
+              })}
+            </>
+          )}
         </div>
         <button
           onClick={onLike}

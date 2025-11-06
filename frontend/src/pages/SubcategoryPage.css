@@ -154,8 +154,25 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: #ffffff;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   line-height: 1.4;
+}
+
+.post-beach-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-beach-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid;
+  border-radius: 12px;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 .post-row-excerpt {
@@ -236,6 +253,22 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Filter Results Message */
+.filter-results-message {
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9375rem;
+}
+
+.filter-results-message .no-results {
+  color: #ef4444;
+  font-weight: 600;
 }
 
 .empty-state {

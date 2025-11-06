@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "../services/forumService.js";
 import { getCategoryBySlug } from "../config/forumCategories.js";
+import { getBeachTagBySlug } from "../config/beachTags.js";
 import { formatDate } from "../utils/forumHelpers.js";
+import PostFilters from "../components/PostFilters.jsx";
+import forumHeroImage from "../assets/images/forum-hero.jpg";
 import "./CategoryPage.css";
 
 export default function CategoryPage() {
@@ -11,6 +14,7 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const POSTS_PER_PAGE = 10;
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+  const [filters, setFilters] = useState({ tags: [], searchText: "" });
 
   // Get category details from config
   const category = getCategoryBySlug(categorySlug);
@@ -22,7 +26,37 @@ export default function CategoryPage() {
     enabled: !!category,
   });
 
-  const posts = postsData?.posts || [];
+  const posts = useMemo(() => postsData?.posts || [], [postsData?.posts]);
+
+  // Filter posts based on selected tags and search text
+  const filteredPosts = useMemo(() => {
+    let filtered = posts;
+
+    // Filter by tags
+    if (filters.tags.length > 0) {
+      filtered = filtered.filter((post) =>
+        post.tags?.some((tag) => filters.tags.includes(tag))
+      );
+    }
+
+    // Filter by search text
+    if (filters.searchText.trim().length > 0) {
+      const searchLower = filters.searchText.toLowerCase();
+      filtered = filtered.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchLower) ||
+          post.content.toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered;
+  }, [posts, filters]);
+
+  // Reset visible count when filters change
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setVisibleCount(POSTS_PER_PAGE);
+  };
 
   // If category not found, redirect to forum home
   if (!category) {
@@ -43,7 +77,7 @@ export default function CategoryPage() {
       <div
         className="category-hero"
         style={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200)`,
+          backgroundImage: `url(${forumHeroImage})`,
         }}
       >
         <div className="category-hero-overlay">
@@ -130,76 +164,121 @@ export default function CategoryPage() {
               </div>
             ) : (
               <>
-                <div className="posts-list">
-                  {posts.slice(0, visibleCount).map((post) => (
-                    <Link
-                      key={post._id}
-                      to={`/forum/post/${post._id}`}
-                      className="post-item"
-                    >
-                      <div className="post-item-header">
-                        <h3 className="post-item-title">{post.title}</h3>
-                        {post.subcategory && (
-                          <span className="post-subcategory-tag">
-                            {
-                              category.subcategories.find(
-                                (s) => s.slug === post.subcategory
-                              )?.icon
-                            }{" "}
-                            {
-                              category.subcategories.find(
-                                (s) => s.slug === post.subcategory
-                              )?.name
-                            }
-                          </span>
-                        )}
-                      </div>
-                      <div className="post-item-meta">
-                        <span className="post-author">
-                          by {post.author?.name || "Unknown"} •{" "}
-                          {formatDate(post.createdAt)}
-                        </span>
-                        <span className="post-stats">
-                          💬 {post.commentCount || 0} · ❤️{" "}
-                          {post.likes?.length || 0} · 👁️ {post.views || 0}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                {/* Filters */}
+                <PostFilters onFilterChange={handleFilterChange} />
 
-                {(posts.length > visibleCount ||
-                  visibleCount > POSTS_PER_PAGE) && (
-                  <div className="show-more-container">
-                    {posts.length > visibleCount && (
-                      <>
-                        <button
-                          onClick={() =>
-                            setVisibleCount((prev) => prev + POSTS_PER_PAGE)
-                          }
-                          className="show-more-btn"
-                        >
-                          Show More Posts
-                        </button>
-                        <span className="posts-remaining">
-                          {posts.length - visibleCount} more posts
-                        </span>
-                      </>
-                    )}
-                    {visibleCount > POSTS_PER_PAGE && (
-                      <>
-                        {posts.length > visibleCount && (
-                          <span className="button-separator">•</span>
-                        )}
-                        <button
-                          onClick={() => setVisibleCount(POSTS_PER_PAGE)}
-                          className="show-more-btn"
-                        >
-                          Hide
-                        </button>
-                      </>
+                {/* Filtered Results Message */}
+                {(filters.tags.length > 0 || filters.searchText.length > 0) && (
+                  <div className="filter-results-message">
+                    Showing {filteredPosts.length} of {posts.length} posts
+                    {filteredPosts.length === 0 && (
+                      <span className="no-results"> - No matches found</span>
                     )}
                   </div>
+                )}
+
+                {filteredPosts.length === 0 ? (
+                  <div className="empty-state">
+                    <p>No posts match your filters</p>
+                    <p style={{ fontSize: "0.875rem", opacity: 0.7 }}>
+                      Try adjusting your search or tag filters
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="posts-list">
+                      {filteredPosts.slice(0, visibleCount).map((post) => (
+                        <Link
+                          key={post._id}
+                          to={`/forum/post/${post._id}`}
+                          className="post-item"
+                        >
+                          <div className="post-item-header">
+                            <h3 className="post-item-title">{post.title}</h3>
+                            <div className="post-tags">
+                              {/* Beach Tags */}
+                              {post.tags &&
+                                post.tags.length > 0 &&
+                                post.tags.map((tagSlug) => {
+                                  const tag = getBeachTagBySlug(tagSlug);
+                                  return tag ? (
+                                    <span
+                                      key={tagSlug}
+                                      className="post-beach-tag"
+                                      style={{
+                                        borderColor: tag.color,
+                                        color: tag.color,
+                                      }}
+                                    >
+                                      {tag.icon} {tag.name}
+                                    </span>
+                                  ) : null;
+                                })}
+                              {/* Subcategory Tag */}
+                              {post.subcategory && (
+                                <span className="post-subcategory-tag">
+                                  {
+                                    category.subcategories.find(
+                                      (s) => s.slug === post.subcategory
+                                    )?.icon
+                                  }{" "}
+                                  {
+                                    category.subcategories.find(
+                                      (s) => s.slug === post.subcategory
+                                    )?.name
+                                  }
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="post-item-meta">
+                            <span className="post-author">
+                              by {post.author?.name || "Unknown"} •{" "}
+                              {formatDate(post.createdAt)}
+                            </span>
+                            <span className="post-stats">
+                              💬 {post.commentCount || 0} · ❤️{" "}
+                              {post.likes?.length || 0} · 👁️ {post.views || 0}
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {(filteredPosts.length > visibleCount ||
+                      visibleCount > POSTS_PER_PAGE) && (
+                      <div className="show-more-container">
+                        {filteredPosts.length > visibleCount && (
+                          <>
+                            <button
+                              onClick={() =>
+                                setVisibleCount((prev) => prev + POSTS_PER_PAGE)
+                              }
+                              className="show-more-btn"
+                            >
+                              Show More Posts
+                            </button>
+                            <span className="posts-remaining">
+                              {filteredPosts.length - visibleCount} more posts
+                            </span>
+                          </>
+                        )}
+                        {visibleCount > POSTS_PER_PAGE && (
+                          <>
+                            {filteredPosts.length > visibleCount && (
+                              <span className="button-separator">•</span>
+                            )}
+                            <button
+                              onClick={() => setVisibleCount(POSTS_PER_PAGE)}
+                              className="show-more-btn"
+                            >
+                              Hide
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}

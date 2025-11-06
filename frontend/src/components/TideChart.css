@@ -8,6 +8,7 @@
 .tide-chart-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  position: relative;
 }
 
 .tide-chart-header h2 {
@@ -24,7 +25,37 @@
 .tide-chart-header p {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.6);
-  margin: 0;
+  margin: 0 0 1rem 0;
+}
+
+/* Beach selector */
+.beach-selector {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 8px;
+  color: #6dd5ed;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  min-width: 200px;
+}
+
+.beach-selector:hover {
+  border-color: rgba(109, 213, 237, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.beach-selector:focus {
+  border-color: #6dd5ed;
+  box-shadow: 0 0 0 3px rgba(109, 213, 237, 0.1);
+}
+
+.beach-selector option {
+  background: #0f172a;
+  color: #6dd5ed;
 }
 
 .tide-chart-container {
@@ -33,6 +64,40 @@
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Loading state */
+.tide-chart-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(109, 213, 237, 0.2);
+  border-top-color: #6dd5ed;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.tide-chart-error {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tide-chart-error p {
+  margin: 0.5rem 0;
 }
 
 /* Current tide info */
@@ -76,7 +141,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem 0 2.5rem 0;
+  padding: 2rem 0 4rem 0;
   min-width: 50px;
 }
 
@@ -98,7 +163,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 2.5rem);
+  height: calc(100% - 4rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -119,7 +184,7 @@
   align-items: flex-end;
   height: 100%;
   gap: 0.5rem;
-  padding-bottom: 2.5rem;
+  padding-bottom: 4rem;
 }
 
 .tide-bar-wrapper {
@@ -166,32 +231,27 @@
 .tide-bar {
   position: relative;
   width: 100%;
-  background: linear-gradient(to top, #2193b0, #6dd5ed);
   border-radius: 4px 4px 0 0;
   transition: all 0.3s ease;
   cursor: pointer;
   min-height: 20px;
 }
 
+.tide-bar-high {
+  background: linear-gradient(to top, #2193b0, #6dd5ed);
+}
+
+.tide-bar-low {
+  background: linear-gradient(to top, #dc2626, #ef4444);
+}
+
+.tide-bar-sea-level {
+  background: linear-gradient(to top, #0891b2, #06b6d4);
+}
+
 .tide-bar:hover {
   filter: brightness(1.2);
   transform: scaleY(1.02);
-}
-
-.tide-bar.current {
-  background: linear-gradient(to top, #f59e0b, #fbbf24);
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
-  }
 }
 
 .tide-height {
@@ -200,46 +260,31 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
+  color: #6dd5ed;
   white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.tide-bar:hover .tide-height {
-  opacity: 1;
-}
-
-.tide-bar.current .tide-height {
-  opacity: 1;
-  color: #fbbf24;
 }
 
 .tide-time {
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
+  margin-top: 0.5rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
-.current-marker {
-  color: #fbbf24;
-  font-size: 0.5rem;
-  animation: blink 2s ease-in-out infinite;
+.tide-time-hour {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
 }
 
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
+.tide-time-date {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Legend */
@@ -247,7 +292,7 @@
   display: flex;
   justify-content: center;
   gap: 2rem;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(109, 213, 237, 0.2);
 }
 
@@ -255,8 +300,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .tide-legend-dot {
@@ -266,65 +309,52 @@
 }
 
 .tide-legend-dot.high {
-  background: #6dd5ed;
+  background: linear-gradient(135deg, #6dd5ed, #2193b0);
 }
 
 .tide-legend-dot.low {
-  background: #ef4444;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
-.tide-legend-dot.current {
-  background: #fbbf24;
-  animation: pulse-dot 2s ease-in-out infinite;
+.tide-legend-dot.sea-level {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
 }
 
-@keyframes pulse-dot {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
+.tide-legend-item span {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* Responsive adjustments */
+/* Responsive design */
 @media (max-width: 768px) {
-  .tide-chart-container {
-    padding: 1.5rem 1rem;
-  }
-
   .tide-current-info {
     flex-direction: column;
     gap: 1rem;
-  }
-
-  .tide-info-item {
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .tide-y-axis {
-    min-width: 40px;
   }
 
   .tide-bars {
     gap: 0.25rem;
   }
 
-  .tide-time {
+  .tide-label {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.3rem;
+  }
+
+  .tide-height {
     font-size: 0.65rem;
   }
 
-  .tide-label {
+  .tide-time-hour {
     font-size: 0.65rem;
-    padding: 0.2rem 0.4rem;
+  }
+
+  .tide-time-date {
+    font-size: 0.6rem;
   }
 
   .tide-legend {
     flex-direction: column;
     gap: 0.75rem;
-    align-items: flex-start;
   }
 }

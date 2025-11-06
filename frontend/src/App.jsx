@@ -12,6 +12,7 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import BeachPage from "./pages/BeachPage";
 import InfoPage from "./pages/InfoPage.jsx";
+import AboutPage from "./pages/AboutPage.jsx";
 import ForumHomePage from "./pages/ForumHomePage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SubcategoryPage from "./pages/SubcategoryPage.jsx";
@@ -23,7 +24,13 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: "light", // Force light theme always
+      }}
+    >
       <UserProvider>
         <UIProvider>
           <Router>
@@ -40,6 +47,7 @@ export default function App() {
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
+                  <Route path="/about" element={<AboutPage />} />
                   <Route path="/forum" element={<ForumHomePage />} />
                   <Route
                     path="/forum/category/:categorySlug"

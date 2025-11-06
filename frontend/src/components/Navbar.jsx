@@ -52,85 +52,70 @@ export default function Navbar() {
         </Link>
 
         <Group gap="sm">
-          <div
-            className="navbar-dropdown"
-            onMouseEnter={() => setBeachesOpen(true)}
-            onMouseLeave={() => setBeachesOpen(false)}
-          >
-            <Button variant="subtle" className="navbar-btn navbar-btn-beaches">
-              Beaches
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ marginLeft: "4px" }}
+          <Group gap="xs" className="navbar-nav-links">
+            <div
+              className="navbar-dropdown"
+              onMouseEnter={() => setBeachesOpen(true)}
+              onMouseLeave={() => setBeachesOpen(false)}
+            >
+              <Button
+                variant="subtle"
+                className="navbar-btn navbar-btn-beaches"
               >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </Button>
-            {beachesOpen && (
-              <div className="navbar-dropdown-menu">
-                {beaches.map((beach) => (
-                  <Link
-                    key={beach.id}
-                    to={`/beach/${beach.id}`}
-                    className="navbar-dropdown-item"
-                    onClick={() => setBeachesOpen(false)}
-                  >
-                    {beach.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+                Beaches
+              </Button>
+              {beachesOpen && (
+                <div className="navbar-dropdown-menu">
+                  {beaches.map((beach) => (
+                    <Link
+                      key={beach.id}
+                      to={`/beach/${beach.id}`}
+                      className="navbar-dropdown-item"
+                      onClick={() => setBeachesOpen(false)}
+                    >
+                      {beach.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          <div
-            className="navbar-dropdown"
-            onMouseEnter={() => setInfoOpen(true)}
-            onMouseLeave={() => setInfoOpen(false)}
-          >
-            <Button variant="subtle" className="navbar-btn navbar-btn-info">
-              Info
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ marginLeft: "4px" }}
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </Button>
-            {infoOpen && (
-              <div className="navbar-dropdown-menu">
-                {infoPages.map((page) => (
-                  <Link
-                    key={page.id}
-                    to={`/info/${page.id}`}
-                    className="navbar-dropdown-item"
-                    onClick={() => setInfoOpen(false)}
-                  >
-                    {page.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+            <div
+              className="navbar-dropdown"
+              onMouseEnter={() => setInfoOpen(true)}
+              onMouseLeave={() => setInfoOpen(false)}
+            >
+              <Button variant="subtle" className="navbar-btn navbar-btn-info">
+                Info
+              </Button>
+              {infoOpen && (
+                <div className="navbar-dropdown-menu">
+                  {infoPages.map((page) => (
+                    <Link
+                      key={page.id}
+                      to={`/info/${page.id}`}
+                      className="navbar-dropdown-item"
+                      onClick={() => setInfoOpen(false)}
+                    >
+                      {page.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          <Link to="/forum" className="navbar-link">
-            <Button variant="subtle" className="navbar-btn navbar-btn-forum">
-              Forum
-            </Button>
-          </Link>
+            <Link to="/forum" className="navbar-link">
+              <Button variant="subtle" className="navbar-btn navbar-btn-forum">
+                Forum
+              </Button>
+            </Link>
+
+            <Link to="/about" className="navbar-link">
+              <Button variant="subtle" className="navbar-btn navbar-btn-about">
+                About
+              </Button>
+            </Link>
+          </Group>
 
           {user ? (
             <>

@@ -1,3 +1,4 @@
+import forumHeroImage from "../assets/images/forum-hero.jpg";
 import "./ForumHeroSection.css";
 
 export default function ForumHeroSection() {
@@ -5,7 +6,7 @@ export default function ForumHeroSection() {
     <div
       className="forum-hero"
       style={{
-        backgroundImage: `url(https://images.unsplash.com/photo-1611224885990-ab7363d1f2f3?w=1200)`,
+        backgroundImage: `url(${forumHeroImage})`,
       }}
     >
       <div className="forum-hero-overlay">

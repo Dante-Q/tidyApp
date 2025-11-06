@@ -7,7 +7,6 @@ import BeachCarousel from "../components/BeachCarousel";
 import InfoGrid from "../components/InfoGrid";
 import BeachMap from "../components/BeachMap";
 import TideChart from "../components/TideChart";
-import WindCompass from "../components/WindCompass";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import BeachCam from "../components/BeachCam";
 import { UserContext } from "../context/UserContext.js";
@@ -49,7 +48,6 @@ export default function HomePage() {
         <BeachSlider />
         <InfoGrid />
         <TideChart />
-        <WindCompass />
         <WaveHeightGraph />
         <BeachCam />
         <BeachMap />

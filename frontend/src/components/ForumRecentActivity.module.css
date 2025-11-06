@@ -55,6 +55,23 @@
   flex: 1;
 }
 
+.postTags {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.postBeachTag {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid;
+  border-radius: 12px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
 .postSubcategoryTag {
   font-size: 0.8125rem;
   padding: 0.25rem 0.75rem;
@@ -130,7 +147,7 @@
     align-items: flex-start;
   }
 
-  .postSubcategoryTag {
+  .postTags {
     align-self: flex-start;
   }
 
@@ -139,4 +156,20 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
+}
+
+/* Filter Results Message */
+.filterResultsMessage {
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9375rem;
+}
+
+.noResults {
+  color: #ef4444;
+  font-weight: 600;
 }

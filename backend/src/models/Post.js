@@ -29,6 +29,27 @@ const postSchema = new mongoose.Schema(
       lowercase: true,
       default: null,
     },
+    tags: {
+      type: [String],
+      default: [],
+      validate: {
+        validator: function (tags) {
+          // Allow empty array
+          if (!tags || tags.length === 0) return true;
+          // Valid beach tags: muizenberg, bloubergstrand, strand, clifton, kalk-bay, milnerton
+          const validTags = [
+            "muizenberg",
+            "bloubergstrand",
+            "strand",
+            "clifton",
+            "kalk-bay",
+            "milnerton",
+          ];
+          return tags.every((tag) => validTags.includes(tag.toLowerCase()));
+        },
+        message: "Invalid beach tag",
+      },
+    },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -75,6 +96,7 @@ postSchema.virtual("commentCount", {
 // Index for faster queries
 postSchema.index({ category: 1, subcategory: 1, createdAt: -1 });
 postSchema.index({ author: 1 });
+postSchema.index({ tags: 1 });
 
 const Post = mongoose.model("Post", postSchema);
 

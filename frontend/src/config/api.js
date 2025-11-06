@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
 export const EXTERNAL_APIS = {
   openMeteo: {
     marine: "https://marine-api.open-meteo.com/v1/marine",
-    // Future: weather, forecast, etc.
+    weather: "https://api.open-meteo.com/v1/forecast",
   },
   // Future: tide APIs, weather APIs, etc.
 };
