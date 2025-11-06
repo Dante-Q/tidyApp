@@ -1,76 +1,46 @@
 import { useState, useContext } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tantml:react-query";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { adminDeletePost, adminMovePost } from "../services/adminService";
-import { togglePinPost, toggleCommentsOnPost } from "../services/forumService";
+import {
+  createAdminDeletePostMutation,
+  createMovePostMutation,
+  createPinPostMutation,
+  createToggleCommentsPostMutation,
+} from "../mutations/adminMutations.js";
 import { FORUM_CATEGORIES } from "../config/forumCategories";
 import "./AdminPostControls.css";
 
 export default function AdminPostControls({ post }) {
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [showMoveModal, setShowMoveModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(post.category);
   const [selectedSubcategory, setSelectedSubcategory] = useState(
     post.subcategory || ""
   );
 
-  const deleteMutation = useMutation({
-    mutationFn: () => adminDeletePost(post._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["posts"]);
-      queryClient.invalidateQueries(["post", post._id]);
-      alert("Post deleted by admin");
-      window.location.href = "/forum";
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to delete post");
-    },
-  });
+  // Use centralized admin mutations
+  const deleteMutation = useMutation(
+    createAdminDeletePostMutation(queryClient, post._id, navigate)
+  );
 
   const moveMutation = useMutation({
-    mutationFn: ({ category, subcategory }) =>
-      adminMovePost(post._id, category, subcategory),
+    ...createMovePostMutation(queryClient, post._id),
     onSuccess: (data) => {
+      setShowMoveModal(false);
       queryClient.invalidateQueries(["posts"]);
       queryClient.invalidateQueries(["post", post._id]);
-      setShowMoveModal(false);
       alert(data.message);
     },
-    onError: (error) => {
-      console.error("Move post error:", error);
-      console.error("Error response:", error.response?.data);
-      const errorMsg = error.response?.data?.message || "Failed to move post";
-      alert(`Error: ${errorMsg}`);
-    },
   });
 
-  const pinMutation = useMutation({
-    mutationFn: () => togglePinPost(post._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["posts"]);
-      queryClient.invalidateQueries(["post", post._id]);
-      queryClient.invalidateQueries(["allPosts"]);
-      queryClient.invalidateQueries(["recentPosts"]);
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to toggle pin status");
-    },
-  });
+  const pinMutation = useMutation(createPinPostMutation(queryClient, post._id));
 
-  const commentsMutation = useMutation({
-    mutationFn: () => toggleCommentsOnPost(post._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["posts"]);
-      queryClient.invalidateQueries(["post", post._id]);
-    },
-    onError: (error) => {
-      alert(
-        error.response?.data?.message || "Failed to toggle comments status"
-      );
-    },
-  });
+  const commentsMutation = useMutation(
+    createToggleCommentsPostMutation(queryClient, post._id)
+  );
 
   // Don't render if not admin
   if (!user?.isAdmin) return null;

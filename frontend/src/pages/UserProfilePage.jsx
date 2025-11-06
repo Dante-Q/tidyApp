@@ -4,16 +4,14 @@ import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.js";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
+import { getFriendshipStatus, getFriends } from "../services/friendService.js";
 import {
-  getFriendshipStatus,
-  sendFriendRequest,
-  acceptFriendRequest,
-  removeFriend,
-  getFriends,
-} from "../services/friendService.js";
+  createSendFriendRequestMutation,
+  createAcceptFriendRequestMutation,
+  createRemoveFriendMutation,
+} from "../mutations/friendMutations.js";
 import UserPostsList from "../components/UserPostsList.jsx";
 import ProfileDetails from "../components/ProfileDetails.jsx";
-import FriendsList from "../components/FriendsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
@@ -57,34 +55,18 @@ export default function UserProfilePage() {
   const friendsCount = friendsData?.friends?.length || 0;
   const canViewFriends = friendsData?.canViewFriends || isOwnProfile;
 
-  // Send friend request mutation
-  const sendRequestMutation = useMutation({
-    mutationFn: sendFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendshipStatus", userId]);
-      queryClient.invalidateQueries(["friendRequests"]); // Refresh dashboard requests
-      queryClient.invalidateQueries(["sentFriendRequests"]); // Refresh sent requests
-    },
-  });
+  // Use centralized friend mutations
+  const sendRequestMutation = useMutation(
+    createSendFriendRequestMutation(queryClient, userId)
+  );
 
-  // Accept friend request mutation
-  const acceptRequestMutation = useMutation({
-    mutationFn: acceptFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendshipStatus", userId]);
-      queryClient.invalidateQueries(["friendRequests"]); // Refresh dashboard requests
-      queryClient.invalidateQueries(["myFriends"]); // Update friends list
-      queryClient.invalidateQueries(["userFriends"]); // Update all user friends queries
-    },
-  });
+  const acceptRequestMutation = useMutation(
+    createAcceptFriendRequestMutation(queryClient, userId)
+  );
 
-  // Remove friend mutation
-  const removeFriendMutation = useMutation({
-    mutationFn: removeFriend,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendshipStatus", userId]);
-    },
-  });
+  const removeFriendMutation = useMutation(
+    createRemoveFriendMutation(queryClient, userId)
+  );
 
   const handleFriendAction = () => {
     if (friendshipStatus === "friends") {
@@ -219,12 +201,13 @@ export default function UserProfilePage() {
                   onClick={handleFriendAction}
                   disabled={
                     friendshipStatus === "pending_sent" ||
-                    friendshipStatus === "pending_received" ||
                     sendRequestMutation.isPending ||
+                    acceptRequestMutation.isPending ||
                     removeFriendMutation.isPending
                   }
                 >
                   {sendRequestMutation.isPending ||
+                  acceptRequestMutation.isPending ||
                   removeFriendMutation.isPending
                     ? "..."
                     : getFriendButtonText()}

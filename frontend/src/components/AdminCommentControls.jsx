@@ -1,7 +1,10 @@
 import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
-import { adminEditComment, adminDeleteComment } from "../services/adminService";
+import {
+  createAdminDeleteCommentMutation,
+  createAdminEditCommentMutation,
+} from "../mutations/adminMutations.js";
 import "./AdminCommentControls.css";
 
 export default function AdminCommentControls({ comment, postId }) {
@@ -10,26 +13,16 @@ export default function AdminCommentControls({ comment, postId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
 
-  const deleteMutation = useMutation({
-    mutationFn: () => adminDeleteComment(comment._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]);
-      alert("Comment deleted by admin");
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to delete comment");
-    },
-  });
+  // Use centralized admin mutations
+  const deleteMutation = useMutation(
+    createAdminDeleteCommentMutation(queryClient, postId)
+  );
 
   const editMutation = useMutation({
-    mutationFn: (content) => adminEditComment(comment._id, content),
+    ...createAdminEditCommentMutation(queryClient, postId),
     onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]);
       setIsEditing(false);
-      alert("Comment updated by admin");
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to edit comment");
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
     },
   });
 
@@ -42,7 +35,7 @@ export default function AdminCommentControls({ comment, postId }) {
         "⚠️ ADMIN: Delete this comment and all its replies? This cannot be undone."
       )
     ) {
-      deleteMutation.mutate();
+      deleteMutation.mutate(comment._id);
     }
   };
 
@@ -51,7 +44,7 @@ export default function AdminCommentControls({ comment, postId }) {
       alert("Comment cannot be empty");
       return;
     }
-    editMutation.mutate(editContent);
+    editMutation.mutate({ commentId: comment._id, content: editContent });
   };
 
   return (

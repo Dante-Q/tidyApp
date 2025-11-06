@@ -6,11 +6,13 @@ import {
   getFriendRequests,
   getSentFriendRequests,
   getFriends,
-  acceptFriendRequest,
-  rejectFriendRequest,
-  cancelFriendRequest,
-  removeFriend,
 } from "../services/friendService";
+import {
+  createAcceptFriendRequestMutation,
+  createRejectFriendRequestMutation,
+  createCancelFriendRequestMutation,
+  createRemoveFriendMutation,
+} from "../mutations/friendMutations.js";
 import { getPosts } from "../services/forumService";
 import {
   getUserInitial,
@@ -68,35 +70,21 @@ export default function FriendsManager() {
 
   const isLoading =
     receivedLoading || sentLoading || friendsLoading || postsLoading;
-  const acceptMutation = useMutation({
-    mutationFn: acceptFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendRequests"]);
-      queryClient.invalidateQueries(["userFriends"]);
-    },
-  });
 
-  const rejectMutation = useMutation({
-    mutationFn: rejectFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendRequests"]);
-    },
-  });
+  // Use centralized friend mutations
+  const acceptMutation = useMutation(
+    createAcceptFriendRequestMutation(queryClient)
+  );
 
-  const cancelMutation = useMutation({
-    mutationFn: cancelFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sentFriendRequests"]);
-      queryClient.invalidateQueries(["friendshipStatus"]);
-    },
-  });
+  const rejectMutation = useMutation(
+    createRejectFriendRequestMutation(queryClient)
+  );
 
-  const removeMutation = useMutation({
-    mutationFn: removeFriend,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["userFriends"]);
-    },
-  });
+  const cancelMutation = useMutation(
+    createCancelFriendRequestMutation(queryClient)
+  );
+
+  const removeMutation = useMutation(createRemoveFriendMutation(queryClient));
 
   const handleRemoveFriend = (friendId, friendName) => {
     if (window.confirm(`Remove ${friendName} from your friends?`)) {

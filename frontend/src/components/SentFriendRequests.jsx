@@ -1,9 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import {
-  getSentFriendRequests,
-  cancelFriendRequest,
-} from "../services/friendService";
+import { getSentFriendRequests } from "../services/friendService";
+import { createCancelFriendRequestMutation } from "../mutations/friendMutations.js";
 import { getUserInitial } from "../utils/forumHelpers";
 import "./SentFriendRequests.css";
 
@@ -17,14 +15,10 @@ export default function SentFriendRequests() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  // Cancel request mutation
-  const cancelMutation = useMutation({
-    mutationFn: cancelFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sentFriendRequests"]);
-      queryClient.invalidateQueries(["friendshipStatus"]); // Update status on user profiles
-    },
-  });
+  // Use centralized friend mutation
+  const cancelMutation = useMutation(
+    createCancelFriendRequestMutation(queryClient)
+  );
 
   const requests = data?.requests || [];
 
