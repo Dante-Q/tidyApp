@@ -1,0 +1,43 @@
+{
+  "version": 8,
+  "name": "Ocean Blue Dark",
+  "metadata": {
+    "description": "Dark ocean theme inspired by OpenMapTiles Fiord Color style",
+    "credits": "Style inspired by https://github.com/openmaptiles/fiord-color-gl-style"
+  },
+  "sources": {
+    "carto": {
+      "type": "raster",
+      "tiles": [
+        "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+        "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+        "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256,
+      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a> | Style inspired by <a href=\"https://github.com/openmaptiles/fiord-color-gl-style\">OpenMapTiles Fiord Color</a>"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#0f172a"
+      }
+    },
+    {
+      "id": "carto-tiles",
+      "type": "raster",
+      "source": "carto",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "paint": {
+        "raster-opacity": 0.85,
+        "raster-brightness-min": 0.1,
+        "raster-brightness-max": 0.7,
+        "raster-contrast": 0.2,
+        "raster-saturation": -0.3
+      }
+    }
+  ]
+}

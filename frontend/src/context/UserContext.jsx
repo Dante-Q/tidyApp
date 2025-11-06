@@ -19,6 +19,7 @@ export function UserProvider({ children }) {
         setUser({
           id: response.data._id,
           name: response.data.name,
+          displayName: response.data.displayName || response.data.name,
         });
       } catch {
         // User not logged in, that's ok
@@ -63,7 +64,7 @@ export function UserProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, login, logout }}>
       {children}
     </UserContext.Provider>
   );

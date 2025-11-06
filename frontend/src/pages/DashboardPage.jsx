@@ -6,6 +6,7 @@ import BeachCarousel from "../components/BeachCarousel";
 import ApiDataViewer from "../components/ApiDataViewer";
 import WaveHeightGraph from "../components/WaveHeightGraph";
 import MyForumPosts from "../components/MyForumPosts";
+import FriendsManager from "../components/FriendsManager";
 import useMarineData from "../hooks/useMarineData";
 
 export default function DashboardPage() {
@@ -21,7 +22,7 @@ export default function DashboardPage() {
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="hero-emoji">👋</span>
-            Welcome back, {user.name}!
+            Welcome back, {user.displayName || user.name}!
           </h1>
           <p className="hero-subtitle">Your favorite beaches & conditions</p>
         </div>
@@ -29,13 +30,16 @@ export default function DashboardPage() {
 
       {/* Dashboard content section */}
       <section className="homepage-content">
+        {/* Friends Manager - Unified Component */}
+        <FriendsManager />
+
+        {/* My Forum Posts */}
+        <MyForumPosts />
+
         <FavoritesWatchlist />
 
         {/* Beach Carousel */}
         <BeachCarousel />
-
-        {/* My Forum Posts */}
-        <MyForumPosts />
 
         {/* Wave Height Graph with Real Data */}
         <WaveHeightGraph

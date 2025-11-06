@@ -134,8 +134,11 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
                       </div>
                       <div className={styles.postItemMeta}>
                         <span className={styles.postAuthor}>
-                          by {post.author?.name || "Unknown"} •{" "}
-                          {formatDate(post.createdAt)}
+                          by{" "}
+                          {post.author?.displayName ||
+                            post.author?.name ||
+                            "Unknown"}{" "}
+                          • {formatDate(post.createdAt)}
                         </span>
                         <span className={styles.postStats}>
                           💬 {post.commentCount || 0} · ❤️{" "}

@@ -47,28 +47,59 @@
   transition: transform 0.4s ease-in-out;
 }
 
-.beach-card {
+.beach-slider .conditions-card-link {
+  min-width: 100%;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
+.beach-slider .conditions-card {
   min-width: 100%;
   background: rgba(15, 23, 42, 0.8);
-  border: none;
+  border: 1px solid rgba(109, 213, 237, 0.15);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.beach-card-image {
+.beach-slider .conditions-card-link:hover .conditions-card {
+  box-shadow: 0 8px 24px rgba(109, 213, 237, 0.3);
+  border-color: rgba(109, 213, 237, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.beach-slider .conditions-card-image {
   width: 100%;
-  height: 250px;
-  background-size: cover;
-  background-position: center;
+  height: 320px;
   position: relative;
   display: flex;
   align-items: flex-end;
   padding: 1rem;
-  border: none;
+  overflow: hidden;
 }
 
-.beach-card-condition {
+.beach-slider .conditions-card-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-image: inherit;
+  transition: transform 0.4s ease;
+  z-index: 0;
+}
+
+.beach-slider .conditions-card-link:hover .conditions-card-image::before {
+  transform: scale(1.08);
+}
+
+.beach-slider .conditions-card-badge {
   background: rgba(109, 213, 237, 0.9);
   color: #0f172a;
   padding: 0.5rem 1rem;
@@ -77,38 +108,40 @@
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
 }
 
-.beach-card-content {
+.beach-slider .conditions-card-content {
   padding: 1.5rem;
 }
 
-.beach-card-title {
+.beach-slider .conditions-card-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 1rem 0;
 }
 
-.beach-card-stats {
+.conditions-card-stats {
   display: flex;
   gap: 1.5rem;
 }
 
-.beach-stat {
+.conditions-stat {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.beach-stat-label {
+.conditions-stat-label {
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.beach-stat-value {
+.conditions-stat-value {
   font-size: 1.125rem;
   font-weight: 600;
   color: #6dd5ed;
@@ -141,21 +174,24 @@
   transform: scale(0.95);
 }
 
-/* Slider Dots */
+/* Slider Dots - Professional style for 6 beaches */
 .beach-slider-dots {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0;
 }
 
 .beach-slider-dot {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(109, 213, 237, 0.3);
-  border: none;
+  background: rgba(109, 213, 237, 0.25);
+  border: 1px solid rgba(109, 213, 237, 0.4);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .beach-slider-dot:hover {
@@ -164,13 +200,13 @@
 
 .beach-slider-dot.active {
   background: #6dd5ed;
-  width: 32px;
-  border-radius: 6px;
+  width: 24px;
+  box-shadow: 0 0 8px rgba(109, 213, 237, 0.4);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .beach-card-image {
+  .beach-slider .conditions-card-image {
     height: 200px;
   }
 
@@ -180,7 +216,7 @@
     font-size: 1.5rem;
   }
 
-  .beach-card-title {
+  .beach-slider .conditions-card-title {
     font-size: 1.25rem;
   }
 }

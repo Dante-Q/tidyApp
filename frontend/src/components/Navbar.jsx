@@ -13,6 +13,7 @@ export default function Navbar() {
   const location = useLocation();
   const [beachesOpen, setBeachesOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
 
   const beaches = [
     { id: "muizenberg", name: "Muizenberg" },
@@ -30,6 +31,14 @@ export default function Navbar() {
     { id: "beach-safety", name: "Beach Safety" },
     { id: "water-temperature", name: "Water Temperature" },
     { id: "marine-life", name: "Marine Life" },
+  ];
+
+  const toolsPages = [
+    { id: "surf-report", name: "Surf Report" },
+    { id: "tides", name: "Tides" },
+    { id: "wind", name: "Wind" },
+    { id: "map", name: "Map" },
+    { id: "cams", name: "Cams" },
   ];
 
   const handleLogout = () => {
@@ -53,6 +62,12 @@ export default function Navbar() {
 
         <Group gap="sm">
           <Group gap="xs" className="navbar-nav-links">
+            <Link to="/" className="navbar-link">
+              <Button variant="subtle" className="navbar-btn navbar-btn-home">
+                Home
+              </Button>
+            </Link>
+
             <div
               className="navbar-dropdown"
               onMouseEnter={() => setBeachesOpen(true)}
@@ -98,6 +113,30 @@ export default function Navbar() {
                       onClick={() => setInfoOpen(false)}
                     >
                       {page.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="navbar-dropdown"
+              onMouseEnter={() => setToolsOpen(true)}
+              onMouseLeave={() => setToolsOpen(false)}
+            >
+              <Button variant="subtle" className="navbar-btn navbar-btn-tools">
+                Tools
+              </Button>
+              {toolsOpen && (
+                <div className="navbar-dropdown-menu">
+                  {toolsPages.map((tool) => (
+                    <Link
+                      key={tool.id}
+                      to={`/tools/${tool.id}`}
+                      className="navbar-dropdown-item"
+                      onClick={() => setToolsOpen(false)}
+                    >
+                      {tool.name}
                     </Link>
                   ))}
                 </div>

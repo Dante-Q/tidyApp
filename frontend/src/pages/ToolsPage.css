@@ -1,0 +1,165 @@
+/* Tools Page Styles */
+.tools-page {
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 100%);
+  padding-bottom: 3rem;
+}
+
+.tools-hero {
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.4);
+  border-bottom: 1px solid rgba(109, 213, 237, 0.15);
+}
+
+.tools-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.tools-description {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tools-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.tools-content-map {
+  padding: 0;
+  max-width: 100%;
+}
+
+.tools-content-map .beach-map-container {
+  height: calc(100vh - 300px);
+  min-height: 500px;
+  border-radius: 0;
+}
+
+/* Tide Education Section */
+.tide-education-section {
+  margin-bottom: 3rem;
+}
+
+.tide-education-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.education-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(109, 213, 237, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.education-card:hover {
+  border-color: rgba(109, 213, 237, 0.4);
+  box-shadow: 0 4px 20px rgba(109, 213, 237, 0.15);
+  transform: translateY(-2px);
+}
+
+.education-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #6dd5ed;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.education-card p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.education-card strong {
+  color: #6dd5ed;
+  font-weight: 600;
+}
+
+/* Chart Sections */
+.chart-section {
+  margin-bottom: 3rem;
+}
+
+.chart-section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.chart-section:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .tide-education-section h2,
+  .chart-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .education-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .education-card {
+    padding: 1.25rem;
+  }
+
+  .education-card h3 {
+    font-size: 1.125rem;
+  }
+
+  .education-card p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .tools-title {
+    font-size: 2rem;
+  }
+
+  .tools-description {
+    font-size: 1rem;
+  }
+
+  .tools-content {
+    padding: 1.5rem 1rem;
+  }
+}

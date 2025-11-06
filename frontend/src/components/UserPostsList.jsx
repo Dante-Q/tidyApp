@@ -27,7 +27,11 @@ export default function UserPostsList({ posts, userName, showTitle = true }) {
   if (posts.length === 0) {
     return (
       <div className={styles.userPostsSection}>
-        {showTitle && <h2 className={styles.sectionTitle}>📝 My Posts</h2>}
+        {showTitle && (
+          <h2 className={styles.sectionTitle}>
+            <span className="hero-emoji">📝</span> My Posts
+          </h2>
+        )}
         <div className={styles.emptyState}>
           <p className={styles.emptyMessage}>No posts yet</p>
           <Link to="/forum/create-post" className={styles.createPostLink}>
@@ -42,7 +46,8 @@ export default function UserPostsList({ posts, userName, showTitle = true }) {
     <div className={styles.userPostsSection}>
       {showTitle && (
         <h2 className={styles.sectionTitle}>
-          📝 {userName ? `Posts by ${userName}` : "My Posts"}
+          <span className="hero-emoji">📝</span>{" "}
+          {userName ? `Posts by ${userName}` : "My Posts"}
         </h2>
       )}
 

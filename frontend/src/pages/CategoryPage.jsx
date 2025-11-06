@@ -233,8 +233,11 @@ export default function CategoryPage() {
                           </div>
                           <div className="post-item-meta">
                             <span className="post-author">
-                              by {post.author?.name || "Unknown"} •{" "}
-                              {formatDate(post.createdAt)}
+                              by{" "}
+                              {post.author?.displayName ||
+                                post.author?.name ||
+                                "Unknown"}{" "}
+                              • {formatDate(post.createdAt)}
                             </span>
                             <span className="post-stats">
                               💬 {post.commentCount || 0} · ❤️{" "}

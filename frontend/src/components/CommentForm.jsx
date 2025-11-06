@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostDetail } from "../context/PostDetailContext.js";
+import { UIContext } from "../context/UIContext.js";
 import { createCreateCommentMutation } from "../mutations/commentMutations.js";
 
 export default function CommentForm() {
   const { user, postId } = usePostDetail();
+  const { openAuth } = useContext(UIContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -47,7 +49,21 @@ export default function CommentForm() {
   if (!user) {
     return (
       <div className="login-prompt">
-        <Link to="/login">Log in</Link> to join the discussion
+        <button
+          onClick={() => openAuth("login")}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#6dd5ed",
+            cursor: "pointer",
+            textDecoration: "underline",
+            padding: 0,
+            font: "inherit",
+          }}
+        >
+          Log in
+        </button>{" "}
+        to join the discussion
       </div>
     );
   }

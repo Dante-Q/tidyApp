@@ -3,15 +3,15 @@
  * Handles fetching and processing hourly sea level (tide height) data
  */
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// Don't add /api prefix - it's already in VITE_API_URL
 
 /**
  * Fetch sea level data for all beaches
  * @returns {Promise<Object>} Sea level data for all beaches
  */
 export async function fetchAllSeaLevelData() {
-  const response = await fetch(`${API_BASE_URL}/api/sea-level`);
+  const response = await fetch(`${API_BASE_URL}/sea-level`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sea level data: ${response.status}`);
@@ -26,7 +26,7 @@ export async function fetchAllSeaLevelData() {
  * @returns {Promise<Object>} Sea level data for the beach
  */
 export async function fetchBeachSeaLevelData(beachName) {
-  const response = await fetch(`${API_BASE_URL}/api/sea-level/${beachName}`);
+  const response = await fetch(`${API_BASE_URL}/sea-level/${beachName}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sea level data: ${response.status}`);

@@ -25,11 +25,15 @@ export function PostDetailProvider({ children }) {
   } = useQuery({
     queryKey: ["post", postId],
     queryFn: async () => {
+      // Defensive: don't call if postId is falsy or the string "undefined"
+      if (!postId || postId === "undefined") throw new Error("Invalid postId");
       const data = await getPostById(postId);
-      const { count, liked } = processLikesData(data.likes, user, data.isLiked);
-      return { ...data, likes: count, isLiked: liked };
+      // data is now { success: true, post: {...} }
+      const post = data.post;
+      const { count, liked } = processLikesData(post.likes, user, post.isLiked);
+      return { ...post, likes: count, isLiked: liked };
     },
-    enabled: !!postId, // Only fetch if we have a postId
+    enabled: Boolean(postId) && postId !== "undefined", // Only fetch if we have a valid postId
     staleTime: 0, // Always consider data stale
     gcTime: 0, // Don't cache at all for testing
   });

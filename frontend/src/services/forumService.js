@@ -11,6 +11,8 @@ export const getPosts = async (params = {}) => {
       params,
       withCredentials: true,
     });
+    // Backend returns { success: true, posts, pagination }
+    // Return the full response object so callers can read posts and pagination
     return response.data;
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -24,6 +26,8 @@ export const getCategoryStats = async () => {
     const response = await axios.get(`${API_URL}/categories`, {
       withCredentials: true,
     });
+    // Backend returns { success: true, stats }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error fetching category stats:", error);
@@ -34,9 +38,14 @@ export const getCategoryStats = async () => {
 // Get single post by ID
 export const getPostById = async (postId) => {
   try {
+    if (!postId || postId === "undefined") {
+      throw new Error("Invalid postId");
+    }
     const response = await axios.get(`${API_URL}/${postId}`, {
       withCredentials: true,
     });
+    // Backend returns { success: true, post }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error fetching post:", error);
@@ -50,6 +59,8 @@ export const createPost = async (postData) => {
     const response = await axios.post(API_URL, postData, {
       withCredentials: true,
     });
+    // Backend returns { success: true, post }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -63,6 +74,8 @@ export const updatePost = async (postId, postData) => {
     const response = await axios.put(`${API_URL}/${postId}`, postData, {
       withCredentials: true,
     });
+    // Backend returns { success: true, post }
+    // Return full wrapper for consistency
     return response.data;
   } catch (error) {
     console.error("Error updating post:", error);
@@ -76,6 +89,7 @@ export const deletePost = async (postId) => {
     const response = await axios.delete(`${API_URL}/${postId}`, {
       withCredentials: true,
     });
+    // Backend returns { success: true, message }
     return response.data;
   } catch (error) {
     console.error("Error deleting post:", error);
@@ -93,6 +107,7 @@ export const toggleLikePost = async (postId) => {
         withCredentials: true,
       }
     );
+    // Backend returns { success: true, likes, isLiked }
     return response.data;
   } catch (error) {
     console.error("Error toggling like:", error);

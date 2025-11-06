@@ -191,12 +191,15 @@ export default function SubcategoryPage() {
                           <div className="post-col-author">
                             <div className="author-info">
                               <div className="author-avatar-small">
-                                {post.author?.name?.charAt(0).toUpperCase() ||
-                                  "?"}
+                                {(post.author?.displayName || post.author?.name)
+                                  ?.charAt(0)
+                                  .toUpperCase() || "?"}
                               </div>
                               <div className="author-details">
                                 <span className="author-name">
-                                  {post.author?.name || "Unknown"}
+                                  {post.author?.displayName ||
+                                    post.author?.name ||
+                                    "Unknown"}
                                 </span>
                                 <span className="post-date">
                                   {formatDate(post.createdAt)}

@@ -4,6 +4,7 @@ import { UserProvider } from "./context/UserContext.jsx";
 import { UIProvider } from "./context/UIProvider.jsx";
 
 import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 import GlobalDrawer from "./components/GlobalDrawer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage";
@@ -20,6 +21,15 @@ import CreatePostPage from "./pages/CreatePostPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import EditPostPage from "./pages/EditPostPage.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
+import UserFriendsPage from "./pages/UserFriendsPage.jsx";
+import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
+import SurfReportPage from "./pages/SurfReportPage.jsx";
+import TidesPage from "./pages/TidesPage.jsx";
+import WindPage from "./pages/WindPage.jsx";
+import MapPage from "./pages/MapPage.jsx";
+import CamsPage from "./pages/CamsPage.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -45,9 +55,22 @@ export default function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route
+                    path="/forgot-password"
+                    element={<ForgotPasswordPage />}
+                  />
+                  <Route path="/verify-otp" element={<VerifyOTPPage />} />
                   <Route path="/beach/:beachName" element={<BeachPage />} />
                   <Route path="/info/:infoSlug" element={<InfoPage />} />
                   <Route path="/about" element={<AboutPage />} />
+                  <Route
+                    path="/tools/surf-report"
+                    element={<SurfReportPage />}
+                  />
+                  <Route path="/tools/tides" element={<TidesPage />} />
+                  <Route path="/tools/wind" element={<WindPage />} />
+                  <Route path="/tools/map" element={<MapPage />} />
+                  <Route path="/tools/cams" element={<CamsPage />} />
                   <Route path="/forum" element={<ForumHomePage />} />
                   <Route
                     path="/forum/category/:categorySlug"
@@ -74,6 +97,18 @@ export default function App() {
                     element={<UserProfilePage />}
                   />
                   <Route
+                    path="/profile/:userId/friends"
+                    element={<UserFriendsPage />}
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <ProtectedRoute>
+                        <ProfileSettingsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
                     path="/dashboard"
                     element={
                       <ProtectedRoute>
@@ -82,6 +117,8 @@ export default function App() {
                     }
                   />
                 </Routes>
+
+                <Footer />
               </AppShell.Main>
             </AppShell>
 
