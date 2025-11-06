@@ -27,39 +27,12 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { fetchTideData as fetchTideDataFromAPI } from "../services/stormglassService.js";
+import { BEACHES } from "../config/beaches.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
-
-// Beach locations (same as frontend config)
-const BEACHES = {
-  muizenberg: {
-    name: "Muizenberg",
-    coordinates: { lat: -34.1183, lng: 18.4717 },
-  },
-  bloubergstrand: {
-    name: "Bloubergstrand",
-    coordinates: { lat: -33.8116, lng: 18.4364 },
-  },
-  strand: {
-    name: "Strand",
-    coordinates: { lat: -34.1236, lng: 18.8258 },
-  },
-  clifton: {
-    name: "Clifton",
-    coordinates: { lat: -33.9394, lng: 18.3772 },
-  },
-  kalkbay: {
-    name: "Kalk Bay",
-    coordinates: { lat: -34.1281, lng: 18.4506 },
-  },
-  milnerton: {
-    name: "Milnerton",
-    coordinates: { lat: -33.8615, lng: 18.4959 },
-  },
-};
 
 // Output directory
 const DATA_DIR = path.join(__dirname, "../../data");

@@ -3,6 +3,7 @@ import {
   getAllCategorySlugs,
   getAllSubcategorySlugs,
 } from "../config/forumCategories.js";
+import { getAllBeachSlugs } from "../config/beaches.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -36,15 +37,8 @@ const postSchema = new mongoose.Schema(
         validator: function (tags) {
           // Allow empty array
           if (!tags || tags.length === 0) return true;
-          // Valid beach tags: muizenberg, bloubergstrand, strand, clifton, kalk-bay, milnerton
-          const validTags = [
-            "muizenberg",
-            "bloubergstrand",
-            "strand",
-            "clifton",
-            "kalk-bay",
-            "milnerton",
-          ];
+          // Valid beach tags from config
+          const validTags = getAllBeachSlugs();
           return tags.every((tag) => validTags.includes(tag.toLowerCase()));
         },
         message: "Invalid beach tag",

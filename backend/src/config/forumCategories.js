@@ -5,6 +5,8 @@
  * Keep this in sync with frontend/src/config/forumCategories.js
  */
 
+import { getAllBeachSlugs } from "./beaches.js";
+
 export const FORUM_CATEGORIES = [
   {
     slug: "general",
@@ -23,15 +25,7 @@ export const FORUM_CATEGORIES = [
   {
     slug: "beaches",
     name: "Beaches",
-    subcategories: [
-      "muizenberg",
-      "bloubergstrand",
-      "strand",
-      "clifton",
-      "kalk-bay",
-      "milnerton",
-      "hidden-gems",
-    ],
+    subcategories: [...getAllBeachSlugs(), "hidden-gems"],
   },
   {
     slug: "food-hangouts",
