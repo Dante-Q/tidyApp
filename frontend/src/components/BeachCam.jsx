@@ -31,6 +31,7 @@ const BeachCam = () => {
   ]);
 
   const [selectedCam, setSelectedCam] = useState(cameras[0]);
+  const [activeTab, setActiveTab] = useState("cameras"); // 'cameras' or 'stats'
 
   return (
     <div className="beach-cam">
@@ -75,8 +76,24 @@ const BeachCam = () => {
             </div>
           </div>
 
+          {/* Mobile tabs */}
+          <div className="cam-mobile-tabs">
+            <button
+              className={`cam-tab ${activeTab === "stats" ? "active" : ""}`}
+              onClick={() => setActiveTab("stats")}
+            >
+              📊 Stats
+            </button>
+            <button
+              className={`cam-tab ${activeTab === "cameras" ? "active" : ""}`}
+              onClick={() => setActiveTab("cameras")}
+            >
+              📹 Cameras
+            </button>
+          </div>
+
           {/* Camera stats */}
-          <div className="cam-stats">
+          <div className={`cam-stats ${activeTab === "stats" ? "active" : ""}`}>
             <div className="cam-stat">
               <span className="cam-stat-label">Quality</span>
               <span className="cam-stat-value">HD</span>
@@ -97,7 +114,11 @@ const BeachCam = () => {
         </div>
 
         {/* Camera selection list */}
-        <div className="beach-cam-list">
+        <div
+          className={`beach-cam-list ${
+            activeTab === "cameras" ? "active" : ""
+          }`}
+        >
           <div className="cam-list-header">Available Cameras</div>
 
           {cameras.map((cam) => (
