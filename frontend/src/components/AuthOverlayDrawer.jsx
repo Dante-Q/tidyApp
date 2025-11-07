@@ -24,16 +24,31 @@ export default function AuthOverlayDrawer({
     }
   }, [initialMode, opened]);
 
+  // Handle blur effect and prevent scrollbar jump
   useEffect(() => {
     const root =
       typeof document !== "undefined" && document.getElementById("root");
     if (!root) return;
+
     if (opened) {
+      // Calculate scrollbar width before hiding
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+
       root.classList.add("tidy-blur");
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
       root.classList.remove("tidy-blur");
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
     }
-    return () => root.classList.remove("tidy-blur");
+
+    return () => {
+      root.classList.remove("tidy-blur");
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
   }, [opened]);
 
   return (

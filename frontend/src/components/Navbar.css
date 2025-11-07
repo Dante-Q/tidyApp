@@ -303,6 +303,13 @@
   transition: transform 0.3s ease;
   border-top: 1px solid rgba(109, 213, 237, 0.2);
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+  /* Hide scrollbar to prevent page jump when drawer opens */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.navbar-mobile::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
 }
 
 .navbar-mobile.active {
