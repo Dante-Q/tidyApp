@@ -6,7 +6,7 @@ import { getCategoryBySlug } from "../config/forumCategories.js";
 import { getBeachTagBySlug } from "../config/beachTags.js";
 import { formatDate } from "../utils/forumHelpers.js";
 import PostFilters from "../components/PostFilters.jsx";
-import forumHeroImage from "../assets/images/forum-hero.jpg";
+import forumHeroImage from "../assets/images/forum-hero.webp";
 import "./CategoryPage.css";
 
 export default function CategoryPage() {

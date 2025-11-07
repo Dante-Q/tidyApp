@@ -1,4 +1,4 @@
-import forumHeroImage from "../assets/images/forum-hero.jpg";
+import forumHeroImage from "../assets/images/forum-hero.webp";
 import "./ForumHeroSection.css";
 
 export default function ForumHeroSection() {

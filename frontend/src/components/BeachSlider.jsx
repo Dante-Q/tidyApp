@@ -5,12 +5,12 @@ import useWeatherData from "../hooks/useWeatherData";
 import "./BeachSlider.css";
 
 // Import beach images
-import muizenbergImg from "../assets/images/hongbin-muizenberg.jpg";
-import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.jpg";
-import cliftonImg from "../assets/images/jean-baptiste-clifton.jpg";
-import kalkbayImg from "../assets/images/david-watkis-kalkbay.jpg";
-import milnertonImg from "../assets/images/sam-wermut-misc.jpg";
-import strandImg from "../assets/images/untitled-photo-misc.jpg";
+import muizenbergImg from "../assets/images/hongbin-muizenberg.webp";
+import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.webp";
+import cliftonImg from "../assets/images/jean-baptiste-clifton.webp";
+import kalkbayImg from "../assets/images/david-watkis-kalkbay.webp";
+import milnertonImg from "../assets/images/sam-wermut-misc.webp";
+import strandImg from "../assets/images/untitled-photo-misc.webp";
 
 // Beach configuration with images
 const beachConfig = [
