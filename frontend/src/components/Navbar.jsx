@@ -8,7 +8,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
-  const { openAuth } = useContext(UIContext);
+  const { openAuth, authOpen } = useContext(UIContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [beachesOpen, setBeachesOpen] = useState(false);
@@ -18,6 +18,13 @@ export default function Navbar() {
   const [mobileBeachesOpen, setMobileBeachesOpen] = useState(false);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+
+  // Close mobile menu when auth drawer opens
+  useEffect(() => {
+    if (authOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [authOpen]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {

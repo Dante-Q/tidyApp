@@ -24,30 +24,40 @@ export default function AuthOverlayDrawer({
     }
   }, [initialMode, opened]);
 
-  // Handle blur effect and prevent scrollbar jump
+  // Handle blur effect and prevent layout shift from scrollbar
   useEffect(() => {
-    const root =
-      typeof document !== "undefined" && document.getElementById("root");
+    const root = typeof document !== "undefined" && document.getElementById("root");
+    const navbar = typeof document !== "undefined" && document.querySelector(".navbar-wrapper");
     if (!root) return;
 
     if (opened) {
-      // Calculate scrollbar width before hiding
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
       root.classList.add("tidy-blur");
+
+      // Prevent body scroll and compensate for scrollbar width
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+        if (navbar) {
+          navbar.style.paddingRight = `${scrollbarWidth}px`;
+        }
+      }
     } else {
       root.classList.remove("tidy-blur");
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
+      if (navbar) {
+        navbar.style.paddingRight = "";
+      }
     }
 
     return () => {
       root.classList.remove("tidy-blur");
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
+      if (navbar) {
+        navbar.style.paddingRight = "";
+      }
     };
   }, [opened]);
 
