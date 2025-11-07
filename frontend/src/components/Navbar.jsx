@@ -306,9 +306,11 @@ export default function Navbar() {
               onClick={() => setMobileBeachesOpen(!mobileBeachesOpen)}
             >
               Beaches
-              <span className="navbar-mobile-toggle">
-                {mobileBeachesOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileBeachesOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileBeachesOpen &&
               beaches.map((beach) => (
@@ -331,9 +333,11 @@ export default function Navbar() {
               onClick={() => setMobileInfoOpen(!mobileInfoOpen)}
             >
               Info
-              <span className="navbar-mobile-toggle">
-                {mobileInfoOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileInfoOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileInfoOpen &&
               infoPages.map((page) => (
@@ -356,9 +360,11 @@ export default function Navbar() {
               onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
             >
               Tools
-              <span className="navbar-mobile-toggle">
-                {mobileToolsOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileToolsOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileToolsOpen &&
               toolsPages.map((tool) => (

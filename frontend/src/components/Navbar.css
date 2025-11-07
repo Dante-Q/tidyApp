@@ -403,9 +403,17 @@
 }
 
 .navbar-mobile-toggle {
-  font-size: 0.6rem;
-  color: rgba(109, 213, 237, 0.6);
+  width: 0;
+  height: 0;
+  border-left: 5px solid #6dd5ed;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
   transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.navbar-mobile-toggle.open {
+  transform: rotate(90deg);
 }
 
 .navbar-mobile-sublink {
