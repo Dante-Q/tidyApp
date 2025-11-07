@@ -43,6 +43,9 @@ export default function HomePage() {
 
       {/* Secondary content section */}
       <section className="homepage-content">
+        {/* Gradient overlay - mobile only */}
+        <div className="homepage-gradient-overlay"></div>
+
         <BeachCarousel />
         <BeachSlider />
         <InfoGrid />
@@ -50,9 +53,6 @@ export default function HomePage() {
         <WaveHeightGraph />
         <BeachCam />
       </section>
-
-      {/* Gradient overlay - mobile only */}
-      <div className="homepage-gradient-overlay"></div>
     </div>
   );
 }
