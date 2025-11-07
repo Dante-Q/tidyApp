@@ -2,6 +2,7 @@
 .about-page {
   min-height: 100vh;
   background: var(--color-bg-dark);
+  overflow-x: hidden;
 }
 
 /* Hero Section */
@@ -161,32 +162,72 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .about-hero {
+    height: 250px;
+  }
+
+  .about-hero-content {
+    padding: 1rem;
+  }
+
   .about-title {
     font-size: 2rem;
+    word-wrap: break-word;
   }
 
   .about-subtitle {
-    font-size: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
 
   .about-article {
-    padding: 2rem 1.5rem;
+    padding: 2rem 2rem;
+    overflow-x: hidden;
+  }
+
+  .about-section {
+    margin-bottom: 2rem;
   }
 
   .about-section h2 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+    word-wrap: break-word;
   }
 
   .about-section p,
   .about-list li {
-    font-size: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .about-list li {
+    padding-left: 1.25rem;
   }
 
   .about-links {
-    padding: 2rem 1.5rem 3rem;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .about-links h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 
   .about-links-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .about-link-card {
+    padding: 1.25rem;
+    height: 8.5rem;
+  }
+
+  .about-link-icon {
+    font-size: 1.75rem;
+  }
+
+  .about-link-text {
+    font-size: 0.9375rem;
   }
 }
