@@ -327,35 +327,205 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .tide-chart {
+    padding: 1.5rem 0;
+    margin-top: 1.5rem;
+  }
+
+  .tide-chart-header {
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .tide-chart-header h2 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.375rem;
+  }
+
+  .tide-chart-header p {
+    font-size: 0.875rem !important;
+    margin-bottom: 0.75rem;
+  }
+
+  .beach-selector {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem !important;
+    min-width: 160px;
+  }
+
+  .tide-chart-container {
+    padding: 1rem;
+    margin: 0 1rem;
+  }
+
   .tide-current-info {
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: row;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  .tide-info-label {
+    font-size: 0.7rem !important;
+  }
+
+  .tide-info-value {
+    font-size: 1rem !important;
+  }
+
+  .tide-y-axis {
+    min-width: 35px;
+    padding: 1.5rem 0 3rem 0;
+  }
+
+  .tide-y-label {
+    font-size: 0.7rem !important;
+  }
+
+  .tide-bars-container {
+    min-height: 200px;
   }
 
   .tide-bars {
     gap: 0.25rem;
+    padding-bottom: 3rem;
+  }
+
+  .tide-bar-container {
+    padding-top: 1.5rem;
   }
 
   .tide-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem !important;
     padding: 0.2rem 0.3rem;
   }
 
   .tide-height {
-    font-size: 0.65rem;
+    font-size: 0.65rem !important;
+    top: -1.25rem;
   }
 
   .tide-time-hour {
-    font-size: 0.65rem;
+    font-size: 0.65rem !important;
   }
 
   .tide-time-date {
-    font-size: 0.6rem;
+    font-size: 0.55rem !important;
   }
 
   .tide-legend {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .tide-legend-item {
+    gap: 0.375rem;
+  }
+
+  .tide-legend-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .tide-legend-item span {
+    font-size: 0.75rem !important;
+  }
+
+  .tide-curve-svg {
+    padding: 1.5rem 0 3rem 0;
+  }
+
+  .tide-curve-time-label .tide-time-hour {
+    font-size: 0.65rem !important;
+  }
+
+  .tide-curve-time-label .tide-time-date {
+    font-size: 0.55rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tide-chart {
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
+
+  .tide-chart-header h2 {
+    font-size: 1.25rem !important;
+  }
+
+  .tide-chart-header p {
+    font-size: 0.8rem !important;
+  }
+
+  .beach-selector {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem !important;
+    min-width: 140px;
+  }
+
+  .tide-chart-container {
+    padding: 0.875rem;
+  }
+
+  .tide-current-info {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .tide-info-label {
+    font-size: 0.65rem !important;
+  }
+
+  .tide-info-value {
+    font-size: 0.9rem !important;
+  }
+
+  .tide-y-axis {
+    min-width: 30px;
+    padding: 1.25rem 0 2.5rem 0;
+  }
+
+  .tide-y-label {
+    font-size: 0.65rem !important;
+  }
+
+  .tide-bars-container {
+    min-height: 180px;
+  }
+
+  .tide-bars {
+    gap: 0.2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .tide-label {
+    font-size: 0.55rem !important;
+    padding: 0.15rem 0.25rem;
+  }
+
+  .tide-height {
+    font-size: 0.6rem !important;
+    top: -1rem;
+  }
+
+  .tide-time-hour {
+    font-size: 0.6rem !important;
+  }
+
+  .tide-time-date {
+    font-size: 0.5rem !important;
+  }
+
+  .tide-legend-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .tide-legend-item span {
+    font-size: 0.7rem !important;
   }
 }
 
@@ -395,14 +565,4 @@
 .tide-curve-time-label .tide-time-date {
   font-size: 0.65rem;
   color: rgba(255, 255, 255, 0.5);
-}
-
-@media (max-width: 768px) {
-  .tide-curve-time-label .tide-time-hour {
-    font-size: 0.65rem;
-  }
-
-  .tide-curve-time-label .tide-time-date {
-    font-size: 0.6rem;
-  }
 }
