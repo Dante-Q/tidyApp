@@ -7,12 +7,12 @@ export default function useWeatherData(beachName = "muizenberg") {
     queryKey: ["weather", beachName.toLowerCase()],
     queryFn: async () => {
       const json = await fetchWeatherData(beachName);
-      
+
       // Validate API response structure
       if (!json?.current) {
         throw new Error("Invalid API response: missing current weather data");
       }
-      
+
       return json;
     },
     staleTime: CACHE_CONFIG.weatherData.ttl, // 5 minutes - data considered fresh

@@ -7,12 +7,12 @@ export default function useMarineData(beachName = "muizenberg") {
     queryKey: ["marine", beachName.toLowerCase()],
     queryFn: async () => {
       const json = await fetchMarineData(beachName);
-      
+
       // Validate API response structure
       if (!json?.hourly?.wave_height) {
         throw new Error("Invalid API response: missing wave data");
       }
-      
+
       return json;
     },
     staleTime: CACHE_CONFIG.marineData.ttl, // 15 minutes - data considered fresh

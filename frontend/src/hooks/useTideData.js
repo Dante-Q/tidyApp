@@ -11,12 +11,12 @@ export default function useTideData(beachName = "muizenberg") {
     queryKey: ["tides", beachName.toLowerCase()],
     queryFn: async () => {
       const json = await fetchBeachTideData(beachName);
-      
+
       // Validate response structure
       if (!json?.extremes) {
         throw new Error("Invalid tide data response: missing extremes");
       }
-      
+
       return json;
     },
     staleTime: 2 * 60 * 60 * 1000, // 2 hours - tide data updated infrequently
