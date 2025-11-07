@@ -202,6 +202,7 @@
 
   .info-grid-header h2 {
     font-size: clamp(1.25rem, 6vw, 1.75rem);
+    margin-bottom: 0.3rem;
   }
 
   .info-grid-container {
