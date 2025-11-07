@@ -300,7 +300,9 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileBeachesOpen ? "active" : ""
+              }`}
               onClick={() => setMobileBeachesOpen(!mobileBeachesOpen)}
             >
               Beaches
@@ -323,7 +325,9 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileInfoOpen ? "active" : ""
+              }`}
               onClick={() => setMobileInfoOpen(!mobileInfoOpen)}
             >
               Info
@@ -346,7 +350,9 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileToolsOpen ? "active" : ""
+              }`}
               onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
             >
               Tools

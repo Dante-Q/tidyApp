@@ -397,7 +397,7 @@
   transition: all 0.2s ease;
 }
 
-.navbar-mobile-section-title:hover {
+.navbar-mobile-section-title.active {
   background: rgba(109, 213, 237, 0.12);
   border-left-color: #6dd5ed;
 }
