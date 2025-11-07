@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
+import ConfirmModal from "./ConfirmModal.jsx";
 import {
   getFriendRequests,
   getSentFriendRequests,
@@ -28,6 +29,8 @@ export default function FriendsManager() {
   const [showAllPosts, setShowAllPosts] = useState(false);
   const [showAllFriends, setShowAllFriends] = useState(false);
   const [showAllSent, setShowAllSent] = useState(false);
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [friendToRemove, setFriendToRemove] = useState(null);
   const queryClient = useQueryClient();
 
   // Fetch user's posts
@@ -87,8 +90,13 @@ export default function FriendsManager() {
   const removeMutation = useMutation(createRemoveFriendMutation(queryClient));
 
   const handleRemoveFriend = (friendId, friendName) => {
-    if (window.confirm(`Remove ${friendName} from your friends?`)) {
-      removeMutation.mutate(friendId);
+    setFriendToRemove({ id: friendId, name: friendName });
+    setConfirmRemoveOpen(true);
+  };
+
+  const handleConfirmRemove = () => {
+    if (friendToRemove) {
+      removeMutation.mutate(friendToRemove.id);
     }
   };
 
@@ -413,6 +421,24 @@ export default function FriendsManager() {
           </>
         )}
       </div>
+
+      {/* Remove Friend Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmRemoveOpen}
+        onClose={() => {
+          setConfirmRemoveOpen(false);
+          setFriendToRemove(null);
+        }}
+        onConfirm={handleConfirmRemove}
+        title="Remove Friend"
+        message={
+          friendToRemove
+            ? `Remove ${friendToRemove.name} from your friends?`
+            : "Remove this friend?"
+        }
+        confirmText="Remove"
+        confirmColor="red"
+      />
     </div>
   );
 }

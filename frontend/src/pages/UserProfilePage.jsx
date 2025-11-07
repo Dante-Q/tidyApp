@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.js";
+import ConfirmModal from "../components/ConfirmModal.jsx";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
 import { getFriendshipStatus, getFriends } from "../services/friendService.js";
@@ -19,6 +20,7 @@ export default function UserProfilePage() {
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("posts"); // 'posts', 'about', 'friends'
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
 
   // Fetch posts for this user using React Query
   const {
@@ -70,15 +72,17 @@ export default function UserProfilePage() {
 
   const handleFriendAction = () => {
     if (friendshipStatus === "friends") {
-      if (window.confirm("Are you sure you want to remove this friend?")) {
-        removeFriendMutation.mutate(userId);
-      }
+      setConfirmRemoveOpen(true);
     } else if (friendshipStatus === "pending_received") {
       // Accept the friend request
       acceptRequestMutation.mutate(userId);
     } else if (friendshipStatus === "none") {
       sendRequestMutation.mutate(userId);
     }
+  };
+
+  const handleConfirmRemove = () => {
+    removeFriendMutation.mutate(userId);
   };
 
   const getFriendButtonText = () => {
@@ -330,6 +334,17 @@ export default function UserProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Remove Friend Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmRemoveOpen}
+        onClose={() => setConfirmRemoveOpen(false)}
+        onConfirm={handleConfirmRemove}
+        title="Remove Friend"
+        message="Are you sure you want to remove this friend?"
+        confirmText="Remove"
+        confirmColor="red"
+      />
     </div>
   );
 }

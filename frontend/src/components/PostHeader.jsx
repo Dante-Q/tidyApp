@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { usePostDetail } from "../context/PostDetailContext.js";
 import {
   getUserInitial,
@@ -14,6 +15,7 @@ import {
 } from "../mutations/postMutations.js";
 import { getDisplayName } from "../utils/displayName.js";
 import AdminPostControls from "./AdminPostControls.jsx";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 import styles from "./PostHeader.module.css";
 
@@ -22,6 +24,7 @@ export default function PostHeader() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isAuthor = user && post && post.author && post.author._id === user.id;
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   const likeMutation = useMutation(createLikePostMutation(queryClient, postId));
   const deleteMutation = useMutation(
@@ -37,13 +40,10 @@ export default function PostHeader() {
   };
 
   const onDelete = () => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this post? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
     deleteMutation.mutate(post._id);
   };
 
@@ -147,6 +147,17 @@ export default function PostHeader() {
 
       {/* Admin Controls */}
       <AdminPostControls post={post} />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This action cannot be undone."
+        confirmText="Delete"
+        confirmColor="red"
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import ConfirmModal from "./ConfirmModal.jsx";
 import {
   createAdminDeletePostMutation,
   createMovePostMutation,
@@ -16,6 +17,7 @@ export default function AdminPostControls({ post }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [showMoveModal, setShowMoveModal] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(post.category);
   const [selectedSubcategory, setSelectedSubcategory] = useState(
     post.subcategory || ""
@@ -48,13 +50,11 @@ export default function AdminPostControls({ post }) {
   if (!user?.isAdmin) return null;
 
   const handleDelete = () => {
-    if (
-      window.confirm(
-        "⚠️ ADMIN: Delete this post permanently? This cannot be undone."
-      )
-    ) {
-      deleteMutation.mutate();
-    }
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteMutation.mutate();
   };
 
   const handleMove = () => {
@@ -188,6 +188,17 @@ export default function AdminPostControls({ post }) {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Admin: Delete Post"
+        message="⚠️ ADMIN: Delete this post permanently? This cannot be undone."
+        confirmText="Delete"
+        confirmColor="red"
+      />
     </div>
   );
 }

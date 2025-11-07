@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePostDetail } from "../context/PostDetailContext.js";
 import InlineCommentForm from "./InlineCommentForm.jsx";
 import AdminCommentControls from "./AdminCommentControls.jsx";
+import ConfirmModal from "./ConfirmModal.jsx";
 import {
   createLikeCommentMutation,
   createDeleteCommentMutation,
@@ -48,6 +49,7 @@ function CommentItem({
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const navigate = useNavigate();
 
   const INITIAL_REPLIES_SHOWN = 3;
@@ -115,9 +117,10 @@ function CommentItem({
   };
 
   const handleDeleteComment = () => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) {
-      return;
-    }
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
     deleteCommentMutation.mutate(comment._id);
   };
 
@@ -302,6 +305,17 @@ function CommentItem({
           )}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Comment"
+        message="Are you sure you want to delete this comment?"
+        confirmText="Delete"
+        confirmColor="red"
+      />
     </div>
   );
 }

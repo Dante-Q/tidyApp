@@ -5,6 +5,7 @@ import { MantineProvider, AppShell } from "@mantine/core";
 // Context Providers
 import { UserProvider } from "./context/UserContext.jsx";
 import { UIProvider } from "./context/UIProvider.jsx";
+import { AlertProvider } from "./context/AlertProvider.jsx";
 
 // Layout Components
 import Navbar from "./components/Navbar.jsx";
@@ -57,87 +58,89 @@ export default function App() {
     >
       <UserProvider>
         <UIProvider>
-          <Router>
-            <ScrollToTop />
-            <AppShell header={{ height: 60 }} padding={0}>
-              <AppShell.Header>
-                <Navbar />
-              </AppShell.Header>
+          <AlertProvider>
+            <Router>
+              <ScrollToTop />
+              <AppShell header={{ height: 60 }} padding={0}>
+                <AppShell.Header>
+                  <Navbar />
+                </AppShell.Header>
 
-              <AppShell.Main>
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route
-                    path="/forgot-password"
-                    element={<ForgotPasswordPage />}
-                  />
-                  <Route path="/verify-otp" element={<VerifyOTPPage />} />
-                  <Route path="/beach/:beachName" element={<BeachPage />} />
-                  <Route path="/info/:infoSlug" element={<InfoPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route
-                    path="/tools/surf-report"
-                    element={<SurfReportPage />}
-                  />
-                  <Route path="/tools/tides" element={<TidesPage />} />
-                  <Route path="/tools/wind" element={<WindPage />} />
-                  <Route path="/tools/map" element={<MapPage />} />
-                  <Route path="/tools/cams" element={<CamsPage />} />
-                  <Route path="/forum" element={<ForumHomePage />} />
-                  <Route
-                    path="/forum/category/:categorySlug"
-                    element={<CategoryPage />}
-                  />
-                  <Route
-                    path="/forum/category/:categorySlug/:subcategorySlug"
-                    element={<SubcategoryPage />}
-                  />
-                  <Route
-                    path="/forum/post/:postId"
-                    element={<PostDetailPage />}
-                  />
-                  <Route
-                    path="/forum/create-post"
-                    element={<CreatePostPage />}
-                  />
-                  <Route
-                    path="/forum/edit/:postId"
-                    element={<EditPostPage />}
-                  />
-                  <Route
-                    path="/profile/:userId"
-                    element={<UserProfilePage />}
-                  />
-                  <Route
-                    path="/profile/:userId/friends"
-                    element={<UserFriendsPage />}
-                  />
-                  <Route
-                    path="/settings"
-                    element={
-                      <ProtectedRoute>
-                        <ProfileSettingsPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                </Routes>
+                <AppShell.Main>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPasswordPage />}
+                    />
+                    <Route path="/verify-otp" element={<VerifyOTPPage />} />
+                    <Route path="/beach/:beachName" element={<BeachPage />} />
+                    <Route path="/info/:infoSlug" element={<InfoPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route
+                      path="/tools/surf-report"
+                      element={<SurfReportPage />}
+                    />
+                    <Route path="/tools/tides" element={<TidesPage />} />
+                    <Route path="/tools/wind" element={<WindPage />} />
+                    <Route path="/tools/map" element={<MapPage />} />
+                    <Route path="/tools/cams" element={<CamsPage />} />
+                    <Route path="/forum" element={<ForumHomePage />} />
+                    <Route
+                      path="/forum/category/:categorySlug"
+                      element={<CategoryPage />}
+                    />
+                    <Route
+                      path="/forum/category/:categorySlug/:subcategorySlug"
+                      element={<SubcategoryPage />}
+                    />
+                    <Route
+                      path="/forum/post/:postId"
+                      element={<PostDetailPage />}
+                    />
+                    <Route
+                      path="/forum/create-post"
+                      element={<CreatePostPage />}
+                    />
+                    <Route
+                      path="/forum/edit/:postId"
+                      element={<EditPostPage />}
+                    />
+                    <Route
+                      path="/profile/:userId"
+                      element={<UserProfilePage />}
+                    />
+                    <Route
+                      path="/profile/:userId/friends"
+                      element={<UserFriendsPage />}
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <ProtectedRoute>
+                          <ProfileSettingsPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </Routes>
 
-                <Footer />
-              </AppShell.Main>
-            </AppShell>
+                  <Footer />
+                </AppShell.Main>
+              </AppShell>
 
-            <GlobalDrawer />
-          </Router>
+              <GlobalDrawer />
+            </Router>
+          </AlertProvider>
         </UIProvider>
       </UserProvider>
     </MantineProvider>

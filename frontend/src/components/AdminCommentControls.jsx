@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
+import ConfirmModal from "./ConfirmModal.jsx";
 import {
   createAdminDeleteCommentMutation,
   createAdminEditCommentMutation,
@@ -12,6 +13,7 @@ export default function AdminCommentControls({ comment, postId }) {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   // Use centralized admin mutations
   const deleteMutation = useMutation(
@@ -30,13 +32,11 @@ export default function AdminCommentControls({ comment, postId }) {
   if (!user?.isAdmin) return null;
 
   const handleDelete = () => {
-    if (
-      window.confirm(
-        "⚠️ ADMIN: Delete this comment and all its replies? This cannot be undone."
-      )
-    ) {
-      deleteMutation.mutate(comment._id);
-    }
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteMutation.mutate(comment._id);
   };
 
   const handleEdit = () => {
@@ -95,6 +95,17 @@ export default function AdminCommentControls({ comment, postId }) {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Admin: Delete Comment"
+        message="⚠️ ADMIN: Delete this comment and all its replies? This cannot be undone."
+        confirmText="Delete"
+        confirmColor="red"
+      />
     </div>
   );
 }

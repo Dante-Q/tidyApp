@@ -1,8 +1,8 @@
 import {
-  toggleLikePost,
-  deletePost,
   createPost,
+  deletePost,
   updatePost,
+  toggleLikePost,
 } from "../services/forumService.js";
 import { showErrorAlert } from "../utils/errorHandlers.js";
 

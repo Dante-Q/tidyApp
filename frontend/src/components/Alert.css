@@ -1,0 +1,123 @@
+.custom-alert {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 1rem 1.25rem;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  z-index: 10001;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.custom-alert-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.custom-alert-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.custom-alert-message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.custom-alert-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.custom-alert-close:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* Error variant */
+.custom-alert-error {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.custom-alert-error .custom-alert-icon {
+  color: #ef4444;
+}
+
+/* Success variant */
+.custom-alert-success {
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.custom-alert-success .custom-alert-icon {
+  color: #22c55e;
+}
+
+/* Info variant */
+.custom-alert-info {
+  border-color: rgba(109, 213, 237, 0.4);
+}
+
+.custom-alert-info .custom-alert-icon {
+  color: #6dd5ed;
+}
+
+/* Warning variant */
+.custom-alert-warning {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.custom-alert-warning .custom-alert-icon {
+  color: #fbbf24;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .custom-alert {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+    padding: 0.875rem 1rem;
+  }
+
+  .custom-alert-message {
+    font-size: 0.875rem;
+  }
+}
