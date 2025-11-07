@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { UserContext } from "../context/UserContext";
 import ConfirmModal from "./ConfirmModal.jsx";
 import {
@@ -116,7 +117,7 @@ export default function AdminPostControls({ post }) {
           onClick={handleToggleComments}
           disabled={commentsMutation.isPending}
         >
-          {post.commentsDisabled ? "� Enable" : "🚫 Disable"}
+          {post.commentsDisabled ? "✅ Enable" : "🚫 Disable"}
         </button>
         <button
           className="admin-btn admin-btn-delete"
@@ -127,67 +128,69 @@ export default function AdminPostControls({ post }) {
         </button>
       </div>
 
-      {/* Move Post Modal */}
-      {showMoveModal && (
-        <div
-          className="admin-modal-overlay"
-          onClick={() => setShowMoveModal(false)}
-        >
-          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Move Post to Different Category</h3>
+      {/* Move Post Modal - rendered via portal to ensure proper centering */}
+      {showMoveModal &&
+        createPortal(
+          <div
+            className="admin-modal-overlay"
+            onClick={() => setShowMoveModal(false)}
+          >
+            <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+              <h3>Move Post to Different Category</h3>
 
-            <div className="form-group">
-              <label>Category</label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  setSelectedSubcategory("");
-                }}
-              >
-                {FORUM_CATEGORIES.map((cat) => (
-                  <option key={cat.slug} value={cat.slug}>
-                    {cat.icon} {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {subcategories.length > 0 && (
               <div className="form-group">
-                <label>Subcategory (Optional)</label>
+                <label>Category</label>
                 <select
-                  value={selectedSubcategory}
-                  onChange={(e) => setSelectedSubcategory(e.target.value)}
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedSubcategory("");
+                  }}
                 >
-                  <option value="">None</option>
-                  {subcategories.map((sub) => (
-                    <option key={sub.slug} value={sub.slug}>
-                      {sub.icon} {sub.name}
+                  {FORUM_CATEGORIES.map((cat) => (
+                    <option key={cat.slug} value={cat.slug}>
+                      {cat.icon} {cat.name}
                     </option>
                   ))}
                 </select>
               </div>
-            )}
 
-            <div className="modal-actions">
-              <button
-                className="btn-cancel"
-                onClick={() => setShowMoveModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn-confirm"
-                onClick={handleMove}
-                disabled={moveMutation.isPending}
-              >
-                {moveMutation.isPending ? "Moving..." : "Move Post"}
-              </button>
+              {subcategories.length > 0 && (
+                <div className="form-group">
+                  <label>Subcategory (Optional)</label>
+                  <select
+                    value={selectedSubcategory}
+                    onChange={(e) => setSelectedSubcategory(e.target.value)}
+                  >
+                    <option value="">None</option>
+                    {subcategories.map((sub) => (
+                      <option key={sub.slug} value={sub.slug}>
+                        {sub.icon} {sub.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button
+                  className="btn-cancel"
+                  onClick={() => setShowMoveModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-confirm"
+                  onClick={handleMove}
+                  disabled={moveMutation.isPending}
+                >
+                  {moveMutation.isPending ? "Moving..." : "Move Post"}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* Delete Confirmation Modal */}
       <ConfirmModal
