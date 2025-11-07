@@ -195,14 +195,16 @@ const TideChart = ({
           <div className="tide-info-item">
             <span className="tide-info-label">Current</span>
             <span className="tide-info-value">
-              {currentHeight !== null ? `${currentHeight}m` : "N/A"}
+              {currentHeight !== null ? `${currentHeight.toFixed(2)}m` : "N/A"}
             </span>
           </div>
           <div className="tide-info-item">
             <span className="tide-info-label">Next High</span>
             <span className="tide-info-value">
               {nextHigh
-                ? `${formatTideTime(nextHigh.time)} (${nextHigh.height}m)`
+                ? `${formatTideTime(nextHigh.time)} (${nextHigh.height.toFixed(
+                    2
+                  )}m)`
                 : "N/A"}
             </span>
           </div>
@@ -210,7 +212,9 @@ const TideChart = ({
             <span className="tide-info-label">Next Low</span>
             <span className="tide-info-value">
               {nextLow
-                ? `${formatTideTime(nextLow.time)} (${nextLow.height}m)`
+                ? `${formatTideTime(nextLow.time)} (${nextLow.height.toFixed(
+                    2
+                  )}m)`
                 : "N/A"}
             </span>
           </div>

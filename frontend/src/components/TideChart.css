@@ -460,9 +460,10 @@
   }
 
   .beach-selector {
-    padding: 0.5rem 0.875rem;
+    padding: 0.5rem 0.875rem !important;
     font-size: 0.8rem !important;
-    min-width: 140px;
+    min-width: 140px !important;
+    margin-bottom: 0 !important;
   }
 
   .tide-chart-container {
