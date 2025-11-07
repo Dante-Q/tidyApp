@@ -542,6 +542,17 @@ footer {
   height: 100% !important;
 }
 
+/* Auth drawer close button - hide on desktop */
+.auth-drawer-close-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .auth-drawer-close-btn {
+    display: flex !important;
+  }
+}
+
 /* ========================================
    RESPONSIVE MOBILE OPTIMIZATIONS
    ======================================== */
