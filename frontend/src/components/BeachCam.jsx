@@ -7,24 +7,61 @@ const BeachCam = () => {
   const [cameras] = useState(getAllCameras());
   const [selectedCam, setSelectedCam] = useState(cameras[0]);
   const [activeTab, setActiveTab] = useState("cameras"); // 'cameras' or 'stats'
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
 
-  // Handle video stream loading
-  useEffect(() => {
-    if (!selectedCam || !videoRef.current) return;
+  // Handle video stream loading (only when user initiates playback)
+  const loadStream = () => {
+    if (!selectedCam || isPlaying) return;
 
     setIsLoading(true);
     setError(null);
 
-    // Clean up previous HLS instance
-    if (hlsRef.current) {
-      hlsRef.current.destroy();
-      hlsRef.current = null;
+    // Handle iframe type (YouTube, etc.)
+    if (selectedCam.type === "iframe") {
+      setIsLoading(false);
+      setIsPlaying(true);
+      return;
     }
 
+    // Handle direct video streams
+    if (selectedCam.type === "direct" && videoRef.current) {
+      const video = videoRef.current;
+      video.src = selectedCam.streamUrl;
+      video.load();
+
+      video.addEventListener(
+        "loadeddata",
+        () => {
+          setIsLoading(false);
+          setIsPlaying(true);
+          video.play().catch((e) => {
+            console.error("Playback failed:", e);
+            setError("Failed to play video");
+            setIsPlaying(false);
+          });
+        },
+        { once: true }
+      );
+
+      video.addEventListener(
+        "error",
+        () => {
+          setError("Failed to load video stream");
+          setIsLoading(false);
+          setIsPlaying(false);
+        },
+        { once: true }
+      );
+
+      return;
+    }
+
+    // Handle HLS streams
+    if (!videoRef.current) return;
     const video = videoRef.current;
 
     if (selectedCam.type === "hls" && selectedCam.streamUrl) {
@@ -43,9 +80,11 @@ const BeachCam = () => {
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setIsLoading(false);
+          setIsPlaying(true);
           video.play().catch((e) => {
-            console.error("Autoplay failed:", e);
-            setError("Click to play video");
+            console.error("Playback failed:", e);
+            setError("Failed to play video");
+            setIsPlaying(false);
           });
         });
 
@@ -54,29 +93,59 @@ const BeachCam = () => {
           if (data.fatal) {
             setError("Failed to load video stream");
             setIsLoading(false);
+            setIsPlaying(false);
           }
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         // Native HLS support (Safari)
         video.src = selectedCam.streamUrl;
-        video.addEventListener("loadedmetadata", () => {
-          setIsLoading(false);
-          video.play().catch((e) => {
-            console.error("Autoplay failed:", e);
-            setError("Click to play video");
-          });
-        });
-        video.addEventListener("error", () => {
-          setError("Failed to load video stream");
-          setIsLoading(false);
-        });
+        video.addEventListener(
+          "loadedmetadata",
+          () => {
+            setIsLoading(false);
+            setIsPlaying(true);
+            video.play().catch((e) => {
+              console.error("Playback failed:", e);
+              setError("Failed to play video");
+              setIsPlaying(false);
+            });
+          },
+          { once: true }
+        );
+        video.addEventListener(
+          "error",
+          () => {
+            setError("Failed to load video stream");
+            setIsLoading(false);
+            setIsPlaying(false);
+          },
+          { once: true }
+        );
       } else {
         setError("HLS not supported in this browser");
         setIsLoading(false);
       }
     }
+  };
 
-    // Cleanup
+  // Clean up stream when camera changes
+  useEffect(() => {
+    setIsPlaying(false);
+    setError(null);
+
+    // Clean up previous HLS instance
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    // Pause and reset video
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.src = "";
+    }
+
+    // Cleanup on unmount
     return () => {
       if (hlsRef.current) {
         hlsRef.current.destroy();
@@ -95,15 +164,40 @@ const BeachCam = () => {
         {/* Main camera view */}
         <div className="beach-cam-main">
           <div className="cam-video-container">
-            {/* Video player for HLS streams */}
-            <video
-              ref={videoRef}
-              className="cam-video"
-              autoPlay
-              muted
-              playsInline
-              controls
-            />
+            {/* Show iframe for YouTube/iframe type */}
+            {selectedCam.type === "iframe" && isPlaying ? (
+              <iframe
+                className="cam-video cam-iframe"
+                src={selectedCam.streamUrl}
+                title={selectedCam.name}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            ) : (
+              /* Video player for HLS and direct streams */
+              <video
+                ref={videoRef}
+                className="cam-video"
+                muted
+                playsInline
+                controls
+                style={{
+                  display: selectedCam.type === "iframe" ? "none" : "block",
+                }}
+              />
+            )}
+
+            {/* Play button overlay (shown when not playing) */}
+            {!isPlaying && !isLoading && !error && (
+              <div className="cam-play-overlay" onClick={loadStream}>
+                <button className="cam-play-button">
+                  <span>▶</span>
+                </button>
+                <p className="cam-play-text">Click to play stream</p>
+              </div>
+            )}
 
             {/* Loading indicator */}
             {isLoading && (
@@ -121,7 +215,7 @@ const BeachCam = () => {
             )}
 
             {/* Live indicator */}
-            {!error && (
+            {isPlaying && !error && (
               <div className="cam-live-indicator">
                 <span className="live-dot"></span>
                 <span className="live-text">LIVE</span>
@@ -140,10 +234,16 @@ const BeachCam = () => {
                 className="cam-control-btn"
                 title="Refresh"
                 onClick={() => {
-                  if (videoRef.current) {
-                    videoRef.current.load();
-                    videoRef.current.play();
+                  setIsPlaying(false);
+                  if (hlsRef.current) {
+                    hlsRef.current.destroy();
+                    hlsRef.current = null;
                   }
+                  if (videoRef.current) {
+                    videoRef.current.pause();
+                    videoRef.current.src = "";
+                  }
+                  setTimeout(() => loadStream(), 100);
                 }}
               >
                 🔄

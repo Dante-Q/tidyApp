@@ -21,7 +21,56 @@ export const BEACH_CAMERAS = [
     quality: "HD",
     type: "hls", // 'hls', 'iframe', or 'direct'
   },
-  // Add more cameras here as they become available
+  {
+    id: "muizenberg-WaveWaters",
+    name: "Muizenberg WaveWatchers",
+    beach: "muizenberg",
+    location: "Beachfront / WaveWatchers",
+    streamUrl: "https://www.youtube.com/embed/70gObI9oeVU?si=uZ0xDLYmo9Wrp1l7",
+    status: "live",
+    quality: "HD",
+    type: "iframe",
+  },
+  {
+    id: "kalkbay-brassbell",
+    name: "Kalk Bay",
+    beach: "kalkbay",
+    location: "Kalk Bay Reef / Brass Bell",
+    streamUrl: "https://www.youtube.com/embed/eXbK6DrZJL4",
+    status: "live",
+    quality: "HD",
+    type: "iframe",
+  },
+  {
+    id: "blouberg",
+    name: "Blouberg Cam",
+    beach: "blouberg",
+    location: "Blouberg / Table Cams",
+    streamUrl: "https://www.youtube.com/embed/8Pmo8orbQig?si=IGEnUW1ETqjh17lb",
+    status: "live",
+    quality: "HD",
+    type: "iframe",
+  },
+  {
+    id: "seapoint-vanilla",
+    name: "SeaPoint",
+    beach: "seapoint",
+    location: "SeaPoint / Vanilla",
+    streamUrl: "https://www.youtube.com/embed/4Zu64CmAjMo?si=IyhNkv-6WKg_mTNK",
+    status: "live",
+    quality: "HD",
+    type: "iframe",
+  },
+  {
+    id: "boulders-beach",
+    name: "Boulders Beach",
+    beach: "boulders",
+    location: "Boulder Beach / SanParks",
+    streamUrl: "https://hibiscus.sanparks.org/video/boulders.mp4?_=1",
+    status: "live",
+    quality: "HD",
+    type: "direct",
+  },
 ];
 
 /**
