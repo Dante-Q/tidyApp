@@ -50,6 +50,9 @@ export default function HomePage() {
         <WaveHeightGraph />
         <BeachCam />
       </section>
+
+      {/* Gradient overlay - mobile only */}
+      <div className="homepage-gradient-overlay"></div>
     </div>
   );
 }
