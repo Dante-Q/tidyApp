@@ -195,6 +195,11 @@
   padding: 0.5rem 0;
 }
 
+/* Mobile controls - hidden by default */
+.beach-slider-controls-mobile {
+  display: none;
+}
+
 .beach-slider-dot {
   width: 8px;
   height: 8px;
@@ -231,9 +236,41 @@
     font-size: 0.9375rem;
   }
 
+  /* Hide desktop arrows */
+  .beach-slider-container .beach-slider-arrow {
+    display: none;
+  }
+
   .beach-slider-container {
-    gap: 0.5rem;
     padding: 0 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Hide desktop dots */
+  .beach-slider-dots-desktop {
+    display: none;
+  }
+
+  /* Show mobile controls */
+  .beach-slider-controls-mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .beach-slider-controls-mobile .beach-slider-dots {
+    padding: 0;
+  }
+
+  .beach-slider-controls-mobile .beach-slider-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .beach-slider-controls-mobile .beach-slider-arrow svg {
+    width: 18px;
+    height: 18px;
   }
 
   .beach-slider .conditions-card-image {
@@ -267,19 +304,8 @@
     padding: 0.375rem 0.75rem;
   }
 
-  .beach-slider-arrow {
-    width: 36px;
-    height: 36px;
-  }
-
-  .beach-slider-arrow svg {
-    width: 18px;
-    height: 18px;
-  }
-
   .beach-slider-dots {
     gap: 0.25rem;
-    padding: 0;
   }
 
   .beach-slider-dot {
@@ -312,16 +338,19 @@
   }
 
   .beach-slider-container {
-    gap: 0.375rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
-  .beach-slider-arrow {
+  .beach-slider-controls-mobile {
+    gap: 1rem;
+  }
+
+  .beach-slider-controls-mobile .beach-slider-arrow {
     width: 32px;
     height: 32px;
   }
 
-  .beach-slider-arrow svg {
+  .beach-slider-controls-mobile .beach-slider-arrow svg {
     width: 16px;
     height: 16px;
   }
