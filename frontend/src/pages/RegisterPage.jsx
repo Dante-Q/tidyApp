@@ -24,8 +24,11 @@ export default function RegisterPage({ onRegister }) {
   const form = useForm({
     initialValues: { name: "", email: "", password: "", confirmPassword: "" },
     validate: {
-      name: (value) =>
-        value.length < 2 ? "Name must be at least 2 characters" : null,
+      name: (value) => {
+        if (value.length < 2) return "Name must be at least 2 characters";
+        if (value.length > 30) return "Name cannot exceed 30 characters";
+        return null;
+      },
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       password: (value) =>
         value.length < 6 ? "Password must be at least 6 characters" : null,

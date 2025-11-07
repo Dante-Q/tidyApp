@@ -29,10 +29,10 @@ const validateName = (name) => {
     return { valid: false, error: "Name must be at least 2 characters long" };
   }
 
-  if (trimmed.length > 50) {
+  if (trimmed.length > 30) {
     return {
       valid: false,
-      error: "Name exceeds maximum length of 50 characters",
+      error: "Name exceeds maximum length of 30 characters",
     };
   }
 
