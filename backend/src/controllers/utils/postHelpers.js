@@ -28,7 +28,7 @@ export const canModifyPost = (post, user) => {
   const postAuthorId = getRefId(post.author);
   const userId = getRefId(user._id);
 
-  return postAuthorId === userId || user.role === "admin";
+  return postAuthorId === userId || user.isAdmin === true;
 };
 
 /**

@@ -65,8 +65,8 @@ export default function AdminPostControls({ post }) {
     }
 
     const moveData = {
-      category: selectedCategory,
-      subcategory: selectedSubcategory || undefined, // Send undefined instead of null
+      newCategory: selectedCategory,
+      newSubcategory: selectedSubcategory || undefined, // Send undefined instead of null
     };
 
     console.log("Moving post to:", moveData);
