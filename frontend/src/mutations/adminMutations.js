@@ -5,7 +5,7 @@ import {
 } from "../services/forumService.js";
 import { adminMovePost } from "../services/adminService.js";
 import { deleteComment, updateComment } from "../services/commentService.js";
-import { showErrorAlert } from "../utils/errorHandlers.js";
+import { showErrorAlert, showSuccessAlert } from "../utils/errorHandlers.js";
 
 /**
  * Create a mutation for admin deleting a post
@@ -68,9 +68,15 @@ export function createTogglePinPostMutation(queryClient, postId) {
   return {
     mutationFn: () => togglePinPost(postId),
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+
+      // Show success message
+      const message = data.isPinned
+        ? "Post pinned successfully"
+        : "Post unpinned successfully";
+      showSuccessAlert(message);
     },
 
     onError: (error) => {
@@ -89,8 +95,14 @@ export function createToggleCommentsPostMutation(queryClient, postId) {
   return {
     mutationFn: () => toggleCommentsOnPost(postId),
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
+
+      // Show success message
+      const message = data.commentsEnabled
+        ? "Comments enabled successfully"
+        : "Comments disabled successfully";
+      showSuccessAlert(message);
     },
 
     onError: (error) => {

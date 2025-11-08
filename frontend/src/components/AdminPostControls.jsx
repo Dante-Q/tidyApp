@@ -10,6 +10,7 @@ import {
   createTogglePinPostMutation,
   createToggleCommentsPostMutation,
 } from "../mutations/adminMutations.js";
+import { showSuccessAlert, showAlert } from "../utils/errorHandlers.js";
 import { FORUM_CATEGORIES } from "../config/forumCategories";
 import "./AdminPostControls.css";
 
@@ -35,7 +36,7 @@ export default function AdminPostControls({ post }) {
       setShowMoveModal(false);
       queryClient.invalidateQueries(["posts"]);
       queryClient.invalidateQueries(["post", post._id]);
-      alert(data.message);
+      showSuccessAlert(data.message || "Post moved successfully");
     },
   });
 
@@ -60,7 +61,7 @@ export default function AdminPostControls({ post }) {
 
   const handleMove = () => {
     if (!selectedCategory) {
-      alert("Please select a category");
+      showAlert("Please select a category", "error");
       return;
     }
 
