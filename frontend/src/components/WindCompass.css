@@ -406,16 +406,9 @@
     font-size: 0.65rem;
   }
 
+  /* Hide thermometer on mobile */
   .thermometer-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .thermometer {
-    height: 250px;
-  }
-
-  .temp-display {
-    font-size: 2rem;
+    display: none;
   }
 }
 
@@ -451,18 +444,6 @@
 
   .direction-label.active {
     font-size: 1.125rem;
-  }
-
-  .thermometer {
-    height: 220px;
-  }
-
-  .thermometer-bulb {
-    width: 35px;
-  }
-
-  .temp-mark {
-    font-size: 0.75rem;
   }
 }
 
@@ -607,8 +588,8 @@
     grid-template-columns: 1fr;
   }
 
+  /* Hide thermometer on tablet and mobile */
   .thermometer-container {
-    max-width: 300px;
-    margin: 0 auto;
+    display: none;
   }
 }

@@ -11,6 +11,8 @@ export const ADMIN_EMAILS = [
   // Add admin email addresses here (lowercase)
   // Example: "admin@gmail.com",
   "hello@gmail.com",
+  "dantequartermain@gmail.com",
+  "tidyappinfo@gmail.com",
 ];
 
 /**
