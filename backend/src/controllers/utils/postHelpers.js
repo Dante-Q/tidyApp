@@ -1,5 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { Filter } from "bad-words";
+import { getRefId } from "./refHelpers.js";
 
 // Initialize profanity filter
 const filter = new Filter();
@@ -24,9 +25,10 @@ export const handleControllerError = (res, message, error) => {
  * @returns {Boolean} True if user can modify the post
  */
 export const canModifyPost = (post, user) => {
-  return (
-    post.author.toString() === user._id.toString() || user.role === "admin"
-  );
+  const postAuthorId = getRefId(post.author);
+  const userId = getRefId(user._id);
+
+  return postAuthorId === userId || user.role === "admin";
 };
 
 /**
@@ -57,10 +59,10 @@ export const validatePostTitle = (title) => {
     return { valid: false, error: "Title must be at least 5 characters long" };
   }
 
-  if (trimmed.length > 200) {
+  if (trimmed.length > 100) {
     return {
       valid: false,
-      error: "Title exceeds maximum length of 200 characters",
+      error: "Title exceeds maximum length of 100 characters",
     };
   }
 

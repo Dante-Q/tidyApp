@@ -5,9 +5,6 @@ import HeroContainer from "../components/HeroContainer";
 import BeachSlider from "../components/BeachSlider";
 import BeachCarousel from "../components/BeachCarousel";
 import InfoGrid from "../components/InfoGrid";
-import TideChart from "../components/TideChart";
-import WaveHeightGraph from "../components/WaveHeightGraph";
-import BeachCam from "../components/BeachCam";
 import { UserContext } from "../context/UserContext.js";
 import { UIContext } from "../context/UIContext.js";
 
@@ -43,12 +40,12 @@ export default function HomePage() {
 
       {/* Secondary content section */}
       <section className="homepage-content">
+        {/* Gradient overlay - mobile only */}
+        <div className="homepage-gradient-overlay"></div>
+
         <BeachCarousel />
         <BeachSlider />
         <InfoGrid />
-        <TideChart />
-        <WaveHeightGraph />
-        <BeachCam />
       </section>
     </div>
   );

@@ -2,6 +2,17 @@
  * Centralized error handling utilities for mutations and API calls
  */
 
+// Store alert callback globally so it can be set by AlertProvider
+let globalShowAlert = null;
+
+/**
+ * Set the global alert function (called by AlertProvider)
+ * @param {Function} showAlertFn - Function to show alerts
+ */
+export const setGlobalAlertFunction = (showAlertFn) => {
+  globalShowAlert = showAlertFn;
+};
+
 /**
  * Extract error message from various error formats
  * @param {Error} error - Error object from axios or other sources
@@ -68,7 +79,14 @@ export const showErrorAlert = (
   defaultMessage = "Action failed. Please try again."
 ) => {
   const message = getErrorMessage(error) || defaultMessage;
-  alert(message);
+
+  // Use custom alert if available, fallback to window.alert
+  if (globalShowAlert) {
+    globalShowAlert(message, "error");
+  } else {
+    console.warn("No global alert function registered, using window.alert");
+    alert(message);
+  }
 };
 
 /**
@@ -95,7 +113,12 @@ export const createErrorHandler = (
     );
 
     if (showAlert) {
-      alert(message);
+      // Use custom alert if available, fallback to window.alert
+      if (globalShowAlert) {
+        globalShowAlert(message, "error");
+      } else {
+        alert(message);
+      }
     }
   };
 };

@@ -2,17 +2,17 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext.js";
+import ConfirmModal from "../components/ConfirmModal.jsx";
 import { getPosts } from "../services/forumService.js";
 import { getUserInitial } from "../utils/forumHelpers.js";
+import { getFriendshipStatus, getFriends } from "../services/friendService.js";
 import {
-  getFriendshipStatus,
-  sendFriendRequest,
-  removeFriend,
-  getFriends,
-} from "../services/friendService.js";
+  createSendFriendRequestMutation,
+  createAcceptFriendRequestMutation,
+  createRemoveFriendMutation,
+} from "../mutations/friendMutations.js";
 import UserPostsList from "../components/UserPostsList.jsx";
 import ProfileDetails from "../components/ProfileDetails.jsx";
-import FriendsList from "../components/FriendsList.jsx";
 import "./UserProfilePage.css";
 
 export default function UserProfilePage() {
@@ -20,6 +20,7 @@ export default function UserProfilePage() {
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("posts"); // 'posts', 'about', 'friends'
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
 
   // Fetch posts for this user using React Query
   const {
@@ -56,32 +57,32 @@ export default function UserProfilePage() {
   const friendsCount = friendsData?.friends?.length || 0;
   const canViewFriends = friendsData?.canViewFriends || isOwnProfile;
 
-  // Send friend request mutation
-  const sendRequestMutation = useMutation({
-    mutationFn: sendFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendshipStatus", userId]);
-      queryClient.invalidateQueries(["friendRequests"]); // Refresh dashboard requests
-      queryClient.invalidateQueries(["sentFriendRequests"]); // Refresh sent requests
-    },
-  });
+  // Use centralized friend mutations
+  const sendRequestMutation = useMutation(
+    createSendFriendRequestMutation(queryClient, userId)
+  );
 
-  // Remove friend mutation
-  const removeFriendMutation = useMutation({
-    mutationFn: removeFriend,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendshipStatus", userId]);
-    },
-  });
+  const acceptRequestMutation = useMutation(
+    createAcceptFriendRequestMutation(queryClient, userId)
+  );
+
+  const removeFriendMutation = useMutation(
+    createRemoveFriendMutation(queryClient, userId)
+  );
 
   const handleFriendAction = () => {
     if (friendshipStatus === "friends") {
-      if (window.confirm("Are you sure you want to remove this friend?")) {
-        removeFriendMutation.mutate(userId);
-      }
+      setConfirmRemoveOpen(true);
+    } else if (friendshipStatus === "pending_received") {
+      // Accept the friend request
+      acceptRequestMutation.mutate(userId);
     } else if (friendshipStatus === "none") {
       sendRequestMutation.mutate(userId);
     }
+  };
+
+  const handleConfirmRemove = () => {
+    removeFriendMutation.mutate(userId);
   };
 
   const getFriendButtonText = () => {
@@ -151,6 +152,26 @@ export default function UserProfilePage() {
     );
   }
 
+  // Check if this is a deleted user account
+  if (
+    userInfo &&
+    (userInfo.displayName === "[Deleted User]" ||
+      userInfo.name === "[Deleted User]" ||
+      userInfo.email === "deleted@system.local")
+  ) {
+    return (
+      <div className="user-profile-page">
+        <div className="error-container">
+          <h2>⚠️ This account has been deleted</h2>
+          <p>This user's profile is no longer available.</p>
+          <Link to="/forum" className="btn-back">
+            ← Back to Forum
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="user-profile-page">
       {/* Profile Header */}
@@ -184,12 +205,13 @@ export default function UserProfilePage() {
                   onClick={handleFriendAction}
                   disabled={
                     friendshipStatus === "pending_sent" ||
-                    friendshipStatus === "pending_received" ||
                     sendRequestMutation.isPending ||
+                    acceptRequestMutation.isPending ||
                     removeFriendMutation.isPending
                   }
                 >
                   {sendRequestMutation.isPending ||
+                  acceptRequestMutation.isPending ||
                   removeFriendMutation.isPending
                     ? "..."
                     : getFriendButtonText()}
@@ -312,6 +334,17 @@ export default function UserProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Remove Friend Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmRemoveOpen}
+        onClose={() => setConfirmRemoveOpen(false)}
+        onConfirm={handleConfirmRemove}
+        title="Remove Friend"
+        message="Are you sure you want to remove this friend?"
+        confirmText="Remove"
+        confirmColor="red"
+      />
     </div>
   );
 }

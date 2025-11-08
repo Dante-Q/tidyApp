@@ -5,12 +5,12 @@ import useWeatherData from "../hooks/useWeatherData";
 import "./BeachSlider.css";
 
 // Import beach images
-import muizenbergImg from "../assets/images/hongbin-muizenberg.jpg";
-import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.jpg";
-import cliftonImg from "../assets/images/jean-baptiste-clifton.jpg";
-import kalkbayImg from "../assets/images/david-watkis-kalkbay.jpg";
-import milnertonImg from "../assets/images/sam-wermut-misc.jpg";
-import strandImg from "../assets/images/untitled-photo-misc.jpg";
+import muizenbergImg from "../assets/images/hongbin-muizenberg.webp";
+import bloubergImg from "../assets/images/tobie-esterhuyzen-blouberg.webp";
+import cliftonImg from "../assets/images/jean-baptiste-clifton.webp";
+import kalkbayImg from "../assets/images/david-watkis-kalkbay.webp";
+import milnertonImg from "../assets/images/sam-wermut-misc.webp";
+import strandImg from "../assets/images/untitled-photo-misc.webp";
 
 // Beach configuration with images
 const beachConfig = [
@@ -154,8 +154,62 @@ export default function BeachSlider() {
         </button>
       </div>
 
-      {/* Dots Navigation */}
-      <div className="beach-slider-dots">
+      {/* Mobile Controls - Arrows + Dots */}
+      <div className="beach-slider-controls-mobile">
+        <button
+          className="beach-slider-arrow beach-slider-arrow-left"
+          onClick={prevSlide}
+          aria-label="Previous beach"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div className="beach-slider-dots">
+          {beachConfig.map((_, index) => (
+            <button
+              key={index}
+              className={`beach-slider-dot ${
+                index === currentIndex ? "active" : ""
+              }`}
+              onClick={() => goToSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          className="beach-slider-arrow beach-slider-arrow-right"
+          onClick={nextSlide}
+          aria-label="Next beach"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      {/* Desktop Dots Navigation */}
+      <div className="beach-slider-dots beach-slider-dots-desktop">
         {beachConfig.map((_, index) => (
           <button
             key={index}

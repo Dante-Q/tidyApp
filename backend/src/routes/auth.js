@@ -1,5 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
@@ -27,10 +29,10 @@ const validateName = (name) => {
     return { valid: false, error: "Name must be at least 2 characters long" };
   }
 
-  if (trimmed.length > 50) {
+  if (trimmed.length > 30) {
     return {
       valid: false,
-      error: "Name exceeds maximum length of 50 characters",
+      error: "Name exceeds maximum length of 30 characters",
     };
   }
 
@@ -90,6 +92,17 @@ router.post(
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Check if display name (which will be auto-generated from name) is already taken
+    // Display names are auto-generated from name in the pre-save hook
+    const displayNameExists = await User.findOne({
+      displayName: { $regex: new RegExp(`^${nameValidation.sanitized}$`, "i") },
+    });
+    if (displayNameExists) {
+      return res.status(400).json({
+        message: "This name is already taken. Please choose a different name.",
+      });
+    }
+
     // Check if user should be admin
     const shouldBeAdmin = isAdminEmail(email);
 
@@ -144,6 +157,13 @@ router.post(
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Block login for system accounts
+    if (user.isSystem) {
+      return res
+        .status(403)
+        .json({ message: "Cannot login to system accounts" });
     }
 
     // Check password
@@ -214,7 +234,16 @@ router.get(
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user);
+      // Create response object
+      const response = user.toObject();
+
+      // Hide admin fields from non-admins (security best practice)
+      if (!user.isAdmin) {
+        delete response.isAdmin;
+        delete response.showAdminBadge;
+      }
+
+      res.json(response);
     } catch (err) {
       res.status(401).json({ message: "Token is not valid" });
     }
@@ -283,13 +312,31 @@ router.patch(
 
     // Update bio, location, interests if provided
     if (bio !== undefined) {
+      // Bio validation
+      if (bio && bio.length > 500) {
+        return res.status(400).json({
+          message: "Bio cannot exceed 500 characters",
+        });
+      }
       user.bio = bio; // Don't trim - preserve spaces, newlines, and emojis
     }
     if (location !== undefined) {
-      user.location = location.trim();
+      const trimmedLocation = location.trim();
+      if (trimmedLocation.length > 100) {
+        return res.status(400).json({
+          message: "Location cannot exceed 100 characters",
+        });
+      }
+      user.location = trimmedLocation;
     }
     if (interests !== undefined) {
-      user.interests = interests.trim();
+      const trimmedInterests = interests.trim();
+      if (trimmedInterests.length > 100) {
+        return res.status(400).json({
+          message: "Interests cannot exceed 100 characters",
+        });
+      }
+      user.interests = trimmedInterests;
     }
 
     // Only allow admins to change showAdminBadge setting
@@ -323,57 +370,74 @@ router.delete(
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-    // Find or create a "Deleted User" system account
-    let deletedUserAccount = await User.findOne({
-      email: "deleted@system.local",
-    });
-    if (!deletedUserAccount) {
-      deletedUserAccount = await User.create({
-        email: "deleted@system.local",
-        password: Math.random().toString(36), // Random password (account is not usable)
-        name: "[Deleted User]",
-        displayName: "[Deleted User]",
+    // Use MongoDB transaction to ensure all operations succeed or rollback
+    const session = await mongoose.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Find or create a "Deleted User" system account atomically
+        // Using findOneAndUpdate with upsert prevents race conditions
+        const deletedUserAccount = await User.findOneAndUpdate(
+          { email: "deleted@system.local" },
+          {
+            $setOnInsert: {
+              email: "deleted@system.local",
+              password: await bcrypt.hash(Math.random().toString(36), 10),
+              name: "[Deleted User]",
+              displayName: "[Deleted User]",
+              isSystem: true, // Mark as system account to prevent login
+            },
+          },
+          { new: true, upsert: true, session }
+        );
+
+        // Reassign all posts to the deleted user account
+        await Post.updateMany(
+          { author: userId },
+          { $set: { author: deletedUserAccount._id } },
+          { session }
+        );
+
+        // Reassign all comments to the deleted user account
+        await Comment.updateMany(
+          { author: userId },
+          { $set: { author: deletedUserAccount._id } },
+          { session }
+        );
+
+        // Remove user from all friends lists
+        await User.updateMany(
+          { friends: userId },
+          { $pull: { friends: userId } },
+          { session }
+        );
+
+        // Remove all friend requests involving this user
+        // This handles both incoming (requests TO this user) and outgoing (requests FROM this user)
+        // since all requests have a "from" field that can match the deleted user's ID
+        await User.updateMany(
+          { "friendRequests.from": userId },
+          { $pull: { friendRequests: { from: userId } } },
+          { session }
+        );
+
+        // Delete the user
+        await User.findByIdAndDelete(userId, { session });
       });
+
+      // Transaction succeeded - clear the auth cookie
+      res.clearCookie("token");
+      res.json({ message: "Account deleted successfully" });
+    } catch (error) {
+      // Transaction failed - rollback happened automatically
+      console.error("Account deletion failed:", error);
+      res
+        .status(500)
+        .json({ error: "Failed to delete account. Please try again." });
+    } finally {
+      // Always end the session
+      await session.endSession();
     }
-
-    // Reassign all posts to the deleted user account
-    await Post.updateMany(
-      { author: userId },
-      { $set: { author: deletedUserAccount._id } }
-    );
-
-    // Reassign all comments to the deleted user account
-    await Comment.updateMany(
-      { author: userId },
-      { $set: { author: deletedUserAccount._id } }
-    );
-
-    // Remove user from all friends lists
-    await User.updateMany({ friends: userId }, { $pull: { friends: userId } });
-
-    // Remove all friend requests to this user
-    await User.updateMany(
-      { "friendRequests.from": userId },
-      { $pull: { friendRequests: { from: userId } } }
-    );
-
-    // Remove all friend requests from this user
-    await User.updateMany(
-      {
-        _id: {
-          $in: (await User.findById(userId)).friendRequests.map((r) => r.from),
-        },
-      },
-      { $pull: { friendRequests: { from: userId } } }
-    );
-
-    // Delete the user
-    await User.findByIdAndDelete(userId);
-
-    // Clear the auth cookie
-    res.clearCookie("token");
-
-    res.json({ message: "Account deleted successfully" });
   })
 );
 

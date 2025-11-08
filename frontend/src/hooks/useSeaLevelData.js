@@ -3,7 +3,7 @@
  * Returns hourly tide height predictions for a specific beach
  */
 
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchBeachSeaLevelData } from "../services/seaLevelService";
 
 /**
@@ -12,42 +12,21 @@ import { fetchBeachSeaLevelData } from "../services/seaLevelService";
  * @returns {Object} { data, seaLevel, loading, error }
  */
 export default function useSeaLevelData(beachName = "muizenberg") {
-  const [data, setData] = useState(null);
-  const [seaLevel, setSeaLevel] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["seaLevel", beachName.toLowerCase()],
+    queryFn: () => fetchBeachSeaLevelData(beachName),
+    staleTime: 60 * 60 * 1000, // 1 hour - sea level data is predictable
+    gcTime: 2 * 60 * 60 * 1000, // 2 hours - keep in cache
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: 2,
+    enabled: !!beachName,
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchData() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const json = await fetchBeachSeaLevelData(beachName);
-
-        if (!controller.signal.aborted) {
-          setData(json);
-          setSeaLevel(json.seaLevel || []);
-          setLoading(false);
-        }
-      } catch (err) {
-        if (!controller.signal.aborted) {
-          console.error("Error fetching sea level data:", err);
-          setError(err.message);
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchData();
-
-    // Cleanup function to abort fetch if component unmounts
-    return () => {
-      controller.abort();
-    };
-  }, [beachName]);
-
-  return { data, seaLevel, loading, error };
+  return {
+    data: data || null,
+    seaLevel: data?.seaLevel || [],
+    loading: isLoading,
+    error: error?.message || null,
+  };
 }

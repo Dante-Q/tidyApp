@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Name is required"],
       trim: true,
       minlength: [2, "Name must be at least 2 characters long"],
-      maxlength: [50, "Name cannot exceed 50 characters"],
+      maxlength: [30, "Name cannot exceed 30 characters"],
       validate: {
         validator: function (v) {
           // Remove HTML tags
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       minlength: [2, "Display name must be at least 2 characters long"],
-      maxlength: [50, "Display name cannot exceed 50 characters"],
+      maxlength: [30, "Display name cannot exceed 30 characters"],
       validate: {
         validator: function (v) {
           if (!v) return true; // Optional field
@@ -89,6 +89,11 @@ const userSchema = new mongoose.Schema(
     showAdminBadge: {
       type: Boolean,
       // Only exists for admins - undefined for regular users
+    },
+    isSystem: {
+      type: Boolean,
+      default: false,
+      // System accounts (like [Deleted User]) cannot be logged into
     },
     avatarColor: {
       type: String,

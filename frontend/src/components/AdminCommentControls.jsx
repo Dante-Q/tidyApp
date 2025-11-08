@@ -1,7 +1,11 @@
 import { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "../context/UserContext";
-import { adminEditComment, adminDeleteComment } from "../services/adminService";
+import ConfirmModal from "./ConfirmModal.jsx";
+import {
+  createAdminDeleteCommentMutation,
+  createAdminEditCommentMutation,
+} from "../mutations/adminMutations.js";
 import "./AdminCommentControls.css";
 
 export default function AdminCommentControls({ comment, postId }) {
@@ -9,27 +13,18 @@ export default function AdminCommentControls({ comment, postId }) {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-  const deleteMutation = useMutation({
-    mutationFn: () => adminDeleteComment(comment._id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]);
-      alert("Comment deleted by admin");
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to delete comment");
-    },
-  });
+  // Use centralized admin mutations
+  const deleteMutation = useMutation(
+    createAdminDeleteCommentMutation(queryClient, postId)
+  );
 
   const editMutation = useMutation({
-    mutationFn: (content) => adminEditComment(comment._id, content),
+    ...createAdminEditCommentMutation(queryClient, postId),
     onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]);
       setIsEditing(false);
-      alert("Comment updated by admin");
-    },
-    onError: (error) => {
-      alert(error.response?.data?.message || "Failed to edit comment");
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
     },
   });
 
@@ -37,13 +32,11 @@ export default function AdminCommentControls({ comment, postId }) {
   if (!user?.isAdmin) return null;
 
   const handleDelete = () => {
-    if (
-      window.confirm(
-        "⚠️ ADMIN: Delete this comment and all its replies? This cannot be undone."
-      )
-    ) {
-      deleteMutation.mutate();
-    }
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteMutation.mutate(comment._id);
   };
 
   const handleEdit = () => {
@@ -51,7 +44,7 @@ export default function AdminCommentControls({ comment, postId }) {
       alert("Comment cannot be empty");
       return;
     }
-    editMutation.mutate(editContent);
+    editMutation.mutate({ commentId: comment._id, content: editContent });
   };
 
   return (
@@ -102,6 +95,17 @@ export default function AdminCommentControls({ comment, postId }) {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Admin: Delete Comment"
+        message="⚠️ ADMIN: Delete this comment and all its replies? This cannot be undone."
+        confirmText="Delete"
+        confirmColor="red"
+      />
     </div>
   );
 }

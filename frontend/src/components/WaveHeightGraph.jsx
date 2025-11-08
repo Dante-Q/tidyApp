@@ -397,38 +397,31 @@ export default function WaveHeightGraph({
                 className="wave-legend-dot"
                 style={{ background: "#ef4444" }}
               ></div>
-              <span>Poor (&lt; 1.5)</span>
+              <span>Poor</span>
             </div>
             <div className="wave-legend-item">
               <div
                 className="wave-legend-dot"
                 style={{ background: "#f59e0b" }}
               ></div>
-              <span>Fair (1.5-2.5)</span>
+              <span>Fair</span>
             </div>
             <div className="wave-legend-item">
               <div
                 className="wave-legend-dot"
                 style={{ background: "#6dd5ed" }}
               ></div>
-              <span>Good (2.5-3.5)</span>
+              <span>Good</span>
             </div>
             <div className="wave-legend-item">
               <div
                 className="wave-legend-dot"
                 style={{ background: "#10b981" }}
               ></div>
-              <span>Excellent (≥ 3.5)</span>
+              <span>Excellent</span>
             </div>
           </div>
-          <div
-            style={{
-              marginTop: "0.5rem",
-              fontSize: "0.75rem",
-              color: "var(--color-text-secondary)",
-              textAlign: "center",
-            }}
-          >
+          <div className="wave-legend-formula">
             Score = Wave Height (m) × Wave Period (s) ÷ 10
           </div>
         </div>

@@ -8,7 +8,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useContext(UserContext);
-  const { openAuth } = useContext(UIContext);
+  const { openAuth, authOpen } = useContext(UIContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [beachesOpen, setBeachesOpen] = useState(false);
@@ -18,6 +18,13 @@ export default function Navbar() {
   const [mobileBeachesOpen, setMobileBeachesOpen] = useState(false);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+
+  // Close mobile menu when auth drawer opens
+  useEffect(() => {
+    if (authOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [authOpen]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -300,13 +307,17 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileBeachesOpen ? "active" : ""
+              }`}
               onClick={() => setMobileBeachesOpen(!mobileBeachesOpen)}
             >
               Beaches
-              <span className="navbar-mobile-toggle">
-                {mobileBeachesOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileBeachesOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileBeachesOpen &&
               beaches.map((beach) => (
@@ -323,13 +334,17 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileInfoOpen ? "active" : ""
+              }`}
               onClick={() => setMobileInfoOpen(!mobileInfoOpen)}
             >
               Info
-              <span className="navbar-mobile-toggle">
-                {mobileInfoOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileInfoOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileInfoOpen &&
               infoPages.map((page) => (
@@ -346,13 +361,17 @@ export default function Navbar() {
 
           <div className="navbar-mobile-section">
             <div
-              className="navbar-mobile-section-title"
+              className={`navbar-mobile-section-title ${
+                mobileToolsOpen ? "active" : ""
+              }`}
               onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
             >
               Tools
-              <span className="navbar-mobile-toggle">
-                {mobileToolsOpen ? "▼" : "▶"}
-              </span>
+              <span
+                className={`navbar-mobile-toggle ${
+                  mobileToolsOpen ? "open" : ""
+                }`}
+              ></span>
             </div>
             {mobileToolsOpen &&
               toolsPages.map((tool) => (

@@ -3,6 +3,12 @@
 .forum-page {
   min-height: 100vh;
   background: var(--color-bg-dark);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.forum-page * {
+  box-sizing: border-box;
 }
 
 /* Hero Section - Matching BeachPage/InfoPage style */
@@ -34,6 +40,7 @@
   text-align: center;
   max-width: 800px;
   padding: 2rem;
+  width: 100%;
 }
 
 .forum-title {
@@ -57,11 +64,13 @@
 /* Forum Content */
 .forum-content {
   padding: 3rem 2rem;
+  width: 100%;
 }
 
 .forum-container {
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* Categories Header - Matching BeachCarousel style */
@@ -94,8 +103,9 @@
 /* Categories Grid - Matching BeachCarousel card style */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 2rem;
+  width: 100%;
 }
 
 .category-card {
@@ -134,6 +144,8 @@
   font-weight: 700;
   color: #ffffff;
   margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .category-description {
@@ -268,28 +280,224 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .forum-hero {
+    height: 250px;
+  }
+
+  .forum-hero-content {
+    padding: 1.5rem 1rem;
+  }
+
   .forum-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   .forum-subtitle {
     font-size: 1rem;
-  }
-
-  .categories-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .forum-hero {
-    height: 300px;
+    line-height: 1.5;
   }
 
   .forum-content {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1rem;
+  }
+
+  .forum-categories {
+    margin-bottom: 3rem;
+  }
+
+  .forum-categories-header {
+    margin-bottom: 2rem;
   }
 
   .forum-categories-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .forum-categories-header p {
+    font-size: 1rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .category-card {
+    padding: 1.25rem;
+    min-height: auto;
+  }
+
+  .category-header {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .category-icon {
     font-size: 2rem;
+  }
+
+  .category-name {
+    font-size: 1.25rem;
+  }
+
+  .category-description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .subcategories-list {
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .subcategory-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .category-stats {
+    gap: 0.625rem;
+    font-size: 0.8rem;
+    padding-top: 0.75rem;
+  }
+
+  .stat-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.625rem;
+  }
+
+  .forum-recent .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 0.75rem;
+  }
+
+  .recent-posts {
+    gap: 0.75rem;
+  }
+
+  .create-post-btn {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.75rem;
+  }
+
+  .filter-results-message {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .forum-hero {
+    height: 200px;
+  }
+
+  .forum-hero-content {
+    padding: 1rem 0.75rem;
+  }
+
+  .forum-title {
+    font-size: 1.75rem;
+  }
+
+  .forum-subtitle {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .forum-content {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .forum-categories {
+    margin-bottom: 2rem;
+  }
+
+  .forum-categories-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .forum-categories-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .forum-categories-header p {
+    font-size: 0.9rem;
+  }
+
+  .categories-grid {
+    gap: 0.75rem;
+  }
+
+  .category-card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .category-header {
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .category-icon {
+    font-size: 1.75rem;
+  }
+
+  .category-name {
+    font-size: 1.125rem;
+  }
+
+  .category-description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 0.625rem;
+  }
+
+  .subcategories-list {
+    gap: 0.25rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .subcategory-tag,
+  .subcategory-more {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .category-stats {
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    padding-top: 0.625rem;
+  }
+
+  .stat-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .forum-recent .section-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-left: 0.625rem;
+  }
+
+  .recent-posts {
+    gap: 0.625rem;
+  }
+
+  .create-post-btn {
+    font-size: 0.85rem;
+    padding: 0.625rem 1.5rem;
+  }
+
+  .create-post-btn span {
+    font-size: 1.125rem;
+  }
+
+  .filter-results-message {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
   }
 }
 

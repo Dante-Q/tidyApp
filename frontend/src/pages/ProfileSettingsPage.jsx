@@ -173,7 +173,7 @@ export default function ProfileSettingsPage() {
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Enter display name"
                 minLength={2}
-                maxLength={50}
+                maxLength={30}
                 required
               />
               <small className="form-hint">

@@ -443,6 +443,11 @@ select:focus {
   gap: 2rem;
 }
 
+/* Gradient overlay - hidden on desktop, visible on mobile */
+.homepage-gradient-overlay {
+  display: none;
+}
+
 /* Secondary content section */
 .homepage-content {
   width: 100%;
@@ -453,6 +458,8 @@ select:focus {
   border-radius: 16px;
   padding: 3rem 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
 }
 
 .content-placeholder {
@@ -542,6 +549,17 @@ footer {
   height: 100% !important;
 }
 
+/* Auth drawer close button - hide on desktop */
+.auth-drawer-close-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .auth-drawer-close-btn {
+    display: flex !important;
+  }
+}
+
 /* ========================================
    RESPONSIVE MOBILE OPTIMIZATIONS
    ======================================== */
@@ -553,6 +571,27 @@ footer {
     padding-top: 1rem;
     margin-top: 1.5rem;
     gap: 0rem;
+  }
+
+  /* Gradient overlay - show on mobile */
+  .homepage-gradient-overlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      rgba(10, 15, 30, 0.8) 0%,
+      rgba(10, 15, 30, 0.3) 8%,
+      rgba(10, 15, 30, 0) 20%,
+      rgba(10, 15, 30, 0) 80%,
+      rgba(10, 15, 30, 0.3) 92%,
+      rgba(10, 15, 30, 0.8) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
   }
 
   /* Homepage content section - reduce padding */

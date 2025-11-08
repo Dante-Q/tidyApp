@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { getFriendRequests } from "../services/friendService";
 import {
-  getFriendRequests,
-  acceptFriendRequest,
-  rejectFriendRequest,
-} from "../services/friendService";
+  createAcceptFriendRequestMutation,
+  createRejectFriendRequestMutation,
+} from "../mutations/friendMutations.js";
 import { getUserInitial } from "../utils/forumHelpers";
 import "./FriendRequests.css";
 
@@ -18,21 +18,14 @@ export default function FriendRequests() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  // Accept request mutation
-  const acceptMutation = useMutation({
-    mutationFn: acceptFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendRequests"]);
-    },
-  });
+  // Use centralized friend mutations
+  const acceptMutation = useMutation(
+    createAcceptFriendRequestMutation(queryClient)
+  );
 
-  // Reject request mutation
-  const rejectMutation = useMutation({
-    mutationFn: rejectFriendRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["friendRequests"]);
-    },
-  });
+  const rejectMutation = useMutation(
+    createRejectFriendRequestMutation(queryClient)
+  );
 
   const requests = data?.requests || [];
 

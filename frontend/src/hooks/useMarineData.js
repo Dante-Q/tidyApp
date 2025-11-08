@@ -1,79 +1,32 @@
-import { useEffect, useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchMarineData } from "../services/openMeteoService.js";
-import { createCache } from "../utils/cacheManager.js";
 import { CACHE_CONFIG } from "../config/cacheConfig.js";
 
-// Create cache instance for marine data
-const marineCache = createCache(CACHE_CONFIG.marineData);
-
 export default function useMarineData(beachName = "muizenberg") {
-  const [data, setData] = useState(null);
-  const [current, setCurrent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const abortControllerRef = useRef(null);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["marine", beachName.toLowerCase()],
+    queryFn: async () => {
+      const json = await fetchMarineData(beachName);
 
-  useEffect(() => {
-    // Check cache first
-
-    const cacheKey = beachName.toLowerCase();
-    const cached = marineCache.get(cacheKey);
-
-    if (cached) {
-      // Use cached data
-      setData(cached);
-      setCurrent(cached.current || null);
-      setLoading(false);
-      return;
-    }
-
-    // Fetch fresh data
-    async function fetchData() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Cancel previous request if it exists
-        if (abortControllerRef.current) {
-          abortControllerRef.current.abort();
-        }
-
-        // Create new abort controller for this request
-        abortControllerRef.current = new AbortController();
-
-        const json = await fetchMarineData(beachName, {
-          signal: abortControllerRef.current.signal,
-        });
-
-        // Validate API response structure
-        if (!json?.hourly?.wave_height) {
-          throw new Error("Invalid API response: missing wave data");
-        }
-
-        // Cache the raw API response
-        marineCache.set(cacheKey, json);
-
-        setData(json);
-        setCurrent(json.current || null);
-      } catch (err) {
-        // Don't set error if request was aborted
-        if (err.name !== "AbortError") {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false);
+      // Validate API response structure
+      if (!json?.hourly?.wave_height) {
+        throw new Error("Invalid API response: missing wave data");
       }
-    }
 
-    fetchData();
+      return json;
+    },
+    staleTime: CACHE_CONFIG.marineData.ttl, // 15 minutes - data considered fresh
+    gcTime: CACHE_CONFIG.marineData.ttl * 2, // 30 minutes - keep in cache
+    refetchOnMount: false, // Don't refetch if data is fresh
+    refetchOnWindowFocus: false, // Don't refetch on tab focus
+    retry: 2, // Retry failed requests twice
+    enabled: !!beachName, // Only fetch if beachName provided
+  });
 
-    // Cleanup function to abort request on unmount
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, [beachName]);
-
-  return { data, current, loading, error };
+  return {
+    data: data || null,
+    current: data?.current || null,
+    loading: isLoading,
+    error: error?.message || null,
+  };
 }

@@ -36,8 +36,12 @@ export function UserProvider({ children }) {
             showAdminBadge: response.data.showAdminBadge === true,
           }),
         });
-      } catch {
-        // User not logged in, that's ok
+      } catch (error) {
+        // User not logged in - this is normal and expected
+        // Only log unexpected errors (not 401)
+        if (error.response?.status !== 401) {
+          console.error("Auth check error:", error);
+        }
         setUser(null);
       } finally {
         setLoading(false);

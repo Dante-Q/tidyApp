@@ -1,9 +1,18 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      open: true, // auto-open report in browser
+      filename: "bundle-report.html", // name of HTML file
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   server: {
     port: 5173, // default Vite port
     allowedHosts: [

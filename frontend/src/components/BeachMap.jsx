@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from "react";
-import Map, { Marker, Popup } from "react-map-gl/maplibre";
+import { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { beaches } from "../config/beachApiConfig";
 import mapStyle from "../assets/mapStyle.json";
-import "maplibre-gl/dist/maplibre-gl.css";
 import "./BeachMap.css";
+
+// Lazy load the entire map component as a single chunk
+const LazyMapComponent = lazy(() => import("./BeachMapContent.jsx"));
 
 // Beach type mapping with unique colors and emojis
 const BEACH_TYPES = {
@@ -18,42 +19,7 @@ const BEACH_TYPES = {
 
 export default function BeachMap({ onBeachSelect }) {
   const navigate = useNavigate();
-  const mapRef = useRef();
   const [popupInfo, setPopupInfo] = useState(null);
-
-  // Cape Town center coordinates
-  const initialView = {
-    longitude: 18.45,
-    latitude: -33.95,
-    zoom: 10,
-  };
-
-  // Fix tile rendering issues
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (mapRef.current) {
-        const map = mapRef.current.getMap();
-
-        const handleLoad = () => {
-          // Wait a bit for tiles to start loading, then force re-render
-          setTimeout(() => {
-            map.resize();
-            // Invalidate tiles by triggering a small zoom change
-            const currentZoom = map.getZoom();
-            map.easeTo({ zoom: currentZoom - 1.7, duration: 0.2 });
-          }, 200);
-        };
-
-        if (map.loaded()) {
-          handleLoad();
-        } else {
-          map.once("load", handleLoad);
-        }
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleMarkerClick = (beachKey, beach) => {
     setPopupInfo({ beachKey, beach });
@@ -79,79 +45,24 @@ export default function BeachMap({ onBeachSelect }) {
       </div>
 
       <div className="beach-map-container">
-        <Map
-          ref={mapRef}
-          initialViewState={initialView}
-          mapStyle={mapStyle}
-          attributionControl={true}
+        <Suspense
+          fallback={
+            <div className="map-loading">
+              <div className="loading-spinner"></div>
+              <p>Loading map...</p>
+            </div>
+          }
         >
-          {Object.entries(beaches).map(([beachKey, beach]) => {
-            const beachType = BEACH_TYPES[beachKey] || {
-              emoji: "📍",
-              color: "#6dd5ed",
-            };
-
-            return (
-              <Marker
-                key={beachKey}
-                longitude={beach.coordinates.lon}
-                latitude={beach.coordinates.lat}
-                anchor="bottom"
-                onClick={(e) => {
-                  e.originalEvent.stopPropagation();
-                  handleMarkerClick(beachKey, beach);
-                }}
-              >
-                <div
-                  className="custom-marker"
-                  style={{ "--marker-color": beachType.color }}
-                >
-                  <div className="marker-pin">
-                    <svg
-                      width="32"
-                      height="40"
-                      viewBox="0 0 32 40"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M16 0C7.163 0 0 7.163 0 16c0 8.837 16 24 16 24s16-15.163 16-24C32 7.163 24.837 0 16 0z"
-                        fill="var(--marker-color)"
-                        stroke="#fff"
-                        strokeWidth="2"
-                      />
-                      <circle cx="16" cy="16" r="6" fill="#fff" />
-                    </svg>
-                  </div>
-                  <div className="marker-emoji">{beachType.emoji}</div>
-                </div>
-              </Marker>
-            );
-          })}
-
-          {popupInfo && (
-            <Popup
-              longitude={popupInfo.beach.coordinates.lon}
-              latitude={popupInfo.beach.coordinates.lat}
-              anchor="top"
-              onClose={() => setPopupInfo(null)}
-              closeOnClick={false}
-              className="custom-popup-wrapper"
-            >
-              <div className="custom-popup">
-                <div className="popup-emoji">
-                  {BEACH_TYPES[popupInfo.beachKey]?.emoji || "📍"}
-                </div>
-                <h3>{popupInfo.beach.name}</h3>
-                <button
-                  className="popup-button"
-                  onClick={() => handlePopupButtonClick(popupInfo.beachKey)}
-                >
-                  View Details →
-                </button>
-              </div>
-            </Popup>
-          )}
-        </Map>
+          <LazyMapComponent
+            beaches={beaches}
+            beachTypes={BEACH_TYPES}
+            mapStyle={mapStyle}
+            popupInfo={popupInfo}
+            onMarkerClick={handleMarkerClick}
+            onPopupButtonClick={handlePopupButtonClick}
+            onPopupClose={() => setPopupInfo(null)}
+          />
+        </Suspense>
       </div>
     </div>
   );
