@@ -670,8 +670,15 @@
     gap: 0.375rem;
   }
 
+  .btn-comment-action {
+    padding: 0;
+  }
   .comments-title {
     font-size: 1.125rem;
+  }
+
+  .comment-item p {
+    padding: 0 0.3rem;
   }
 
   .comment-form,
@@ -680,7 +687,7 @@
   }
 
   .comment-item {
-    padding: 1rem 0.75rem;
+    padding: 0.8rem 0.85rem;
   }
 
   .comment-content {

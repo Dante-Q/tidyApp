@@ -27,16 +27,16 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.75rem;
   background: rgba(109, 213, 237, 0.1);
   border: 1px solid rgba(109, 213, 237, 0.3);
-  border-radius: 20px;
-  font-size: 0.875rem;
+  border-radius: 12px;
+  font-size: 0.8125rem;
   color: #6dd5ed;
 }
 
 .categoryEmoji {
-  font-size: 1.125rem;
+  font-size: 0.8125rem;
 }
 
 .categoryName {
@@ -56,6 +56,8 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  white-space: nowrap;
+  flex-wrap: nowrap;
 }
 
 .btnLikePost:hover {
@@ -71,6 +73,10 @@
 
 .btnLikePost.liked:hover {
   background: rgba(239, 68, 68, 0.3);
+}
+
+.postContent {
+  width: 100%;
 }
 
 .postTitle {
@@ -233,15 +239,18 @@
 /* Responsive */
 @media (max-width: 768px) {
   .postHeader {
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 1rem;
     margin: 0 0 1.5rem;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .postCategory {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     gap: 0.75rem;
+    order: 1;
   }
 
   .leftSection {
@@ -250,24 +259,14 @@
     align-items: center;
   }
 
-  .categoryInfo {
-    font-size: 0.8125rem;
-    padding: 0.375rem 0.875rem;
-  }
-
-  .categoryEmoji {
-    font-size: 1rem;
-  }
-
-  .btnLikePost {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.8125rem;
+  .postContent {
+    order: 2;
   }
 
   .postTitle {
     font-size: 1.5rem;
     margin-left: 0;
-    margin-top: 1rem;
+    margin-top: 0;
     margin-bottom: 0.75rem;
     line-height: 1.3;
     word-wrap: break-word;
@@ -277,29 +276,45 @@
     font-size: 1.25rem;
   }
 
+  .postBody {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 1rem;
+  }
+
+  .categoryInfo {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .categoryEmoji {
+    font-size: 0.8rem;
+  }
+
+  .btnLikePost {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
   .postBeachTags {
     gap: 0.375rem;
     margin-bottom: 1rem;
   }
 
   .postBeachTag {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.625rem;
-  }
-
-  .postBody {
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    margin-top: 1rem;
-    margin-left: 0;
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.75rem;
   }
 
   .postMeta {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
+    margin-top: 0;
+    padding-top: 1.5rem;
+    order: 4;
   }
 
   .postAuthor {
@@ -336,6 +351,7 @@
     gap: 0.5rem;
     margin-top: 1.5rem;
     padding-top: 1.5rem;
+    order: 5;
   }
 
   .btnAction {
@@ -344,11 +360,17 @@
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
   }
+
+  /* Admin Controls - global selector since it's not a CSS module class */
+  .postHeader :global(.admin-post-controls) {
+    order: 6;
+    margin-top: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
   .postHeader {
-    padding: 1rem 0.75rem;
+    padding: 1.2rem 1rem;
   }
 
   .postTitle {
