@@ -511,7 +511,7 @@ select:focus {
 /* Footer */
 footer {
   text-align: center;
-  padding: 2rem 1rem;
+  /* global footer padding removed to allow component-level footer styles in Footer.css */
   font-size: 0.875rem;
   color: #64748b;
 }

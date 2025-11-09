@@ -583,6 +583,14 @@
     padding: 1.5rem 0.75rem;
   }
 
+  .section-header {
+    flex-direction: row;
+  }
+
+  .section-title {
+    margin-bottom: 0;
+  }
+
   .subcategories-section {
     margin-bottom: 2rem;
   }
