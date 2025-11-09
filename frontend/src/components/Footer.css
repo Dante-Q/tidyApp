@@ -302,7 +302,7 @@
   }
 
   .footer-links {
-    gap: 1.25rem 1rem;
+    gap: 1.25rem 1rem !important;
   }
 
   .footer-section {

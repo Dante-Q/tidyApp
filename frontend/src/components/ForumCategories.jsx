@@ -1,8 +1,22 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import FORUM_CATEGORIES from "../config/forumCategories.js";
 import "./ForumCategories.css";
 
 export default function ForumCategories({ posts, loading }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const subCategoryLimit = isMobile ? 1 : 3;
+
   return (
     <div className="forum-categories">
       <div className="forum-categories-header">
@@ -37,14 +51,17 @@ export default function ForumCategories({ posts, loading }) {
                 {category.subcategories &&
                   category.subcategories.length > 0 && (
                     <div className="subcategories-list">
-                      {category.subcategories.slice(0, 3).map((sub) => (
-                        <span key={sub.slug} className="subcategory-tag">
-                          {sub.icon} {sub.name}
-                        </span>
-                      ))}
-                      {category.subcategories.length > 3 && (
+                      {category.subcategories
+                        .slice(0, subCategoryLimit)
+                        .map((sub) => (
+                          <span key={sub.slug} className="subcategory-tag">
+                            {sub.icon} {sub.name}
+                          </span>
+                        ))}
+                      {category.subcategories.length > subCategoryLimit && (
                         <span className="subcategory-more">
-                          +{category.subcategories.length - 3} more
+                          +{category.subcategories.length - subCategoryLimit}{" "}
+                          more
                         </span>
                       )}
                     </div>

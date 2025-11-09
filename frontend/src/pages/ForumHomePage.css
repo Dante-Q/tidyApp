@@ -65,6 +65,7 @@
 .forum-content {
   padding: 3rem 2rem;
   width: 100%;
+  max-width: 100%;
 }
 
 .forum-container {
@@ -106,6 +107,7 @@
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 2rem;
   width: 100%;
+  max-width: 100%;
 }
 
 .category-card {
@@ -118,6 +120,7 @@
   display: flex;
   flex-direction: column;
   min-height: 240px;
+  min-width: 0;
   text-decoration: none;
   color: inherit;
 }
@@ -158,7 +161,8 @@
 
 .subcategories-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -325,6 +329,7 @@
   .category-card {
     padding: 1.25rem;
     min-height: auto;
+    min-width: 0;
   }
 
   .category-header {
@@ -431,21 +436,21 @@
   }
 
   .category-card {
-    padding: 1rem;
+    padding: 0.7rem;
     border-radius: 8px;
   }
 
   .category-header {
     gap: 0.625rem;
-    margin-bottom: 0.625rem;
+    margin-bottom: 0.2rem;
   }
 
   .category-icon {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .category-name {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
   .category-description {
@@ -468,7 +473,7 @@
   .category-stats {
     gap: 0.5rem;
     font-size: 0.75rem;
-    padding-top: 0.625rem;
+    padding-top: 0.5rem;
   }
 
   .stat-badge {
