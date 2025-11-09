@@ -40,16 +40,6 @@ export default function ForumHomePage() {
             recentPosts={nonPinnedPosts}
             loading={loadingRecentPosts}
           />
-
-          {/* Create Post Button */}
-          <div className="forum-actions">
-            <Link to="/forum/create-post">
-              <button className="create-post-btn">
-                <span>✍️</span>
-                Create New Post
-              </button>
-            </Link>
-          </div>
         </div>
       </section>
     </div>

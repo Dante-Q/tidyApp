@@ -566,9 +566,20 @@ footer {
 
 /* Tablet (Portrait) - 768px and below */
 @media (max-width: 768px) {
+  /* Remove bottom padding from all pages on mobile */
+  main,
+  section,
+  .page,
+  .page-container,
+  [class*="-page"],
+  [class*="-content"] {
+    padding-bottom: 0 !important;
+  }
+
   /* Homepage wrapper - reduce padding */
   .homepage-wrapper {
     padding-top: 1rem;
+    padding-bottom: 0 !important;
     margin-top: 1.5rem;
     gap: 0rem;
   }
