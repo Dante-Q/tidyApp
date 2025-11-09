@@ -633,14 +633,14 @@
 
 .post-excerpt {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9375rem;
+  font-size: 0.8rem;
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .post-meta {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.5);
 }
