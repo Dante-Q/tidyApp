@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import { helmetConfig } from "./config/security.js";
+import { corsOptions } from "./config/cors.js";
 import { initRateLimiters } from "./middleware/rateLimiters.js";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
@@ -49,20 +50,7 @@ console.log(
 // 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies)
 app.set("trust proxy", 1);
 
-// 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies)
-app.set("trust proxy", 1);
-
 // 3. CORS configuration
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
-      return callback(null, true);
-    }
-    callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-};
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -80,17 +68,6 @@ const {
   friendsLimiter,
   apiLimiter,
 } = initRateLimiters(process.env.MONGO_URI);
-
-// 6. Apply global rate limiter to all requests
-app.use(globalLimiter);
-app.use(express.json());
-app.use(cookieParser());
-
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error(err));
 
 // 6. Apply global rate limiter to all requests
 app.use(globalLimiter);
