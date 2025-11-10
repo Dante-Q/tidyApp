@@ -353,15 +353,162 @@
     padding: 1rem;
   }
 
+  .profile-tabs {
+    overflow-y: hidden;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+  }
+
+  .profile-tabs .tab {
+    justify-content: center;
+  }
+
+  .settings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
   .settings-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .settings-emoji {
+    font-size: 1.25em;
+  }
+
+  .btn-view-profile {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
   }
 
   .settings-section {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .section-heading {
+    font-size: 1.25rem;
+  }
+
+  .section-description {
+    font-size: 0.875rem;
+  }
+
+  .form-group input[type="text"]:not(.color-text-input),
+  .form-group input[type="email"],
+  .form-group input[type="password"],
+  .form-group textarea {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+  }
+
+  .form-hint {
+    font-size: 0.8125rem;
+  }
+
+  .form-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .btn-save,
+  .btn-back {
+    flex: 1 1 0%;
+    min-width: 0;
+    max-width: none;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center;
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.9375rem;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 1.2;
+    border: 1px solid transparent !important;
+    vertical-align: middle;
+    margin-top: 0 !important;
+  }
+
+  .btn-back {
+    border-color: rgba(109, 213, 237, 0.3) !important;
+  }
+
+  .btn-save {
+    border: none !important;
   }
 
   .confirm-actions {
     flex-direction: column;
+  }
+
+  .btn-cancel-delete,
+  .btn-confirm-delete {
+    width: 100%;
+  }
+
+  .checkbox-group .form-hint {
+    margin-left: 1.75rem;
+  }
+
+  .checkbox-label {
+    font-size: 0.9375rem;
+  }
+
+  .btn-danger {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-settings-page {
+    padding: 0.75rem;
+  }
+
+  .settings-title {
+    font-size: 1.5rem;
+  }
+
+  .btn-view-profile {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .settings-section {
+    padding: 1.25rem 0.875rem;
+  }
+
+  .section-heading {
+    font-size: 1.125rem;
+  }
+
+  .form-group input[type="text"]:not(.color-text-input),
+  .form-group input[type="email"],
+  .form-group input[type="password"],
+  .form-group textarea {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-save,
+  .btn-back {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-cancel-delete,
+  .btn-confirm-delete {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
   }
 }
