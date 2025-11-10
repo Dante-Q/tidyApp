@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MultiSelect, TextInput } from "@mantine/core";
 import BEACH_TAGS from "../config/beachTags.js";
 import "./PostFilters.css";
@@ -10,6 +10,18 @@ import "./PostFilters.css";
 export default function PostFilters({ onFilterChange }) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 968);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleTagChange = (tags) => {
     setSelectedTags(tags);
@@ -53,11 +65,12 @@ export default function PostFilters({ onFilterChange }) {
           }))}
           value={selectedTags}
           onChange={handleTagChange}
-          searchable
+          searchable={!isMobile}
           clearable
           comboboxProps={{
             position: "bottom",
             middlewares: { flip: false, shift: false },
+            withinPortal: false,
           }}
           classNames={{
             root: "filter-tags-root",

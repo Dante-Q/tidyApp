@@ -8,9 +8,15 @@
   padding-bottom: 0;
 }
 
+/* Ensure any global footer element padding is overridden by the component styles */
+footer.footer {
+  padding: 0 !important;
+}
+
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
+  margin-top: 1rem;
   padding: 1rem 2rem 2rem;
   display: grid;
   grid-template-columns: 1.5fr 2fr;
@@ -191,6 +197,64 @@
   font-size: 0.875rem;
 }
 
+/* Footer Toggle Container (Mobile only) */
+.footer-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  margin-top: 1rem;
+}
+
+.footer-toggle-btn {
+  background: rgba(109, 213, 237, 0.1);
+  border: 1px solid rgba(109, 213, 237, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.footer-toggle-btn:hover {
+  background: rgba(109, 213, 237, 0.2);
+  border-color: rgba(109, 213, 237, 0.5);
+}
+
+.footer-toggle-arrow {
+  color: #6dd5ed;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.footer-toggle-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Collapsible Footer Container */
+.footer-container {
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.footer-container.footer-closed {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  visibility: hidden !important;
+}
+
+.footer-container.footer-open {
+  max-height: 2000px;
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .footer-container {
@@ -280,9 +344,6 @@
     gap: 1.75rem;
   }
 
-  .footer {
-    padding-top: 1rem !important;
-  }
   .footer-logo-text {
     font-size: 1.5rem;
   }
@@ -302,7 +363,7 @@
   }
 
   .footer-links {
-    gap: 1.25rem 1rem;
+    gap: 1.25rem 1rem !important;
   }
 
   .footer-section {

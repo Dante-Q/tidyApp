@@ -82,17 +82,20 @@ export default function PostHeader() {
           {post.isLiked ? "❤️" : "🤍"} {post.likes || 0}
         </button>
       </div>
-      <h1 className={styles.postTitle}>
-        {post.isPinned && (
-          <span className={styles.pinIcon} title="Pinned">
-            📌{" "}
-          </span>
-        )}
-        {post.title}
-      </h1>
 
-      {/* Post Content */}
-      <div className={styles.postBody}>{post.content}</div>
+      <div className={styles.postContent}>
+        <h1 className={styles.postTitle}>
+          {post.isPinned && (
+            <span className={styles.pinIcon} title="Pinned">
+              📌{" "}
+            </span>
+          )}
+          {post.title}
+        </h1>
+
+        {/* Post Content */}
+        <div className={styles.postBody}>{post.content}</div>
+      </div>
 
       <div className={styles.postMeta}>
         <Link to={`/profile/${post.author._id}`} className={styles.postAuthor}>

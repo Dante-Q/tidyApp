@@ -57,7 +57,12 @@ export default function ForumRecentActivity({ recentPosts, loading }) {
 
   return (
     <div className={styles.forumRecent}>
-      <h2 className={styles.sectionTitle}>Recent Activity</h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Recent Activity</h2>
+        <Link to="/forum/create-post" className={styles.btnCreatePost}>
+          ✍️ New Post
+        </Link>
+      </div>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem", color: "#fff" }}>
           Loading posts...

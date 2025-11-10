@@ -264,8 +264,8 @@
   }
 
   .beach-slider-controls-mobile .beach-slider-arrow {
-    width: 36px;
-    height: 36px;
+    width: 0px !important;
+    height: 0px !important;
   }
 
   .beach-slider-controls-mobile .beach-slider-arrow svg {

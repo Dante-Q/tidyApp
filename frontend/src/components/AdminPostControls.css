@@ -44,6 +44,9 @@
   font-size: 0.9rem;
   text-decoration: none;
   display: inline-block;
+  flex: 1 1 auto;
+  min-width: fit-content;
+  text-align: center;
 }
 
 .admin-btn:disabled {
@@ -199,4 +202,28 @@
 .btn-confirm:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .admin-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .admin-btn {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+    width: 100%;
+  }
+
+  .admin-badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .admin-icon {
+    font-size: 1rem;
+  }
 }

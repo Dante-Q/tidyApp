@@ -90,6 +90,36 @@ export const showErrorAlert = (
 };
 
 /**
+ * Show success alert for successful actions
+ * @param {string} message - Success message to display
+ * @param {string} type - Alert type (default: "success")
+ */
+export const showSuccessAlert = (message, type = "success") => {
+  // Use custom alert if available, fallback to window.alert
+  if (globalShowAlert) {
+    globalShowAlert(message, type);
+  } else {
+    console.warn("No global alert function registered, using window.alert");
+    alert(message);
+  }
+};
+
+/**
+ * Show generic alert
+ * @param {string} message - Message to display
+ * @param {string} type - Alert type (default: "info")
+ */
+export const showAlert = (message, type = "info") => {
+  // Use custom alert if available, fallback to window.alert
+  if (globalShowAlert) {
+    globalShowAlert(message, type);
+  } else {
+    console.warn("No global alert function registered, using window.alert");
+    alert(message);
+  }
+};
+
+/**
  * Generic error handler for React Query onError callbacks
  * Creates a handler function that can be used directly in mutations
  * @param {Function} setError - Optional state setter for error display

@@ -214,13 +214,17 @@ function CommentItem({
         {!post?.commentsDisabled && (
           <>
             <button
-              onClick={() =>
+              onClick={() => {
+                if (!user) {
+                  navigate("/login");
+                  return;
+                }
                 setReplyTo({
                   commentId: comment._id, // Where the form appears
                   parentId: parentCommentId || comment._id, // Parent for the reply
                   username: getDisplayName(comment.author),
-                })
-              }
+                });
+              }}
               className="btn-comment-action"
             >
               💬 Reply

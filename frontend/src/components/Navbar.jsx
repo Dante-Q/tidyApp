@@ -112,6 +112,7 @@ export default function Navbar() {
                   <Link
                     to={isOnDashboard ? "/" : "/dashboard"}
                     className="navbar-mobile-btn-small navbar-mobile-btn-small-dashboard"
+                    onClick={closeMobileMenu}
                   >
                     {isOnDashboard ? "Home" : "Dashboard"}
                   </Link>
