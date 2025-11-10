@@ -4,6 +4,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import { helmetConfig } from "./config/security.js";
+import { initRateLimiters } from "./middleware/rateLimiters.js";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
@@ -11,7 +15,6 @@ import tideRoutes from "./routes/tides.js";
 import seaLevelRoutes from "./routes/seaLevel.js";
 import friendRoutes from "./routes/friends.js";
 import adminRoutes from "./routes/admin.js";
-import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,22 +38,51 @@ if (missing.length) {
 
 const app = express();
 
-// CORS configuration - allow localhost and 127.0.0.1 on any port (for development)
+// 1. Security Headers (Helmet.js)
+app.use(helmet(helmetConfig));
+console.log(
+  process.env.NODE_ENV === "production"
+    ? "🔒 Production security headers enabled"
+    : "🔓 Development security headers enabled"
+);
+
+// 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies)
+app.set("trust proxy", 1);
+
+// 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies)
+app.set("trust proxy", 1);
+
+// 3. CORS configuration
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
     if (!origin) return callback(null, true);
-
-    // Allow localhost and 127.0.0.1 on any port
     if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
       return callback(null, true);
     }
-
     callback(new Error("Not allowed by CORS"));
   },
-  credentials: true, // Allow cookies and auth headers
+  credentials: true,
 };
 app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
+
+// 4. Connect to MongoDB FIRST (required for rate limiting)
+await mongoose.connect(process.env.MONGO_URI);
+console.log("✅ MongoDB connected");
+
+// 5. Initialize rate limiters AFTER MongoDB connection
+const {
+  globalLimiter,
+  authLimiter,
+  adminLimiter,
+  publicDataLimiter,
+  friendsLimiter,
+  apiLimiter,
+} = initRateLimiters(process.env.MONGO_URI);
+
+// 6. Apply global rate limiter to all requests
+app.use(globalLimiter);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -60,31 +92,32 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 
-// Test route
+// 6. Apply global rate limiter to all requests
+app.use(globalLimiter);
+
+// 7. Routes with specific rate limiters
 app.get("/", (req, res) => {
   res.send("tidyApp API Running!");
 });
 
-// Auth routes
-app.use("/api/auth", authRoutes);
+// Auth routes (strict rate limiting)
+app.use("/api/auth", authLimiter, authRoutes);
 
-// Forum routes
-app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
+// Forum routes (general API rate limiting)
+app.use("/api/posts", apiLimiter, postRoutes);
+app.use("/api/comments", apiLimiter, commentRoutes);
 
-// Friends routes
-app.use("/api/friends", friendRoutes);
+// Friends routes (friend-specific rate limiting)
+app.use("/api/friends", friendsLimiter, friendRoutes);
 
-// Admin routes
-app.use("/api/admin", adminRoutes);
+// Admin routes (admin-specific rate limiting)
+app.use("/api/admin", adminLimiter, adminRoutes);
 
-// Tide data routes
-app.use("/api/tides", tideRoutes);
+// Public data routes (relaxed rate limiting)
+app.use("/api/tides", publicDataLimiter, tideRoutes);
+app.use("/api/sea-level", publicDataLimiter, seaLevelRoutes);
 
-// Sea level data routes
-app.use("/api/sea-level", seaLevelRoutes);
-
-// Global error handler
+// 8. Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -93,5 +126,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+// 9. Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🔒 Security: Helmet + Rate Limiting (MongoDB) enabled`);
+});
