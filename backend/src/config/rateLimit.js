@@ -16,7 +16,7 @@ export const rateLimitConfig = {
   // Authentication endpoints (login, register)
   auth: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 20,
+    max: 100, // Increased to allow frequent /me endpoint checks
     message: "Too many authentication attempts, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,

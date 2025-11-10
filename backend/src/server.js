@@ -71,10 +71,7 @@ const {
   apiLimiter,
 } = initRateLimiters(process.env.MONGO_URI);
 
-// 6. Apply global rate limiter to all requests
-app.use(globalLimiter);
-
-// 7. Routes with specific rate limiters
+// 6. Routes with specific rate limiters
 app.get("/", (req, res) => {
   res.send("tidyApp API Running!");
 });

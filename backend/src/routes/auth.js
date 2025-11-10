@@ -9,6 +9,7 @@ import { protect } from "../middleware/auth.js";
 import sanitizeHtml from "sanitize-html";
 import { Filter } from "bad-words";
 import { isAdminEmail } from "../config/adminConfig.js";
+import { sendVerificationEmail } from "../utils/emailService.js";
 
 const router = express.Router();
 const filter = new Filter();
@@ -106,37 +107,40 @@ router.post(
     // Check if user should be admin
     const shouldBeAdmin = isAdminEmail(email);
 
+    // Generate verification token (expires in 1 day)
+    const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
     // Create new user
     const user = await User.create({
       email,
       password,
       name: nameValidation.sanitized,
       isAdmin: shouldBeAdmin,
+      isVerified: false,
+      verificationToken,
       // Only set showAdminBadge for admins
       ...(shouldBeAdmin && { showAdminBadge: true }),
     });
 
-    // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
-
-    // Send JWT in HttpOnly cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // Must be false in development for localhost
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      path: "/",
-    });
+    // Send verification email
+    try {
+      await sendVerificationEmail(email, verificationToken);
+    } catch (error) {
+      console.error("Failed to send verification email:", error);
+      // Continue registration even if email fails
+    }
 
     res.status(201).json({
-      message: "User registered successfully",
+      message:
+        "User registered successfully. Please check your email to verify your account.",
       user: {
         id: user._id,
         name: user.name,
         displayName: user.displayName,
         avatarColor: user.avatarColor,
+        isVerified: user.isVerified,
         // Only include admin fields if user is admin
         ...(user.isAdmin && {
           isAdmin: true,
@@ -170,6 +174,15 @@ router.post(
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Check if email is verified
+    if (!user.isVerified) {
+      return res.status(403).json({
+        message:
+          "Please verify your email before logging in. Check your inbox for the verification link.",
+        requiresVerification: true,
+      });
     }
 
     // Update admin status based on current config (in case admin list changed)
@@ -437,6 +450,146 @@ router.delete(
     } finally {
       // Always end the session
       await session.endSession();
+    }
+  })
+);
+
+// Verify email
+router.get(
+  "/verify/:token",
+  asyncHandler(async (req, res) => {
+    const { token } = req.params;
+
+    try {
+      console.log("🔍 Verifying token...");
+
+      // Verify the JWT token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("✅ Token decoded:", { email: decoded.email });
+
+      // Find user by email from token and matching verification token
+      const user = await User.findOne({
+        email: decoded.email,
+        verificationToken: token,
+      });
+
+      console.log("👤 User found:", !!user);
+
+      if (!user) {
+        // Check if user exists but is already verified (token was cleared)
+        const verifiedUser = await User.findOne({
+          email: decoded.email,
+          isVerified: true,
+        });
+
+        if (verifiedUser) {
+          console.log("✅ User already verified");
+          return res.status(200).json({
+            message: "Email already verified. You can now log in.",
+            alreadyVerified: true,
+          });
+        }
+
+        console.log("❌ No user found with email and token");
+        return res.status(400).json({
+          message: "Invalid or expired verification token",
+        });
+      }
+
+      // Check if already verified
+      if (user.isVerified) {
+        console.log("✅ Already verified");
+        return res.status(200).json({
+          message: "Email already verified. You can now log in.",
+          alreadyVerified: true,
+        });
+      }
+
+      // Mark user as verified
+      user.isVerified = true;
+      user.verificationToken = undefined;
+      await user.save();
+
+      console.log("✅ User verified successfully");
+
+      res.status(200).json({
+        message: "Email successfully verified! You can now log in.",
+        verified: true,
+      });
+    } catch (error) {
+      console.error("Verification error:", error);
+
+      if (error.name === "TokenExpiredError") {
+        return res.status(400).json({
+          message: "Verification link has expired. Please request a new one.",
+          expired: true,
+        });
+      }
+
+      return res.status(400).json({
+        message: "Invalid verification token",
+        error: error.message,
+      });
+    }
+  })
+);
+
+// Resend verification email
+router.post(
+  "/resend-verification",
+  asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required",
+      });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return res.status(200).json({
+        message:
+          "If an account with that email exists and is not verified, a verification email has been sent.",
+      });
+    }
+
+    // Check if already verified
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "This email is already verified. You can log in.",
+        alreadyVerified: true,
+      });
+    }
+
+    // Generate new verification token (expires in 1 day)
+    const verificationToken = jwt.sign(
+      { email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // Update user with new token
+    user.verificationToken = verificationToken;
+    await user.save();
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(user.email, verificationToken);
+
+      res.status(200).json({
+        message: "Verification email sent! Please check your inbox.",
+        emailSent: true,
+      });
+    } catch (error) {
+      console.error("Failed to send verification email:", error);
+
+      return res.status(500).json({
+        message: "Failed to send verification email. Please try again later.",
+      });
     }
   })
 );

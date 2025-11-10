@@ -12,11 +12,13 @@ import {
   Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import Alert from "../components/Alert.jsx";
 import { UserContext } from "../context/UserContext.js";
 import { API_ENDPOINTS } from "../config/api.js";
 
 export default function LoginPage({ onLogin, onForgotPassword }) {
   const [error, setError] = useState("");
+  const [requiresVerification, setRequiresVerification] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ export default function LoginPage({ onLogin, onForgotPassword }) {
   const handleSubmit = async (values) => {
     try {
       setError("");
+      setRequiresVerification(false);
       setLoading(true);
 
       const response = await axios.post(API_ENDPOINTS.auth.login, values, {
@@ -49,9 +52,15 @@ export default function LoginPage({ onLogin, onForgotPassword }) {
         navigate("/dashboard");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "An error occurred"
-      );
+      // Check if error is due to unverified email
+      if (err.response?.data?.requiresVerification) {
+        setRequiresVerification(true);
+        setError(err.response.data.message);
+      } else {
+        setError(
+          err.response?.data?.message || err.message || "An error occurred"
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -76,7 +85,39 @@ export default function LoginPage({ onLogin, onForgotPassword }) {
         }}
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          {error && (
+          {requiresVerification && (
+            <div style={{ marginBottom: "1rem" }}>
+              <Alert
+                type="warning"
+                message={
+                  <div>
+                    <strong>Email Verification Required</strong>
+                    <br />
+                    {error}
+                    <br />
+                    <br />
+                    <Text
+                      size="sm"
+                      style={{ color: "rgba(255, 255, 255, 0.8)" }}
+                    >
+                      Didn't receive the email?{" "}
+                      <Link
+                        to="/resend-verification"
+                        style={{
+                          color: "#6dd5ed",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        Request a new verification link
+                      </Link>
+                    </Text>
+                  </div>
+                }
+              />
+            </div>
+          )}
+
+          {error && !requiresVerification && (
             <Text color="red" size="sm" mb="sm">
               {error}
             </Text>

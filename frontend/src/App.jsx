@@ -24,6 +24,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
 import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
+import VerifyEmailPage from "./pages/VerifyEmailPage.jsx";
+import ResendVerificationPage from "./pages/ResendVerificationPage.jsx";
 
 // Pages - User
 import DashboardPage from "./pages/DashboardPage";
@@ -76,6 +78,14 @@ export default function App() {
                       element={<ForgotPasswordPage />}
                     />
                     <Route path="/verify-otp" element={<VerifyOTPPage />} />
+                    <Route
+                      path="/verify/:token"
+                      element={<VerifyEmailPage />}
+                    />
+                    <Route
+                      path="/resend-verification"
+                      element={<ResendVerificationPage />}
+                    />
                     <Route path="/beach/:beachName" element={<BeachPage />} />
                     <Route path="/info/:infoSlug" element={<InfoPage />} />
                     <Route path="/about" element={<AboutPage />} />

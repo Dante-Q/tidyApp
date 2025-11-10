@@ -1,8 +1,7 @@
 // API configuration
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-// Remove trailing slash if present
-const API_BASE_URL = BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : BASE_URL;
+// In development, Vite proxy handles /api requests to backend
+// In production, set VITE_API_URL to your backend URL
+const API_BASE_URL = "/api";
 
 // Backend API endpoints
 export const API_ENDPOINTS = {
@@ -14,6 +13,8 @@ export const API_ENDPOINTS = {
     me: `${API_BASE_URL}/auth/me`,
     profile: `${API_BASE_URL}/auth/profile`,
     deleteAccount: `${API_BASE_URL}/auth/account`,
+    verify: (token) => `${API_BASE_URL}/auth/verify/${token}`,
+    resendVerification: `${API_BASE_URL}/auth/resend-verification`,
   },
 };
 

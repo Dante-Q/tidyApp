@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema(
       trim: true,
       validate: {
         validator: function (v) {
-          return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v);
+          // Allow + character and other valid email characters
+          return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+            v
+          );
         },
         message: (props) => `${props.value} is not a valid email address!`,
       },
@@ -94,6 +97,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       // System accounts (like [Deleted User]) cannot be logged into
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
     },
     avatarColor: {
       type: String,
