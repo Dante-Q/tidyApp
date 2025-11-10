@@ -39,6 +39,8 @@ if (missing.length) {
 
 const app = express();
 
+console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+
 // 1. Security Headers (Helmet.js)
 app.use(helmet(helmetConfig));
 console.log(
