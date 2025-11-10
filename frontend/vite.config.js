@@ -7,21 +7,30 @@ export default defineConfig({
   plugins: [
     react(),
     visualizer({
-      open: true, // auto-open report in browser
-      filename: "bundle-report.html", // name of HTML file
+      open: false, // Don't auto-open in production builds
+      filename: "bundle-report.html",
       gzipSize: true,
       brotliSize: true,
     }),
   ],
+  build: {
+    // Production build optimizations
+    minify: "terser",
+    sourcemap: false, // Disable source maps in production for security
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          mantine: ["@mantine/core", "@mantine/hooks", "@mantine/form"],
+        },
+      },
+    },
+  },
   server: {
-    port: 5173, // default Vite port
-    allowedHosts: [
-      "ironbound-unappeasingly-ruthie.ngrok-free.dev",
-      ".ngrok-free.dev", // Allow any ngrok-free.dev subdomain
-    ],
+    port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:5000", // your Express backend
+        target: "http://localhost:5000", // Development backend
         changeOrigin: true,
         secure: false,
       },

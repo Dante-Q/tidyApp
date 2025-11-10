@@ -25,10 +25,16 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Startup guard: ensure required env vars are present
 const requiredEnv = ["JWT_SECRET", "MONGO_URI"];
+
+// Additional production requirements
+if (process.env.NODE_ENV === "production") {
+  requiredEnv.push("EMAIL_USER", "EMAIL_PASS", "FRONTEND_URL");
+}
+
 const missing = requiredEnv.filter((key) => !process.env[key]);
 if (missing.length) {
   console.error(
-    `Missing required environment variable(s): ${missing.join(", ")}.`
+    `❌ Missing required environment variable(s): ${missing.join(", ")}.`
   );
   console.error(
     "Please create a backend/.env (or update it) — see backend/.env.example for required values."

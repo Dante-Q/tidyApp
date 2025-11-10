@@ -204,8 +204,8 @@ router.post(
     // Send JWT as HttpOnly cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // Must be false in development for localhost
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production", // true in production (HTTPS), false in development
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       path: "/",
     });
