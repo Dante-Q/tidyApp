@@ -59,6 +59,7 @@ export default function PostFilters({ onFilterChange }) {
             position: "bottom",
             middlewares: { flip: false, shift: false },
           }}
+          withinPortal={false}
           classNames={{
             root: "filter-tags-root",
             input: "filter-tags-input",

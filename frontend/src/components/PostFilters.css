@@ -14,9 +14,11 @@
   margin-right: 0;
 }
 
-/* When clear button is present, adjust grid */
-.filters-row:has(.btn-clear-filters) {
-  grid-template-columns: 1fr 1fr auto;
+/* When clear button is present, adjust grid on desktop only */
+@media (min-width: 969px) {
+  .filters-row:has(.btn-clear-filters) {
+    grid-template-columns: 1fr 1fr auto;
+  }
 }
 
 /* Search Input Styling */
@@ -153,10 +155,67 @@
 @media (max-width: 968px) {
   .filters-row {
     grid-template-columns: 1fr;
+    width: 100%;
   }
 
+  /* Hide clear button on mobile - each tag has its own X button */
   .btn-clear-filters {
-    width: 100%;
+    display: none;
+  }
+
+  /* Ensure each filter control stretches full width and stays in its row */
+  .filters-row > * {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    grid-column: 1;
+  }
+
+  .filter-search-root,
+  .filter-tags-root {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Target all Mantine wrapper elements */
+  .post-filters .mantine-TextInput-root,
+  .post-filters .mantine-TextInput-wrapper,
+  .post-filters .mantine-MultiSelect-root,
+  .post-filters .mantine-MultiSelect-wrapper,
+  .post-filters .mantine-Input-wrapper {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Fix input widths */
+  .filter-search-input,
+  .post-filters .mantine-TextInput-input,
+  .filter-tags-input,
+  .post-filters .mantine-MultiSelect-input {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Prevent MultiSelect from growing vertically and causing layout shift */
+  .filter-tags-input,
+  .post-filters .mantine-MultiSelect-input {
+    min-height: 55px !important;
+    max-height: 55px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Make pills scroll horizontally instead of wrapping */
+  .post-filters .mantine-MultiSelect-inputField {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    display: flex !important;
   }
 }
 
