@@ -81,21 +81,19 @@ export default function SubcategoryPage() {
     <div className="subcategory-page">
       {/* Simple Header */}
       <div className="subcategory-header">
-        <div className="subcategory-breadcrumb">
-          <Link to="/forum">Forum</Link>
-          <span>/</span>
-          <Link to={`/forum/category/${categorySlug}`}>{category.name}</Link>
-          <span>/</span>
-          <span>{subcategory.name}</span>
-        </div>
-        <div className="subcategory-title-section">
+        <div>
+          <div className="subcategory-breadcrumb">
+            <Link to="/forum">Forum</Link>
+            <span>/</span>
+            <Link to={`/forum/category/${categorySlug}`}>{category.name}</Link>
+            <span>/</span>
+            <span>{subcategory.name}</span>
+          </div>
           <h1 className="subcategory-title">
             <span className="subcategory-icon-large">{subcategory.icon}</span>
             {subcategory.name}
           </h1>
-          <p className="subcategory-description">{subcategory.description}</p>
-        </div>
-        <div className="subcategory-actions">
+          <p className="subcat-page-description">{subcategory.description}</p>
           <Link
             to={`/forum/create-post?category=${categorySlug}&subcategory=${subcategorySlug}`}
             className="btn-new-post"

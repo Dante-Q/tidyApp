@@ -116,7 +116,7 @@ export default function CategoryPage() {
                       to={`/forum/category/${categorySlug}/${sub.slug}`}
                       className="subcategory-card"
                     >
-                      <div className="subcategory-header">
+                      <div className="subcategory-card-header">
                         <span className="subcategory-icon">{sub.icon}</span>
                         <h3 className="subcategory-name">{sub.name}</h3>
                       </div>
