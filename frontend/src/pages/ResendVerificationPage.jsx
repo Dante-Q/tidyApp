@@ -48,7 +48,17 @@ function ResendVerificationPage() {
 
   return (
     <Container size="xs" style={{ marginTop: "100px" }}>
-      <Paper shadow="md" p="xl" radius="md" withBorder>
+      <Paper
+        shadow="xl"
+        p="xl"
+        radius="lg"
+        withBorder
+        style={{
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
         <Stack gap="lg">
           <div style={{ textAlign: "center" }}>
             <div
@@ -56,7 +66,7 @@ function ResendVerificationPage() {
                 width: "80px",
                 height: "80px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                background: "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -65,8 +75,14 @@ function ResendVerificationPage() {
             >
               <IconMail size={40} color="white" />
             </div>
-            <Title order={2}>Resend Verification Email</Title>
-            <Text c="dimmed" size="sm" mt="xs">
+            <Title order={2} style={{ color: "#ffffff" }}>
+              Resend Verification Email
+            </Title>
+            <Text
+              size="sm"
+              mt="xs"
+              style={{ color: "rgba(255, 255, 255, 0.7)" }}
+            >
               Enter your email address and we'll send you a new verification
               link
             </Text>
@@ -91,23 +107,49 @@ function ResendVerificationPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 leftSection={<IconMail size={16} />}
+                styles={{
+                  label: {
+                    color: "#ffffff",
+                    fontWeight: 500,
+                    marginBottom: 8,
+                  },
+                  input: {
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#ffffff",
+                    "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
+                    "&:focus": {
+                      border: "1px solid #6dd5ed",
+                      background: "rgba(255, 255, 255, 0.15)",
+                    },
+                  },
+                }}
               />
 
               <Button
                 type="submit"
                 fullWidth
                 loading={loading}
-                variant="gradient"
-                gradient={{ from: "blue", to: "cyan" }}
+                size="md"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+                  fontWeight: 600,
+                  height: 48,
+                }}
               >
                 Send Verification Email
               </Button>
 
-              <Text size="sm" ta="center">
+              <Text
+                size="sm"
+                ta="center"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Already verified?{" "}
                 <Link
                   to="/login"
-                  style={{ color: "#667eea", textDecoration: "none" }}
+                  style={{ color: "#6dd5ed", textDecoration: "none" }}
                 >
                   Log in
                 </Link>

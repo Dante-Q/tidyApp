@@ -55,13 +55,25 @@ function VerifyEmailPage() {
 
   return (
     <Container size="xs" style={{ marginTop: "100px" }}>
-      <Paper shadow="md" p="xl" radius="md" withBorder>
+      <Paper
+        shadow="xl"
+        p="xl"
+        radius="lg"
+        withBorder
+        style={{
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
         <Stack align="center" gap="lg">
           {status === "verifying" && (
             <>
-              <Loader size="xl" />
-              <Title order={2}>Verifying your email...</Title>
-              <Text c="dimmed" ta="center">
+              <Loader size="xl" color="cyan" />
+              <Title order={2} style={{ color: "#ffffff" }}>
+                Verifying your email...
+              </Title>
+              <Text style={{ color: "rgba(255, 255, 255, 0.7)" }} ta="center">
                 Please wait while we verify your email address
               </Text>
             </>
@@ -75,7 +87,7 @@ function VerifyEmailPage() {
                   height: "80px",
                   borderRadius: "50%",
                   background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -83,22 +95,29 @@ function VerifyEmailPage() {
               >
                 <IconCheck size={48} color="white" />
               </div>
-              <Title order={2}>Email Verified!</Title>
+              <Title order={2} style={{ color: "#ffffff" }}>
+                Email Verified!
+              </Title>
               <Alert
                 type="success"
                 message={
                   message || "Your email has been successfully verified!"
                 }
               />
-              <Text size="sm" c="dimmed">
+              <Text size="sm" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 Redirecting to login page...
               </Text>
               <Button
                 component={Link}
                 to="/login"
-                variant="gradient"
-                gradient={{ from: "blue", to: "cyan" }}
                 fullWidth
+                size="md"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+                  fontWeight: 600,
+                  height: 48,
+                }}
               >
                 Go to Login
               </Button>
@@ -112,7 +131,8 @@ function VerifyEmailPage() {
                   width: "80px",
                   height: "80px",
                   borderRadius: "50%",
-                  background: "#ffa94d",
+                  background:
+                    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -120,7 +140,9 @@ function VerifyEmailPage() {
               >
                 <IconMail size={48} color="white" />
               </div>
-              <Title order={2}>Link Expired</Title>
+              <Title order={2} style={{ color: "#ffffff" }}>
+                Link Expired
+              </Title>
               <Alert
                 type="warning"
                 message={
@@ -132,12 +154,25 @@ function VerifyEmailPage() {
                 <Button
                   component={Link}
                   to="/resend-verification"
-                  variant="gradient"
-                  gradient={{ from: "orange", to: "yellow" }}
+                  size="md"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                    fontWeight: 600,
+                  }}
                 >
                   Request New Link
                 </Button>
-                <Button component={Link} to="/login" variant="light">
+                <Button
+                  component={Link}
+                  to="/login"
+                  size="md"
+                  variant="outline"
+                  style={{
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                    color: "#ffffff",
+                  }}
+                >
                   Go to Login
                 </Button>
               </Group>
@@ -151,7 +186,8 @@ function VerifyEmailPage() {
                   width: "80px",
                   height: "80px",
                   borderRadius: "50%",
-                  background: "#fa5252",
+                  background:
+                    "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -159,7 +195,9 @@ function VerifyEmailPage() {
               >
                 <IconX size={48} color="white" />
               </div>
-              <Title order={2}>Verification Failed</Title>
+              <Title order={2} style={{ color: "#ffffff" }}>
+                Verification Failed
+              </Title>
               <Alert
                 type="error"
                 message={message || "An error occurred during verification."}
@@ -168,12 +206,25 @@ function VerifyEmailPage() {
                 <Button
                   component={Link}
                   to="/resend-verification"
-                  variant="gradient"
-                  gradient={{ from: "blue", to: "cyan" }}
+                  size="md"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+                    fontWeight: 600,
+                  }}
                 >
                   Resend Email
                 </Button>
-                <Button component={Link} to="/login" variant="light">
+                <Button
+                  component={Link}
+                  to="/login"
+                  size="md"
+                  variant="outline"
+                  style={{
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                    color: "#ffffff",
+                  }}
+                >
                   Go to Login
                 </Button>
               </Group>

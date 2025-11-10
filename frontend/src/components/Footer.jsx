@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Footer.css";
 
 export default function Footer() {
@@ -8,6 +8,8 @@ export default function Footer() {
   const navigate = useNavigate();
   const [isFooterOpen, setIsFooterOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [toggleBottomOffset, setToggleBottomOffset] = useState(78);
+  const footerBottomRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,6 +27,20 @@ export default function Footer() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Dynamically calculate toggle button position based on footer bottom height
+  useEffect(() => {
+    const updateTogglePosition = () => {
+      if (footerBottomRef.current && isMobile) {
+        const bottomHeight = footerBottomRef.current.offsetHeight;
+        setToggleBottomOffset(bottomHeight);
+      }
+    };
+
+    updateTogglePosition();
+    window.addEventListener("resize", updateTogglePosition);
+    return () => window.removeEventListener("resize", updateTogglePosition);
+  }, [isMobile]);
 
   const toggleFooter = () => {
     if (isMobile) {
@@ -85,7 +101,10 @@ export default function Footer() {
     <>
       {/* Toggle Button Container (Mobile only) */}
       {isMobile && (
-        <div className="footer-toggle-container">
+        <div
+          className="footer-toggle-container"
+          style={{ bottom: `${toggleBottomOffset}px` }}
+        >
           <button
             className="footer-toggle-btn"
             onClick={toggleFooter}
@@ -145,7 +164,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="footer-bottom">
+        <div className="footer-bottom" ref={footerBottomRef}>
           <div className="footer-bottom-container">
             <p className="footer-copyright">
               © {currentYear} TidyApp. All rights reserved.

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import {
@@ -9,15 +9,16 @@ import {
   Container,
   Button,
   Text,
+  Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import Alert from "../components/Alert.jsx";
+import { AlertContext } from "../context/AlertContext.js";
 import { API_ENDPOINTS } from "../config/api.js";
 
-export default function RegisterPage() {
+export default function RegisterPage({ onClose }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const { showAlert } = useContext(AlertContext);
 
   const form = useForm({
     initialValues: { name: "", email: "", password: "", confirmPassword: "" },
@@ -46,8 +47,19 @@ export default function RegisterPage() {
         { withCredentials: true }
       );
 
-      // Show verification success message
-      setRegistrationSuccess(true);
+      // Close drawer if opened from drawer
+      if (onClose) {
+        onClose();
+      }
+
+      // Show global alert notification (outside drawer)
+      showAlert(
+        "Registration successful! Please check your email to verify your account before logging in.",
+        "success"
+      );
+
+      // Clear form
+      form.reset();
 
       // No auto-login - user must verify email first
     } catch (err) {
@@ -78,168 +90,133 @@ export default function RegisterPage() {
         }}
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          {registrationSuccess ? (
-            <div style={{ marginBottom: "1.5rem" }}>
-              <Alert
-                type="success"
-                message={
-                  <div>
-                    <strong>Registration Successful!</strong>
-                    <br />
-                    Please check your email to verify your account before
-                    logging in.
-                    <br />
-                    <br />
-                    <Text
-                      size="sm"
-                      style={{ color: "rgba(255, 255, 255, 0.8)" }}
-                    >
-                      Didn't receive the email? Check your spam folder or{" "}
-                      <Link
-                        to="/resend-verification"
-                        style={{
-                          color: "#6dd5ed",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        request a new one
-                      </Link>
-                      .
-                    </Text>
-                    <br />
-                    <Button
-                      component={Link}
-                      to="/login"
-                      mt="sm"
-                      size="sm"
-                      fullWidth
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
-                      }}
-                    >
-                      Go to Login
-                    </Button>
-                  </div>
-                }
-              />
-            </div>
-          ) : (
-            <>
-              {error && (
-                <Text color="red" size="sm" mb="sm">
-                  {error}
-                </Text>
-              )}
-
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                required
-                size="md"
-                styles={{
-                  label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
-                  input: {
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    color: "#ffffff",
-                    "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
-                    "&:focus": {
-                      border: "1px solid #6dd5ed",
-                      background: "rgba(255, 255, 255, 0.15)",
-                    },
-                  },
-                }}
-                {...form.getInputProps("name")}
-              />
-              <TextInput
-                label="Email"
-                placeholder="you@example.com"
-                required
-                mt="md"
-                size="md"
-                styles={{
-                  label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
-                  input: {
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    color: "#ffffff",
-                    "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
-                    "&:focus": {
-                      border: "1px solid #6dd5ed",
-                      background: "rgba(255, 255, 255, 0.15)",
-                    },
-                  },
-                }}
-                {...form.getInputProps("email")}
-              />
-              <PasswordInput
-                label="Password"
-                placeholder="Create a password"
-                required
-                mt="md"
-                size="md"
-                styles={{
-                  label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
-                  input: {
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    color: "#ffffff",
-                    "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
-                    "&:focus": {
-                      border: "1px solid #6dd5ed",
-                      background: "rgba(255, 255, 255, 0.15)",
-                    },
-                  },
-                  innerInput: {
-                    color: "#ffffff",
-                  },
-                }}
-                {...form.getInputProps("password")}
-              />
-              <PasswordInput
-                label="Confirm Password"
-                placeholder="Confirm your password"
-                required
-                mt="md"
-                size="md"
-                styles={{
-                  label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
-                  input: {
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    color: "#ffffff",
-                    "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
-                    "&:focus": {
-                      border: "1px solid #6dd5ed",
-                      background: "rgba(255, 255, 255, 0.15)",
-                    },
-                  },
-                  innerInput: {
-                    color: "#ffffff",
-                  },
-                }}
-                {...form.getInputProps("confirmPassword")}
-              />
-
-              <Button
-                fullWidth
-                mt="xl"
-                type="submit"
-                loading={loading}
-                disabled={!form.isValid()}
-                size="md"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
-                  fontWeight: 600,
-                  height: 48,
-                }}
-              >
-                Register
-              </Button>
-            </>
+          {error && (
+            <Text color="red" size="sm" mb="sm">
+              {error}
+            </Text>
           )}
+
+          <TextInput
+            label="Name"
+            placeholder="Your name"
+            required
+            size="md"
+            styles={{
+              label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
+              input: {
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#ffffff",
+                "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
+                "&:focus": {
+                  border: "1px solid #6dd5ed",
+                  background: "rgba(255, 255, 255, 0.15)",
+                },
+              },
+            }}
+            {...form.getInputProps("name")}
+          />
+          <TextInput
+            label="Email"
+            placeholder="you@example.com"
+            required
+            mt="md"
+            size="md"
+            styles={{
+              label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
+              input: {
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#ffffff",
+                "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
+                "&:focus": {
+                  border: "1px solid #6dd5ed",
+                  background: "rgba(255, 255, 255, 0.15)",
+                },
+              },
+            }}
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Create a password"
+            required
+            mt="md"
+            size="md"
+            styles={{
+              label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
+              input: {
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#ffffff",
+                "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
+                "&:focus": {
+                  border: "1px solid #6dd5ed",
+                  background: "rgba(255, 255, 255, 0.15)",
+                },
+              },
+              innerInput: {
+                color: "#ffffff",
+              },
+            }}
+            {...form.getInputProps("password")}
+          />
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            required
+            mt="md"
+            size="md"
+            styles={{
+              label: { color: "#ffffff", fontWeight: 500, marginBottom: 8 },
+              input: {
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#ffffff",
+                "&::placeholder": { color: "rgba(255, 255, 255, 0.4)" },
+                "&:focus": {
+                  border: "1px solid #6dd5ed",
+                  background: "rgba(255, 255, 255, 0.15)",
+                },
+              },
+              innerInput: {
+                color: "#ffffff",
+              },
+            }}
+            {...form.getInputProps("confirmPassword")}
+          />
+
+          <Group position="apart" mt="lg">
+            <Text
+              component={Link}
+              to="/resend-verification"
+              onClick={() => {
+                if (onClose) {
+                  onClose();
+                }
+              }}
+              size="sm"
+              style={{ color: "#6dd5ed", textDecoration: "none" }}
+            >
+              Request a new verification link
+            </Text>
+          </Group>
+
+          <Button
+            fullWidth
+            mt="xl"
+            type="submit"
+            loading={loading}
+            disabled={!form.isValid()}
+            size="md"
+            style={{
+              background: "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+              fontWeight: 600,
+              height: 48,
+            }}
+          >
+            Register
+          </Button>
         </form>
       </Paper>
     </Container>

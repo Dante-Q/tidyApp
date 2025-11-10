@@ -559,7 +559,7 @@ footer {
   /* Homepage wrapper - reduce padding */
   .homepage-wrapper {
     padding-top: 1rem;
-    padding-bottom: 0 !important;
+    padding-bottom: 3.5rem !important;
     margin-top: 1.5rem;
     gap: 0rem;
   }

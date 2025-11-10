@@ -1,6 +1,5 @@
 // AuthOverlayDrawer.jsx
 import { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Drawer, Button } from "@mantine/core";
 import "@mantine/core/styles.css"; // Add Mantine CSS
 import { UserContext } from "../context/UserContext.js";
@@ -14,7 +13,6 @@ export default function AuthOverlayDrawer({
   initialMode = "login",
 }) {
   const { login } = useContext(UserContext);
-  const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode);
 
   // Sync local mode when initialMode changes or when drawer opens
@@ -151,14 +149,7 @@ export default function AuthOverlayDrawer({
           onForgotPassword={() => setMode("forgot-password")}
         />
       ) : mode === "register" ? (
-        <RegisterPage
-          onRegister={(userData) => {
-            login(userData);
-            onClose();
-            // Navigate to dashboard only on successful registration
-            navigate("/dashboard");
-          }}
-        />
+        <RegisterPage onClose={onClose} />
       ) : (
         <ForgotPasswordPage
           onSuccess={() => {
