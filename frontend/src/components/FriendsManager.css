@@ -79,6 +79,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+/* Apply gradient only to the text, not the emoji */
+.friends-manager .section-title-text {
   background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -540,6 +544,8 @@
   .friends-tabs .tab {
     padding: 0.5rem 0.5rem;
     font-size: 0.75rem;
+    width: 25%;
+    justify-content: center;
   }
 
   .friend-avatar,

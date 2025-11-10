@@ -16,7 +16,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: var(--font-sans), var(--font-emoji);
+  font-family: var(--font-sans);
   background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0f172a 100%);
   color: var(--color-text);
   overflow-x: hidden;
@@ -36,24 +36,6 @@ body {
 /* Ensure all elements have emoji font support */
 * {
   font-family: inherit;
-}
-
-/* Global emoji font support for common emoji containers */
-.hero-emoji,
-.navbar-logo-emoji,
-.category-emoji,
-.tag-emoji,
-.beach-emoji,
-.stat-icon,
-.empty-icon,
-.profile-icon,
-.settings-icon,
-.disabled-icon,
-.admin-icon,
-.admin-label,
-span[class*="emoji"],
-span[class*="icon"] {
-  font-family: var(--font-emoji);
 }
 
 /* Custom scrollbar styling for dark theme */
@@ -261,11 +243,19 @@ select:focus {
   background-clip: text;
 }
 
-.hero-emoji {
+/* Hero emoji sizing - only apply to images, not text emojis */
+.hero-emoji img,
+img.hero-emoji {
   width: clamp(2rem, 4vw, 5rem);
   height: clamp(2rem, 4vw, 5rem);
   flex-shrink: 0;
   animation: wave 2.5s ease-in-out infinite;
+}
+
+/* Hero emoji animation for text emojis (no size constraint) */
+span.hero-emoji {
+  animation: wave 2.5s ease-in-out infinite;
+  display: inline-block;
 }
 
 .hero-emoji-crown {
@@ -566,16 +556,6 @@ footer {
 
 /* Tablet (Portrait) - 768px and below */
 @media (max-width: 768px) {
-  /* Remove bottom padding from all pages on mobile */
-  main,
-  section,
-  .page,
-  .page-container,
-  [class*="-page"],
-  [class*="-content"] {
-    padding-bottom: 0 !important;
-  }
-
   /* Homepage wrapper - reduce padding */
   .homepage-wrapper {
     padding-top: 1rem;
@@ -623,8 +603,9 @@ footer {
     gap: 0.4rem;
   }
 
-  /* Hero emoji/logo - adjust size */
-  .hero-emoji {
+  /* Hero emoji/logo - adjust size (images only) */
+  .hero-emoji img,
+  img.hero-emoji {
     width: clamp(1.75rem, 5vw, 2.5rem);
     height: clamp(1.75rem, 5vw, 2.5rem);
   }
@@ -682,8 +663,9 @@ footer {
     flex-wrap: wrap;
   }
 
-  /* Hero emoji/logo - smaller */
-  .hero-emoji {
+  /* Hero emoji/logo - smaller (only apply size to images, not text emojis) */
+  .hero-emoji img,
+  img.hero-emoji {
     width: clamp(1.5rem, 6vw, 2rem);
     height: clamp(1.5rem, 6vw, 2rem);
   }
