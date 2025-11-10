@@ -70,8 +70,8 @@ export default function PostFilters({ onFilterChange }) {
           comboboxProps={{
             position: "bottom",
             middlewares: { flip: false, shift: false },
+            withinPortal: false,
           }}
-          withinPortal={false}
           classNames={{
             root: "filter-tags-root",
             input: "filter-tags-input",
