@@ -109,7 +109,7 @@ export default function FriendsManager() {
         </h2>
         <div className="header-buttons">
           <Link to={`/profile/${user?.id}`} className="btn-profile">
-            `<span className="profile-icon">👤</span> Profile
+            <span className="profile-icon">👤</span> Profile
           </Link>
           <Link to="/settings" className="btn-settings">
             <span className="settings-icon">⚙️</span> Settings

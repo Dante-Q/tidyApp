@@ -81,6 +81,11 @@
   gap: 0.5rem;
 }
 
+/* Disable animation for profile emoji in section title */
+.friends-manager .section-title .hero-emoji {
+  animation: none;
+}
+
 /* Apply gradient only to the text, not the emoji */
 .friends-manager .section-title-text {
   background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
