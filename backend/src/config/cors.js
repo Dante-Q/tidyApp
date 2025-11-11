@@ -3,7 +3,13 @@
  * Cross-Origin Resource Sharing settings for development and production
  */
 
+// Log the current NODE_ENV for debugging
+console.log(
+  `🔍 CORS Config - NODE_ENV: ${process.env.NODE_ENV || "undefined"}`
+);
+
 const isDevelopment = process.env.NODE_ENV !== "production";
+console.log(`🔍 CORS Config - isDevelopment: ${isDevelopment}`);
 
 // Allowed origins
 const allowedOrigins = isDevelopment
@@ -18,6 +24,8 @@ const allowedOrigins = isDevelopment
       // Also allow the API subdomain for direct access
       "https://api.tidyapp.co.za",
     ];
+
+console.log(`🔍 CORS Config - Allowed origins:`, allowedOrigins);
 
 /**
  * CORS configuration options
