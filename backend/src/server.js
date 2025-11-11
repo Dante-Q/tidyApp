@@ -112,8 +112,8 @@ app.use((err, req, res, next) => {
 });
 
 // 9. Start server
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT;
+console.log(`🟢 Starting server on port ${PORT}`);
 // Use HTTPS in production if SSL certificates are available
 if (
   process.env.NODE_ENV === "production" &&
