@@ -1,4 +1,6 @@
 import express from "express";
+import https from "https";
+import fs from "fs";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -111,7 +113,25 @@ app.use((err, req, res, next) => {
 
 // 9. Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🔒 Security: Helmet + Rate Limiting (MongoDB) enabled`);
-});
+
+// Use HTTPS in production if SSL certificates are available
+if (
+  process.env.NODE_ENV === "production" &&
+  process.env.SSL_CERT &&
+  process.env.SSL_KEY
+) {
+  const httpsOptions = {
+    cert: fs.readFileSync(process.env.SSL_CERT),
+    key: fs.readFileSync(process.env.SSL_KEY),
+  };
+
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log(`✅ HTTPS Server running on port ${PORT}`);
+    console.log(`🔒 Security: Helmet + Rate Limiting (MongoDB) enabled`);
+  });
+} else {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`🔒 Security: Helmet + Rate Limiting (MongoDB) enabled`);
+  });
+}
