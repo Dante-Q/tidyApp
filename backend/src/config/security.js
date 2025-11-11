@@ -38,9 +38,6 @@ export const helmetConfig = isDevelopment
           frameSrc: ["'none'"],
         },
       },
-      hsts: {
-        maxAge: 31536000,
-        includeSubDomains: true,
-        preload: true,
-      },
+      // HSTS disabled when using Flexible SSL (Cloudflare handles HTTPS)
+      hsts: false,
     };
