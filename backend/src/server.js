@@ -55,8 +55,9 @@ console.log(
     : "🔓 Development security headers enabled"
 );
 
-// 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies)
-app.set("trust proxy", 1);
+// 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies like Cloudflare)
+// For Cloudflare, trust all proxies
+app.set("trust proxy", true);
 
 // 3. CORS configuration
 app.use(cors(corsOptions));

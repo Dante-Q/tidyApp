@@ -12,9 +12,11 @@ const allowedOrigins = isDevelopment
       /^http:\/\/(localhost|127\.0\.0\.1):\d+$/,
     ]
   : [
-      // Production: Only allow your production domain
+      // Production: Allow both with and without www
       "https://tidyapp.co.za",
-      "https://www.tidyapp.co.za", // Include www subdomain if needed
+      "https://www.tidyapp.co.za",
+      // Also allow the API subdomain for direct access
+      "https://api.tidyapp.co.za",
     ];
 
 /**
@@ -34,8 +36,11 @@ export const corsOptions = {
     });
 
     if (isAllowed) {
+      console.log(`✅ CORS: Allowed origin: ${origin}`);
       callback(null, true);
     } else {
+      console.error(`❌ CORS: Blocked origin: ${origin}`);
+      console.error(`   Allowed origins:`, allowedOrigins);
       callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
