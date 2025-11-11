@@ -56,8 +56,8 @@ console.log(
 );
 
 // 2. Trust proxy for accurate IP detection (important for rate limiting behind reverse proxies like Cloudflare)
-// For Cloudflare, trust all proxies
-app.set("trust proxy", true);
+// Trust only 1 proxy hop (Cloudflare)
+app.set("trust proxy", 1);
 
 // 3. CORS configuration
 app.use(cors(corsOptions));
