@@ -55,8 +55,13 @@ export function initRateLimiters(mongoUri) {
       store,
     }),
 
-    friendsLimiter: rateLimit({
-      ...rateLimitConfig.friends,
+    friendsReadLimiter: rateLimit({
+      ...rateLimitConfig.friendsRead,
+      store,
+    }),
+
+    friendsWriteLimiter: rateLimit({
+      ...rateLimitConfig.friendsWrite,
       store,
     }),
 

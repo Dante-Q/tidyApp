@@ -76,7 +76,8 @@ const {
   authLimiter,
   adminLimiter,
   publicDataLimiter,
-  friendsLimiter,
+  friendsReadLimiter,
+  friendsWriteLimiter,
   apiLimiter,
 } = initRateLimiters(process.env.MONGO_URI);
 
@@ -92,8 +93,8 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/posts", apiLimiter, postRoutes);
 app.use("/api/comments", apiLimiter, commentRoutes);
 
-// Friends routes (friend-specific rate limiting)
-app.use("/api/friends", friendsLimiter, friendRoutes);
+// Friends routes (pass limiters to friends router)
+app.use("/api/friends", friendRoutes(friendsReadLimiter, friendsWriteLimiter));
 
 // Admin routes (admin-specific rate limiting)
 app.use("/api/admin", adminLimiter, adminRoutes);

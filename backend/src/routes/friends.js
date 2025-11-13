@@ -12,36 +12,29 @@ import {
 } from "../controllers/friends/index.js";
 import { protect } from "../middleware/auth.js";
 
-const router = express.Router();
+/**
+ * Friends routes with separate rate limiting for read vs write operations
+ * @param {Function} readLimiter - Rate limiter for read operations (GET)
+ * @param {Function} writeLimiter - Rate limiter for write operations (POST, DELETE)
+ */
+export default function friendsRoutes(readLimiter, writeLimiter) {
+  const router = express.Router();
 
-// All routes require authentication
-router.use(protect);
+  // All routes require authentication
+  router.use(protect);
 
-// Get pending friend requests for current user
-router.get("/requests", getFriendRequests);
+  // READ operations - high limit (500/15min)
+  router.get("/requests", readLimiter, getFriendRequests);
+  router.get("/sent", readLimiter, getSentFriendRequests);
+  router.get("/status/:userId", readLimiter, getFriendshipStatus);
+  router.get("/:userId", readLimiter, getFriends); // Must come last - generic :userId route
 
-// Get sent friend requests (outgoing)
-router.get("/sent", getSentFriendRequests);
+  // WRITE operations - strict limit (30/15min)
+  router.post("/request/:userId", writeLimiter, sendFriendRequest);
+  router.delete("/request/:userId", writeLimiter, cancelFriendRequest);
+  router.post("/accept/:requestId", writeLimiter, acceptFriendRequest);
+  router.post("/reject/:requestId", writeLimiter, rejectFriendRequest);
+  router.delete("/:friendId", writeLimiter, removeFriend);
 
-// Get friendship status with another user
-router.get("/status/:userId", getFriendshipStatus);
-
-// Send friend request
-router.post("/request/:userId", sendFriendRequest);
-
-// Cancel/withdraw a sent friend request
-router.delete("/request/:userId", cancelFriendRequest);
-
-// Accept friend request
-router.post("/accept/:requestId", acceptFriendRequest);
-
-// Reject friend request
-router.post("/reject/:requestId", rejectFriendRequest);
-
-// Remove a friend
-router.delete("/:friendId", removeFriend);
-
-// Get friends list for a user (must come last - generic :userId route)
-router.get("/:userId", getFriends);
-
-export default router;
+  return router;
+}

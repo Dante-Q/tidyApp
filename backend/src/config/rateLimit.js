@@ -7,7 +7,7 @@ export const rateLimitConfig = {
   // Global rate limit for all requests
   global: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000,
+    max: 2000, // Increased from 1000 for active users
     message: "Too many requests from this IP, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
@@ -16,7 +16,7 @@ export const rateLimitConfig = {
   // Authentication endpoints (login, register)
   auth: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Increased to allow frequent /me endpoint checks
+    max: 200, // Increased from 100 for frequent /me checks
     message: "Too many authentication attempts, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
@@ -40,11 +40,20 @@ export const rateLimitConfig = {
     legacyHeaders: false,
   },
 
-  // Friend actions
-  friends: {
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 50,
+  // Friend read operations (status checks, getting friends lists)
+  friendsRead: {
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 500, // High limit for reading friend data
     message: "Too many friend requests, please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
+  },
+
+  // Friend write operations (send, accept, reject, remove)
+  friendsWrite: {
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 30, // Strict limit for friend actions
+    message: "Too many friend actions, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
   },

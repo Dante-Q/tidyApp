@@ -40,25 +40,25 @@ export default function FriendsManager() {
     enabled: !!user?.id,
   });
 
-  // Fetch received friend requests
+  // Fetch received friend requests (keep real-time for important notifications)
   const { data: receivedData, isLoading: receivedLoading } = useQuery({
     queryKey: ["friendRequests"],
     queryFn: getFriendRequests,
-    refetchInterval: 30000,
+    refetchInterval: 30000, // 30 seconds - important to notify user
   });
 
-  // Fetch sent friend requests
+  // Fetch sent friend requests (less critical, poll less frequently)
   const { data: sentData, isLoading: sentLoading } = useQuery({
     queryKey: ["sentFriendRequests"],
     queryFn: getSentFriendRequests,
-    refetchInterval: 30000,
+    refetchInterval: 120000, // 2 minutes - less critical
   });
 
-  // Fetch friends list
+  // Fetch friends list (no polling - relies on invalidation after mutations)
   const { data: friendsData, isLoading: friendsLoading } = useQuery({
     queryKey: ["userFriends", "me"],
     queryFn: () => getFriends("me"),
-    refetchInterval: 30000,
+    // No refetchInterval - friends list changes infrequently
   });
 
   const receivedRequests = receivedData?.requests || [];
